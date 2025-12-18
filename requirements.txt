@@ -1,0 +1,37 @@
+# --- Core ---
+numpy>=1.26
+pandas>=2.2
+scikit-learn>=1.5
+
+# --- Inference runtimes ---
+onnx>=1.16
+onnxruntime>=1.19
+# Lightweight TFLite only when Py<3.12 (no Windows wheel)
+tflite-runtime>=2.14 ; python_version < "3.12" and platform_system != "Windows"
+
+# --- API server ---
+fastapi>=0.111
+uvicorn[standard]>=0.30
+
+# --- Packet processing (optional) ---
+scapy>=2.6
+# pyshark not Py3.12-ready on PyPI; enable only on <=3.11
+pyshark>=0.6 ; python_version < "3.12"
+
+# --- Notebooks ---
+notebook>=7.0
+# (or jupyterlab>=4.0 if you prefer Lab)
+
+#how to create repo w terminal : 
+#create local folder
+#enter folder
+#run git int
+#git init*
+#then run: gh repo create my-project --public --source=. --remote=origin
+#to push changes: git push -u origin main
+#verify on web: gh repo view --web
+
+# inca am eroarea de permission denied la 4. cu suricata in repo!!!!!! cautat variante pt rezolvat
+# verificat care fileuri sunt pe root, posibil sa nu mearga suricata in repo ptc am facut fileurile cu root
+
+

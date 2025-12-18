@@ -1,0 +1,16 @@
+#separator \x09
+#set_separator	,
+#empty_field	(empty)
+#unset_field	-
+#path	quic
+#open	2025-10-18-04-26-19
+#fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	version	client_initial_dcid	client_scid	server_scid	server_name	client_protocol	history
+#types	time	string	addr	port	addr	port	string	string	string	string	string	string	string
+1760752635.296607	CSNv6r1j2XgYiO1nPh	2a02:2f04:e104:3f00:2370:d47c:4774:d134	37048	2a00:1450:400c:c0a::54	443	1	480b6d73d5755248	ab69bd	e80b6d73d5755248	accounts.google.com	h3	IIISZiiiiishIH
+1760752650.679648	CNoQHv3E3EczRhtNjc	192.168.100.62	41620	34.36.137.203	443	1	75e1b334ef2c55ab	0ddf46	f5e1b334ef2c55ab	ads.mozilla.org	h3	IIISiiiiIishIHihH
+1760752719.608788	CrYPMdap4rjYzHrn9	2a02:2f04:e104:3f00:2370:d47c:4774:d134	43783	2600:1901:1:7c5::	443	1	625a0c0db681d503	(empty)	e25a0c0db681d503	spclient.wg.spotify.com	h3	IISiiIishIHihH
+1760752703.149623	C0s8e24HCZAoBZhlci	2a02:2f04:e104:3f00:2370:d47c:4774:d134	41656	2600:1901:1:7c5::	443	1	7dce60c281622cca	(empty)	fdce60c281622cca	spclient.wg.spotify.com	h3	IISiiIishHihH
+1760752703.122430	C95VZe4cToq4WZSoKb	2a02:2f04:e104:3f00:2370:d47c:4774:d134	56737	2600:1901:1:5a5::	443	1	08013182f98d4215	(empty)	e8013182f98d4215	gew1-spclient.spotify.com	h3	IISiiishH
+1760752703.156992	Cx5SeCi6xQiWBZK58	2a02:2f04:e104:3f00:2370:d47c:4774:d134	44585	2600:1901:1:7c5::	443	1	aefbcdbb63dc3b36	(empty)	eefbcdbb63dc3b36	api-partner.spotify.com	h3	IISiiIishHihH
+1760752699.642415	CP4QYLunIXYjz5tS5	2a02:2f04:e104:3f00:2370:d47c:4774:d134	45308	2600:1901:1:5a5::	443	1	874e1f6e3da9c259	(empty)	e74e1f6e3da9c259	gew1-spclient.spotify.com	h3	IISiiIishHihH
+#close	2025-10-18-04-26-19

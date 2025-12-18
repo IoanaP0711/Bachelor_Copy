@@ -1,0 +1,19 @@
+
+# virtual envs
+venv/
+venv_tf/
+.env/
+.venv/
+
+#Python cache
+__pycache__/
+*.pyc
+
+# Jupyter
+.ipynb_checkpoints/
+
+#Logs
+logs/*.log
+
+# OS
+.DS_Store

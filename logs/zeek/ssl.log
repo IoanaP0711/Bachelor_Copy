@@ -1,0 +1,25 @@
+#separator \x09
+#set_separator	,
+#empty_field	(empty)
+#unset_field	-
+#path	ssl
+#open	2025-10-18-04-26-19
+#fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	version	cipher	curve	server_name	resumed	last_alert	next_protocol	established	ssl_history	cert_chain_fps	client_cert_chain_fps	sni_matches_cert
+#types	time	string	addr	port	addr	port	string	string	string	string	bool	string	string	bool	string	vector[string]	vector[string]	bool
+1760752686.540159	C1eQbI3sF5vkuGp7R8	2a02:2f04:e104:3f00:2370:d47c:4774:d134	56244	2a04:4e42:8e::347	443	TLSv13	TLS_AES_128_GCM_SHA256	X25519MLKEM768	sync-1-us-west1-g.sync.services.mozilla.com	T	-	-	T	CIsi	-	-	-
+1760752686.541742	CxylWMNdVWyqKfVT9	2a02:2f04:e104:3f00:2370:d47c:4774:d134	56236	2a04:4e42:8e::347	443	TLSv13	TLS_AES_128_GCM_SHA256	X25519MLKEM768	profile.accounts.firefox.com	T	-	-	T	CIsi	-	-	-
+1760752688.400880	CPVbWG1MBirFIdqOjg	192.168.100.62	50708	34.107.243.93	443	TLSv13	TLS_AES_128_GCM_SHA256	x25519	push.services.mozilla.com	T	-	-	T	CsiI	-	-	-
+1760752688.483545	CvEabh3JQ4hjdNlDUd	192.168.100.62	50716	34.107.243.93	443	TLSv13	TLS_AES_128_GCM_SHA256	x25519	push.services.mozilla.com	T	-	-	T	CsiI	-	-	-
+1760752635.300970	CSNv6r1j2XgYiO1nPh	2a02:2f04:e104:3f00:2370:d47c:4774:d134	37048	2a00:1450:400c:c0a::54	443	TLSv13	TLS_AES_128_GCM_SHA256	X25519MLKEM768	accounts.google.com	T	-	-	F	Cs	-	-	-
+1760752699.696516	CdQNKm3YOtOoANe51	2a02:2f04:e104:3f00:2370:d47c:4774:d134	44404	2600:1901:1:5a5::	443	TLSv13	TLS_AES_128_GCM_SHA256	x25519	gew1-spclient.spotify.com	T	-	-	T	CsiI	-	-	-
+1760752702.995392	CXarARWN4AyC4uYFj	2a02:2f04:e104:3f00:2370:d47c:4774:d134	42586	2a02:26f0:9c00::684c:dc33	443	TLSv13	TLS_AES_256_GCM_SHA384	secp256r1	i.scdn.co	T	-	-	T	CsiI	-	-	-
+1760752703.026176	CZCg8Q2DtoUmOe1J8e	2a02:2f04:e104:3f00:2370:d47c:4774:d134	55472	2a02:26f0:9c00::684c:dc39	443	TLSv13	TLS_AES_256_GCM_SHA384	x25519	i.scdn.co	T	-	-	T	CsiI	-	-	-
+1760752703.105417	CGopGj3wZP7HMQs2l	2a02:2f04:e104:3f00:2370:d47c:4774:d134	42596	2a02:26f0:9c00::684c:dc33	443	TLSv13	TLS_AES_256_GCM_SHA384	x25519	i.scdn.co	T	-	-	T	CsiI	-	-	-
+1760752703.203011	C7VrTEvDpKMqCwfDc	2a02:2f04:e104:3f00:2370:d47c:4774:d134	46784	2600:1901:1:7c5::	443	TLSv13	TLS_AES_128_GCM_SHA256	x25519	spclient.wg.spotify.com	T	-	-	T	CsiI	-	-	-
+1760752650.679664	CNoQHv3E3EczRhtNjc	192.168.100.62	41620	34.36.137.203	443	TLSv13	TLS_AES_128_GCM_SHA256	x25519	ads.mozilla.org	T	-	-	F	Cs	-	-	-
+1760752719.608864	CrYPMdap4rjYzHrn9	2a02:2f04:e104:3f00:2370:d47c:4774:d134	43783	2600:1901:1:7c5::	443	TLSv13	TLS_AES_128_GCM_SHA256	x25519	spclient.wg.spotify.com	T	-	-	F	Cs	-	-	-
+1760752703.149644	C0s8e24HCZAoBZhlci	2a02:2f04:e104:3f00:2370:d47c:4774:d134	41656	2600:1901:1:7c5::	443	TLSv13	TLS_AES_128_GCM_SHA256	x25519	spclient.wg.spotify.com	T	-	-	F	Cs	-	-	-
+1760752703.122447	C95VZe4cToq4WZSoKb	2a02:2f04:e104:3f00:2370:d47c:4774:d134	56737	2600:1901:1:5a5::	443	TLSv13	TLS_AES_128_GCM_SHA256	x25519	gew1-spclient.spotify.com	T	-	-	F	Cs	-	-	-
+1760752703.157022	Cx5SeCi6xQiWBZK58	2a02:2f04:e104:3f00:2370:d47c:4774:d134	44585	2600:1901:1:7c5::	443	TLSv13	TLS_AES_128_GCM_SHA256	x25519	api-partner.spotify.com	T	-	-	F	Cs	-	-	-
+1760752699.642479	CP4QYLunIXYjz5tS5	2a02:2f04:e104:3f00:2370:d47c:4774:d134	45308	2600:1901:1:5a5::	443	TLSv13	TLS_AES_128_GCM_SHA256	x25519	gew1-spclient.spotify.com	T	-	-	F	Cs	-	-	-
+#close	2025-10-18-04-26-19

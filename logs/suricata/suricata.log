@@ -1,0 +1,340 @@
+[14351 - Suricata-Main] 2025-10-18 04:03:12 Notice: suricata: This is Suricata version 8.0.1 RELEASE running in USER mode
+[14351 - Suricata-Main] 2025-10-18 04:03:12 Info: cpu: CPUs/cores online: 12
+[14351 - Suricata-Main] 2025-10-18 04:03:12 Info: suricata: Setting engine mode to IDS mode by default
+[14351 - Suricata-Main] 2025-10-18 04:03:12 Info: exception-policy: master exception-policy set to: auto
+[14351 - Suricata-Main] 2025-10-18 04:03:12 Info: suricata: Preparing unexpected signal handling
+[14351 - Suricata-Main] 2025-10-18 04:03:12 Info: logopenfile: fast output device (regular) initialized: fast.log
+[14351 - Suricata-Main] 2025-10-18 04:03:12 Info: logopenfile: eve-log output device (regular) initialized: eve.json
+[14351 - Suricata-Main] 2025-10-18 04:03:12 Info: logopenfile: stats output device (regular) initialized: stats.log
+[14351 - Suricata-Main] 2025-10-18 04:03:17 Info: detect: 2 rule files processed. 45853 rules successfully loaded, 0 rules failed, 0 rules skipped
+[14351 - Suricata-Main] 2025-10-18 04:03:17 Info: threshold-config: Threshold config parsed: 0 rule(s) found
+[14351 - Suricata-Main] 2025-10-18 04:03:17 Info: detect: 45856 signatures processed. 960 are IP-only rules, 4416 are inspecting packet payload, 40248 inspect application layer, 110 are decoder event only
+[14351 - Suricata-Main] 2025-10-18 04:03:18 Notice: mpm-hs: Rule group caching - loaded: 112 newly cached: 0 total cacheable: 112
+[14352 - RX#01] 2025-10-18 04:03:18 Info: pcap: Starting file run for data/raw/sample_traffic.pcap
+[14351 - Suricata-Main] 2025-10-18 04:03:18 Notice: threads: Threads created -> RX: 1 W: 12 FM: 1 FR: 1   Engine started.
+[14352 - RX#01] 2025-10-18 04:03:18 Info: checksum: Less than 1/10th of packets have an invalid checksum, assuming checksum offloading is NOT used (64/1000)
+[14352 - RX#01] 2025-10-18 04:03:18 Info: pcap: pcap file data/raw/sample_traffic.pcap end of file reached (pcap err code 0)
+[14351 - Suricata-Main] 2025-10-18 04:03:18 Notice: suricata: Signal Received.  Stopping engine.
+[14351 - Suricata-Main] 2025-10-18 04:03:18 Info: suricata: time elapsed 0.111s
+[14352 - RX#01] 2025-10-18 04:03:18 Notice: pcap: read 1 file, 3773 packets, 3174469 bytes
+[14351 - Suricata-Main] 2025-10-18 04:03:18 Info: counters: Alerts: 1126
+[14386 - Suricata-Main] 2025-10-18 04:03:56 Notice: suricata: This is Suricata version 8.0.1 RELEASE running in USER mode
+[14386 - Suricata-Main] 2025-10-18 04:03:56 Info: cpu: CPUs/cores online: 12
+[14386 - Suricata-Main] 2025-10-18 04:03:56 Info: suricata: Setting engine mode to IDS mode by default
+[14386 - Suricata-Main] 2025-10-18 04:03:56 Info: exception-policy: master exception-policy set to: auto
+[14386 - Suricata-Main] 2025-10-18 04:03:56 Info: suricata: Preparing unexpected signal handling
+[14386 - Suricata-Main] 2025-10-18 04:03:56 Info: logopenfile: fast output device (regular) initialized: fast.log
+[14386 - Suricata-Main] 2025-10-18 04:03:56 Info: logopenfile: eve-log output device (regular) initialized: eve.json
+[14386 - Suricata-Main] 2025-10-18 04:03:56 Info: logopenfile: stats output device (regular) initialized: stats.log
+[14386 - Suricata-Main] 2025-10-18 04:04:00 Info: detect: 2 rule files processed. 45853 rules successfully loaded, 0 rules failed, 0 rules skipped
+[14386 - Suricata-Main] 2025-10-18 04:04:01 Info: threshold-config: Threshold config parsed: 0 rule(s) found
+[14386 - Suricata-Main] 2025-10-18 04:04:01 Info: detect: 45856 signatures processed. 960 are IP-only rules, 4416 are inspecting packet payload, 40248 inspect application layer, 110 are decoder event only
+[14386 - Suricata-Main] 2025-10-18 04:04:01 Notice: mpm-hs: Rule group caching - loaded: 112 newly cached: 0 total cacheable: 112
+[14390 - RX#01] 2025-10-18 04:04:01 Info: pcap: Starting file run for data/raw/sample_traffic.pcap
+[14386 - Suricata-Main] 2025-10-18 04:04:01 Notice: threads: Threads created -> RX: 1 W: 12 FM: 1 FR: 1   Engine started.
+[14390 - RX#01] 2025-10-18 04:04:01 Info: checksum: Less than 1/10th of packets have an invalid checksum, assuming checksum offloading is NOT used (81/1000)
+[14390 - RX#01] 2025-10-18 04:04:01 Info: pcap: pcap file data/raw/sample_traffic.pcap end of file reached (pcap err code 0)
+[14386 - Suricata-Main] 2025-10-18 04:04:01 Notice: suricata: Signal Received.  Stopping engine.
+[14386 - Suricata-Main] 2025-10-18 04:04:01 Info: suricata: time elapsed 0.111s
+[14390 - RX#01] 2025-10-18 04:04:01 Notice: pcap: read 1 file, 3773 packets, 3174469 bytes
+[14386 - Suricata-Main] 2025-10-18 04:04:01 Info: counters: Alerts: 1126
+[18350 - Suricata-Main] 2025-10-18 17:46:46 Notice: suricata: This is Suricata version 8.0.1 RELEASE running in USER mode
+[18350 - Suricata-Main] 2025-10-18 17:46:46 Info: cpu: CPUs/cores online: 12
+[18350 - Suricata-Main] 2025-10-18 17:46:46 Info: suricata: Setting engine mode to IDS mode by default
+[18350 - Suricata-Main] 2025-10-18 17:46:46 Info: exception-policy: master exception-policy set to: auto
+[18350 - Suricata-Main] 2025-10-18 17:46:46 Info: suricata: Preparing unexpected signal handling
+[18350 - Suricata-Main] 2025-10-18 17:46:46 Error: runmodes: Failed to lookup configuration child node: (null)
+[48039 - Suricata-Main] 2025-11-04 00:17:10 Notice: suricata: This is Suricata version 8.0.1 RELEASE running in USER mode
+[48039 - Suricata-Main] 2025-11-04 00:17:10 Info: cpu: CPUs/cores online: 12
+[48039 - Suricata-Main] 2025-11-04 00:17:10 Info: suricata: Setting engine mode to IDS mode by default
+[48039 - Suricata-Main] 2025-11-04 00:17:10 Info: exception-policy: master exception-policy set to: auto
+[48039 - Suricata-Main] 2025-11-04 00:17:10 Info: suricata: Preparing unexpected signal handling
+[48039 - Suricata-Main] 2025-11-04 00:17:10 Info: logopenfile: fast output device (regular) initialized: fast.log
+[48039 - Suricata-Main] 2025-11-04 00:17:10 Info: logopenfile: eve-log output device (regular) initialized: eve.json
+[48039 - Suricata-Main] 2025-11-04 00:17:10 Info: logopenfile: stats output device (regular) initialized: stats.log
+[48039 - Suricata-Main] 2025-11-04 00:17:24 Info: detect: 1 rule files processed. 45852 rules successfully loaded, 0 rules failed, 0 rules skipped
+[48039 - Suricata-Main] 2025-11-04 00:17:24 Info: threshold-config: Threshold config parsed: 0 rule(s) found
+[48039 - Suricata-Main] 2025-11-04 00:17:24 Info: detect: 45855 signatures processed. 959 are IP-only rules, 4416 are inspecting packet payload, 40248 inspect application layer, 110 are decoder event only
+[48039 - Suricata-Main] 2025-11-04 00:17:24 Perf: detect: TCP toserver: 41 port groups, 40 unique SGH's, 1 copies
+[48039 - Suricata-Main] 2025-11-04 00:17:24 Perf: detect: TCP toclient: 21 port groups, 21 unique SGH's, 0 copies
+[48039 - Suricata-Main] 2025-11-04 00:17:24 Perf: detect: UDP toserver: 41 port groups, 40 unique SGH's, 1 copies
+[48039 - Suricata-Main] 2025-11-04 00:17:24 Perf: detect: UDP toclient: 21 port groups, 17 unique SGH's, 4 copies
+[48039 - Suricata-Main] 2025-11-04 00:17:24 Perf: detect: OTHER toserver: 254 proto groups, 4 unique SGH's, 250 copies
+[48039 - Suricata-Main] 2025-11-04 00:17:24 Perf: detect: OTHER toclient: 254 proto groups, 0 unique SGH's, 254 copies
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: Unique rule groups: 122
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: Builtin MPM "toserver TCP packet": 32
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: Builtin MPM "toclient TCP packet": 20
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: Builtin MPM "toserver TCP stream": 33
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: Builtin MPM "toclient TCP stream": 19
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: Builtin MPM "toserver UDP packet": 40
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: Builtin MPM "toclient UDP packet": 17
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: Builtin MPM "other IP packet": 3
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_uri (http)": 16
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_uri (http)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_uri (doh2)": 16
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_uri (doh2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_uri (http2)": 16
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_uri (http2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_raw_uri (http)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_raw_uri (http)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_raw_uri (doh2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_raw_uri (doh2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_raw_uri (http2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_raw_uri (http2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_request_line (http)": 8
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_request_line (doh2)": 8
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_request_line (http2)": 8
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_client_body (http)": 14
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_client_body (http)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_client_body (doh2)": 14
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_client_body (doh2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_client_body (http2)": 14
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_client_body (http2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_response_line (http)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_response_line (doh2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_response_line (http2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_header (http)": 10
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_header (http)": 1
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_header (http)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_header (http)": 3
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_header (http)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_header (http)": 10
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_header (http)": 10
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_header (http)": 1
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_header (http)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_header (http)": 3
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_header (http)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_header (http)": 10
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_header (doh2)": 10
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_header (doh2)": 1
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_header (doh2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_header (doh2)": 3
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_header (doh2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_header (doh2)": 10
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_header (http2)": 10
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_header (http2)": 1
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_header (http2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_header (http2)": 3
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_header (http2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_header (http2)": 10
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_header (doh2)": 10
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_header (doh2)": 1
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_header (doh2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_header (doh2)": 3
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_header (doh2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_header (doh2)": 10
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_header (http2)": 10
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_header (http2)": 1
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_header (http2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_header (http2)": 3
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_header (http2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_header (http2)": 10
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_request_header (doh2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_request_header (doh2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_request_header (http2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_request_header (http2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_request_header (http)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_request_header (http)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_response_header (doh2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_response_header (doh2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_response_header (doh2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_response_header (doh2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_response_header (http2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_response_header (http2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_response_header (http2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_response_header (http2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_response_header (http)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_response_header (http)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_response_header (http)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_response_header (http)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_header_names (http)": 11
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_header_names (http)": 1
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_header_names (http)": 3
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_header_names (http)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_header_names (http)": 8
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_header_names (http)": 11
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_header_names (http)": 1
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_header_names (http)": 3
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_header_names (http)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_header_names (http)": 8
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_header_names (doh2)": 11
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_header_names (doh2)": 1
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_header_names (doh2)": 3
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_header_names (doh2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_header_names (doh2)": 8
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_header_names (http2)": 11
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_header_names (http2)": 1
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_header_names (http2)": 3
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_header_names (http2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_header_names (http2)": 8
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_header_names (doh2)": 11
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_header_names (doh2)": 1
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_header_names (doh2)": 3
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_header_names (doh2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_header_names (doh2)": 8
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_header_names (http2)": 11
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_header_names (http2)": 1
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_header_names (http2)": 3
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_header_names (http2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_header_names (http2)": 8
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_accept (http)": 8
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_accept (doh2)": 8
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_accept (http2)": 8
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_accept_enc (http)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_accept_enc (doh2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_accept_enc (http2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_accept_lang (http)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_accept_lang (doh2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_accept_lang (http2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_referer (http)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_referer (doh2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_referer (http2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_connection (http)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_connection (doh2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_connection (http2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_connection (http)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_connection (doh2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_connection (http2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_content_len (http)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_content_len (doh2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_content_len (http2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_content_len (http)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_content_len (doh2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_content_len (http2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_content_type (http)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_content_type (doh2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_content_type (http2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_content_type (http)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_content_type (doh2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_content_type (http2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http.server (http)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http.server (doh2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http.server (http2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http.location (http)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http.location (doh2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http.location (http2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_start (http)": 6
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_start (http)": 6
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_raw_header (http)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_raw_header (http)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_raw_header (http)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_raw_header (http)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_raw_header (http)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_raw_header (http)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_raw_header (doh2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_raw_header (doh2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_raw_header (doh2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_raw_header (http2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_raw_header (http2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_raw_header (http2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_raw_header (doh2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_raw_header (doh2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_raw_header (doh2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_raw_header (http2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_raw_header (http2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_raw_header (http2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_method (http)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_method (doh2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_method (http2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_cookie (http)": 8
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_cookie (http)": 8
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_cookie (doh2)": 8
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_cookie (http2)": 8
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_cookie (doh2)": 8
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_cookie (http2)": 8
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_user_agent (http)": 15
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_user_agent (doh2)": 15
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_user_agent (http2)": 15
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_host (http)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_host (http)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_host (doh2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_host (doh2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_host (http2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_host (http2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_raw_host (http)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_raw_host (doh2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver http_raw_host (http2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_stat_code (http)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_stat_code (doh2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient http_stat_code (http2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver tls.sni (tls)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver tls.sni (tls)": 1
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver tls.cert_issuer (tls)": 6
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient tls.cert_issuer (tls)": 6
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver tls.cert_subject (tls)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient tls.cert_subject (tls)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient tls.cert_serial (tls)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver tls.cert_serial (tls)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient tls.cert_fingerprint (tls)": 1
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver tls.cert_fingerprint (tls)": 1
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient tls.certs (tls)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver tls.certs (tls)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver ja3.hash (tls)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver ja3.hash (quic)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient ja3s.hash (tls)": 1
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient ja3s.hash (quic)": 1
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver ssh.proto (ssh)": 1
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient ssh.proto (ssh)": 1
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver ssh_software (ssh)": 1
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient ssh_software (ssh)": 1
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient file_data (nfs)": 23
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient file_data (nfs)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver file_data (nfs)": 23
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver file_data (nfs)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient file_data (smb)": 23
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient file_data (smb)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver file_data (smb)": 23
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver file_data (smb)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient file_data (ftp)": 23
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient file_data (ftp)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver file_data (ftp)": 23
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver file_data (ftp)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient file_data (ftp-data)": 23
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient file_data (ftp-data)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver file_data (ftp-data)": 23
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver file_data (ftp-data)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient file_data (http)": 23
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient file_data (http)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver file_data (http)": 23
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver file_data (http)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient file_data (doh2)": 23
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient file_data (doh2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient file_data (http2)": 23
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toclient file_data (http2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver file_data (doh2)": 23
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver file_data (doh2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver file_data (http2)": 23
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver file_data (http2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver file_data (smtp)": 23
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver file_data (smtp)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver dns_query (doh2)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver dns_query (doh2)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver dns_query (dns)": 4
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: AppLayer MPM "toserver dns_query (dns)": 2
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: Pkt MPM "icmpv6.hdr": 1
+[48039 - Suricata-Main] 2025-11-04 00:17:25 Perf: detect: Pkt MPM "ipv6.hdr": 1
+[48039 - Suricata-Main] 2025-11-04 00:17:52 Notice: mpm-hs: Rule group caching - loaded: 0 newly cached: 112 total cacheable: 112
+[48287 - RX#01] 2025-11-04 00:17:53 Info: pcap: Starting file run for /home/ioanap/Desktop/Bachelor/data/raw/sample_traffic.pcap
+[48039 - Suricata-Main] 2025-11-04 00:17:53 Notice: threads: Threads created -> RX: 1 W: 12 FM: 1 FR: 1   Engine started.
+[48287 - RX#01] 2025-11-04 00:17:53 Info: checksum: Less than 1/10th of packets have an invalid checksum, assuming checksum offloading is NOT used (9/1000)
+[48287 - RX#01] 2025-11-04 00:17:53 Info: pcap: pcap file /home/ioanap/Desktop/Bachelor/data/raw/sample_traffic.pcap end of file reached (pcap err code 0)
+[48039 - Suricata-Main] 2025-11-04 00:17:53 Notice: suricata: Signal Received.  Stopping engine.
+[48039 - Suricata-Main] 2025-11-04 00:17:53 Info: suricata: time elapsed 0.240s
+[48301 - FR#01] 2025-11-04 00:17:53 Perf: flow-manager: 104 flows processed
+[48287 - RX#01] 2025-11-04 00:17:53 Notice: pcap: read 1 file, 3773 packets, 3174469 bytes
+[48039 - Suricata-Main] 2025-11-04 00:17:53 Perf: tmqh-flow: AutoFP - Total flow handler queues - 12
+[48288 - W#01] 2025-11-04 00:17:53 Perf: detect: threshold thread cache stats: cnt:0 notinit:0 nosupport:0 miss_expired:0 miss:0 hit:0, housekeeping: checks:0, expired:0
+[48289 - W#02] 2025-11-04 00:17:53 Perf: detect: threshold thread cache stats: cnt:0 notinit:0 nosupport:0 miss_expired:0 miss:0 hit:0, housekeeping: checks:0, expired:0
+[48290 - W#03] 2025-11-04 00:17:53 Perf: detect: threshold thread cache stats: cnt:5 notinit:2 nosupport:0 miss_expired:0 miss:0 hit:3, housekeeping: checks:3, expired:0
+[48291 - W#04] 2025-11-04 00:17:53 Perf: detect: threshold thread cache stats: cnt:0 notinit:0 nosupport:0 miss_expired:0 miss:0 hit:0, housekeeping: checks:0, expired:0
+[48292 - W#05] 2025-11-04 00:17:53 Perf: detect: threshold thread cache stats: cnt:0 notinit:0 nosupport:0 miss_expired:0 miss:0 hit:0, housekeeping: checks:0, expired:0
+[48293 - W#06] 2025-11-04 00:17:53 Perf: detect: threshold thread cache stats: cnt:0 notinit:0 nosupport:0 miss_expired:0 miss:0 hit:0, housekeeping: checks:0, expired:0
+[48294 - W#07] 2025-11-04 00:17:53 Perf: detect: threshold thread cache stats: cnt:0 notinit:0 nosupport:0 miss_expired:0 miss:0 hit:0, housekeeping: checks:0, expired:0
+[48295 - W#08] 2025-11-04 00:17:53 Perf: detect: threshold thread cache stats: cnt:0 notinit:0 nosupport:0 miss_expired:0 miss:0 hit:0, housekeeping: checks:0, expired:0
+[48296 - W#09] 2025-11-04 00:17:53 Perf: detect: threshold thread cache stats: cnt:0 notinit:0 nosupport:0 miss_expired:0 miss:0 hit:0, housekeeping: checks:0, expired:0
+[48297 - W#10] 2025-11-04 00:17:53 Perf: detect: threshold thread cache stats: cnt:0 notinit:0 nosupport:0 miss_expired:0 miss:0 hit:0, housekeeping: checks:0, expired:0
+[48298 - W#11] 2025-11-04 00:17:53 Perf: detect: threshold thread cache stats: cnt:0 notinit:0 nosupport:0 miss_expired:0 miss:0 hit:0, housekeeping: checks:0, expired:0
+[48299 - W#12] 2025-11-04 00:17:53 Perf: detect: threshold thread cache stats: cnt:0 notinit:0 nosupport:0 miss_expired:0 miss:0 hit:0, housekeeping: checks:0, expired:0
+[48039 - Suricata-Main] 2025-11-04 00:17:53 Info: counters: Alerts: 1125
+[48039 - Suricata-Main] 2025-11-04 00:17:53 Perf: ippair: ippair memory usage: 398144 bytes, maximum: 16777216
+[48039 - Suricata-Main] 2025-11-04 00:17:53 Perf: host: host memory usage: 382144 bytes, maximum: 33554432
