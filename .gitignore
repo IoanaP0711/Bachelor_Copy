@@ -1,19 +1,27 @@
-
-# virtual envs
+# Python environments
 venv/
+venv_api/
 venv_tf/
-.env/
 .venv/
+env/
 
-#Python cache
+# Python cache
 __pycache__/
-*.pyc
+*.py[cod]
+.pytest_cache/
 
 # Jupyter
 .ipynb_checkpoints/
 
-#Logs
-logs/*.log
+# Runtime logs
+logs/
+*.log
+log.txt
 
-# OS
+# Local environment config
+.env
+
+# OS/editor files
+.vscode/
+.idea/
 .DS_Store
