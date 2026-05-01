@@ -25,3 +25,8 @@ log.txt
 .vscode/
 .idea/
 .DS_Store
+
+# Large datasets / generated captures
+data/external/
+data/raw/
+data/processed/suricata_features.csv
