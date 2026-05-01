@@ -39,34 +39,6 @@ def detect_dataset_type(columns: List[str]) -> Optional[DatasetType]:
 
     return None
 
-
-def bin_port(port_value) -> int:
-    """
-    Map a numeric port to a small number of bins:
-
-        0 -> port 0 / missing
-        1 -> [1, 1023]   (well-known ports)
-        2 -> [1024, 49151] (registered ports)
-        3 -> [49152, 65535] (dynamic / private ports)
-
-    If the port is missing or cannot be parsed, returns 0.
-    """
-    try:
-        if pd.isna(port_value):
-            return 0
-        p = int(port_value)
-    except (ValueError, TypeError):
-        return 0
-
-    if p <= 0:
-        return 0
-    if p <= 1023:
-        return 1
-    if p <= 49151:
-        return 2
-    return 3
-
-
 def normalize_label(raw_label) -> int:
     """
     Convert various dataset-specific labels into a binary label:
@@ -137,27 +109,6 @@ def map_cicids2017(df: pd.DataFrame) -> pd.DataFrame:
     # Protocol
     proto = pd.to_numeric(df.get("Protocol", np.nan), errors="coerce").fillna(-1).astype(int)
 
-    # Ports (CIC sometimes uses "Src Port"/"Dst Port" or "Source Port"/"Destination Port")
-    sport_col = None
-    dport_col = None
-    for c in df.columns:
-        name = c.lower().replace(" ", "")
-        if name in {"srcport", "sourceport"}:
-            sport_col = c
-        if name in {"dstport", "destinationport", "destport"}:
-            dport_col = c
-
-    if sport_col is None or dport_col is None:
-        raise ValueError(
-            "Could not find source/destination port columns in CIC-IDS-2017 CSV."
-        )
-
-    sport = df[sport_col]
-    dport = df[dport_col]
-
-    sport_bin = sport.map(bin_port).astype(int)
-    dport_bin = dport.map(bin_port).astype(int)
-
     # Label
     if "Label" not in df.columns:
         raise ValueError("CIC-IDS-2017 CSV must contain a 'Label' column.")
@@ -175,8 +126,6 @@ def map_cicids2017(df: pd.DataFrame) -> pd.DataFrame:
             "byte_rate": byte_rate.astype("float64"),
             "fwd_rev_ratio": fwd_rev_ratio.astype("float64"),
             "proto": proto.astype("int32"),
-            "sport_bin": sport_bin.astype("int8"),
-            "dport_bin": dport_bin.astype("int8"),
             "label": label.astype("int8"),
         }
     )
@@ -189,10 +138,9 @@ def map_unsw_nb15(df: pd.DataFrame) -> pd.DataFrame:
     Map UNSW-NB15 CSV columns to the compact schema.
 
     Typical columns:
-        dur, spkts, dpkts, sbytes, dbytes, proto, sport, dport, label / class
+        dur, spkts, dpkts, sbytes, dbytes, proto, label / class
     """
 
-    # Work on a copy and normalize column names to lower case without spaces
     df = df.copy()
     df.columns = [str(c).strip().lower() for c in df.columns]
 
@@ -213,13 +161,9 @@ def map_unsw_nb15(df: pd.DataFrame) -> pd.DataFrame:
     bytes_fwd = pd.to_numeric(col("sbytes"), errors="coerce").fillna(0)
     bytes_rev = pd.to_numeric(col("dbytes"), errors="coerce").fillna(0)
 
-    # Rates
     safe_duration = duration.replace(0, np.nan)
-    pkt_rate = (pkts_fwd + pkts_rev) / safe_duration
-    byte_rate = (bytes_fwd + bytes_rev) / safe_duration
-
-    pkt_rate = pkt_rate.fillna(0)
-    byte_rate = byte_rate.fillna(0)
+    pkt_rate = ((pkts_fwd + pkts_rev) / safe_duration).fillna(0)
+    byte_rate = ((bytes_fwd + bytes_rev) / safe_duration).fillna(0)
 
     fwd_rev_ratio = pkts_fwd / pkts_rev.replace(0, np.nan)
     fwd_rev_ratio = fwd_rev_ratio.replace([np.inf, -np.inf], np.nan).fillna(pkts_fwd)
@@ -232,54 +176,14 @@ def map_unsw_nb15(df: pd.DataFrame) -> pd.DataFrame:
         proto = pd.to_numeric(proto_raw, errors="coerce").fillna(-1).astype(int)
     else:
         proto_map = {"TCP": 6, "UDP": 17, "ICMP": 1}
-        proto = (
-            proto_raw.astype(str)
-            .str.upper()
-            .map(proto_map)
-            .fillna(0)
-            .astype(int)
-        )
-
-    # --- Ports: be tolerant, fall back to 0 if missing ---
-    sport_candidates = ["sport", "src_port", "srcport", "source_port"]
-    dport_candidates = ["dport", "dst_port", "dstport", "destination_port", "dest_port"]
-
-    sport_series = None
-    for name in sport_candidates:
-        if name in df.columns:
-            sport_series = df[name]
-            break
-
-    dport_series = None
-    for name in dport_candidates:
-        if name in df.columns:
-            dport_series = df[name]
-            break
-
-    if sport_series is None:
-        logging.warning(
-            "No source-port column found in UNSW-NB15 CSV; setting sport_bin = 0."
-        )
-        sport_bin = pd.Series(0, index=df.index, dtype="int8")
-    else:
-        sport_bin = sport_series.map(bin_port).astype(int)
-
-    if dport_series is None:
-        logging.warning(
-            "No destination-port column found in UNSW-NB15 CSV; setting dport_bin = 0."
-        )
-        dport_bin = pd.Series(0, index=df.index, dtype="int8")
-    else:
-        dport_bin = dport_series.map(bin_port).astype(int)
+        proto = proto_raw.astype(str).str.upper().map(proto_map).fillna(0).astype(int)
 
     # --- Label: some UNSW variants use 'label', others 'class' ---
-    label_col = None
     if "label" in df.columns:
         label_col = "label"
     elif "class" in df.columns:
         label_col = "class"
-
-    if label_col is None:
+    else:
         raise ValueError(
             "UNSW-NB15 CSV must contain a 'label' or 'class' column for ground truth."
         )
@@ -297,8 +201,6 @@ def map_unsw_nb15(df: pd.DataFrame) -> pd.DataFrame:
             "byte_rate": byte_rate.astype("float64"),
             "fwd_rev_ratio": fwd_rev_ratio.astype("float64"),
             "proto": proto.astype("int32"),
-            "sport_bin": sport_bin.astype("int8"),
-            "dport_bin": dport_bin.astype("int8"),
             "label": label.astype("int8"),
         }
     )

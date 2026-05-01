@@ -75,10 +75,23 @@ def train_model(X_train_scaled, contamination, random_state):
 # VALIDATION
 # ----------------------------------------------------------
 def evaluate_model(model, X_val_scaled, y_val):
-    raw = model.predict(X_val_scaled)        # 1=normal, -1=anomaly
-    pred = (raw == -1).astype(int)           # 1=anomaly
+    """
+    Evaluate Isolation Forest using:
+    - decision_function for AUC (continuous score)
+    - predict() for F1 (binary anomaly decision)
+    """
 
-    auc = roc_auc_score(y_val, pred)
+    # Isolation Forest scores:
+    # decision_function -> higher = more normal
+    # so we NEGATE it to get "anomaly score"
+    scores = -model.decision_function(X_val_scaled)
+
+    # Binary predictions (needed for F1)
+    raw = model.predict(X_val_scaled)        # 1 = normal, -1 = anomaly
+    pred = (raw == -1).astype(int)           # 1 = anomaly
+
+    # Metrics
+    auc = roc_auc_score(y_val, scores)
     f1 = f1_score(y_val, pred)
 
     print(f"[METRIC] AUC={auc:.4f}  F1={f1:.4f}")
@@ -93,7 +106,12 @@ def save_onnx(model, n_features, out_path):
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
 
     initial_type = [("input", FloatTensorType([None, n_features]))]
-    onnx_model = convert_sklearn(model, initial_types=initial_type)
+    onnx_model = convert_sklearn(
+    model,
+    initial_types=initial_type,
+    target_opset={"ai.onnx.ml": 3, "": 13}   # "" is the main ONNX opset
+)
+
 
     with open(out_path, "wb") as f:
         f.write(onnx_model.SerializeToString())

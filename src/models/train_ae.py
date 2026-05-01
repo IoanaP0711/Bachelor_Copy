@@ -208,7 +208,7 @@ def train_autoencoder(
     callbacks = [
         tf.keras.callbacks.EarlyStopping(
             monitor="val_loss",
-            patience=5,
+            patience=50,
             restore_best_weights=True,
         )
     ]
@@ -224,10 +224,19 @@ def train_autoencoder(
         verbose=1,
     )
 
+    # import pandas as pd  # (better: move this to the top of the file)
+
     val_loss = float(history.history["val_loss"][-1])
     logging.info(f"Final validation MSE: {val_loss:.6f}")
 
+    # Save training history for plots
+    hist_df = pd.DataFrame(history.history)
+    hist_path = "data/models/ae_training_history.csv"
+    hist_df.to_csv(hist_path, index=False)
+    logging.info(f"Saved training history to {hist_path}")
+
     return model
+
 
 
 def export_to_onnx(model: tf.keras.Model, input_dim: int, out_path: str):
