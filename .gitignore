@@ -30,3 +30,6 @@ log.txt
 data/external/
 data/raw/
 data/processed/suricata_features.csv
+
+# Local Suricata rule dumps / generated IDS rules
+config/rules/suricata.rules
