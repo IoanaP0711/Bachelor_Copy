@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "metric": "reconstruction_mse_on_scaled_features",
+  "method": "manual_bands_live",
+  "bands": {
+    "ok": 1.50,
+    "warn": 3.00,
+    "crit": 8.00
+  }
+}
