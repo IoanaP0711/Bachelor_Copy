@@ -33,3 +33,14 @@ data/processed/suricata_features.csv
 
 # Local Suricata rule dumps / generated IDS rules
 config/rules/suricata.rules
+
+The raw UNSW-NB15 dataset is not stored in this repository because of GitHub file size limits.
+To reproduce training, download the UNSW-NB15 CSV files and place them in:
+
+data/external/UNSW-NB15/
+
+Expected files:
+UNSW-NB15_1.csv
+UNSW-NB15_2.csv
+UNSW-NB15_3.csv
+UNSW-NB15_4.csv
