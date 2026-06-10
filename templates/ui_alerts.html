@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>RT-IDS Alerts</title>
+  <link rel="stylesheet" href="/static/dashboard.css">
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-title">Alerts</div>
+      <div class="brand-subtitle">
+        User-friendly view of stored anomaly alerts.
+        <span class="pill review">REVIEW</span>
+      </div>
+    </div>
+
+    <nav class="main-nav" aria-label="Dashboard navigation">
+      <a href="/" data-nav="dashboard">Dashboard</a>
+      <a href="/ui/system" data-nav="system">System</a>
+      <a href="/ui/alerts" class="active" data-nav="alerts">Alerts</a>
+      <a href="/ui/recent" data-nav="recent">Recent Traffic</a>
+    </nav>
+  </header>
+
+  <div class="controls">
+    <span class="label">Limit:</span>
+    <input id="limit" type="number" min="1" max="200" value="50"/>
+    <button onclick="loadAlerts()">Refresh</button>
+    <button onclick="clearAlertsUi()">Clear alerts</button>
+    <span class="label muted" id="lastUpdate">—</span>
+  </div>
+
+  <div class="filter-bar" aria-label="Alert severity filters">
+    <span class="label">Show:</span>
+    <button class="filter-btn active" data-filter="ALL" onclick="setAlertFilter('ALL')">All</button>
+    <button class="filter-btn" data-filter="OK" onclick="setAlertFilter('OK')">OK</button>
+    <button class="filter-btn" data-filter="BENIGN" onclick="setAlertFilter('BENIGN')">BENIGN</button>
+    <button class="filter-btn" data-filter="REVIEW" onclick="setAlertFilter('REVIEW')">REVIEW</button>
+    <button class="filter-btn" data-filter="CRITICAL" onclick="setAlertFilter('CRITICAL')">CRITICAL</button>
+  </div>
+
+  <div class="table-hint">
+    This page presents alert records in a user-facing table.
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 150px;">Time</th>
+          <th style="width: 220px;">Source</th>
+          <th style="width: 220px;">Destination</th>
+          <th style="width: 90px;">Proto</th>
+          <th style="width: 120px;">Traffic class</th>
+          <th style="width: 100px;">Repeat</th>
+          <th style="width: 130px;">Final label</th>
+          <th style="width: 120px;">Raw severity</th>
+          <th style="width: 120px;">Score</th>
+          <th style="width: 360px;">Summary</th>
+        </tr>
+      </thead>
+
+      <tbody id="rows">
+        <tr>
+          <td colspan="10" class="muted">Loading…</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer class="ui-footer">
+    Technical API endpoints are available for testing and integration.
+  </footer>
+
+  <script src="/static/ui_common.js"></script>
+  <script src="/static/ui_alerts.js"></script>
+</body>
+</html>

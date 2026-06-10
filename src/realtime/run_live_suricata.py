@@ -10,9 +10,13 @@ from typing import Any, Dict, Optional
 import requests
 
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 API_BASE_URL = os.getenv("API_BASE_URL", "http://127.0.0.1:8000").rstrip("/")
 PREDICT_URL = f"{API_BASE_URL}/predict"
+IDS_API_KEY = os.getenv("IDS_API_KEY", "")
 
 
 def _to_unix_seconds(ts: Any) -> Optional[float]:
@@ -209,7 +213,12 @@ def main() -> int:
             continue
 
         try:
-            r = requests.post(PREDICT_URL, json=payload, timeout=2.0)
+            r = requests.post(
+    PREDICT_URL,
+    json=payload,
+    headers={"X-API-Key": IDS_API_KEY},
+    timeout=2.0,
+)
             if r.status_code != 200:
                 print("[WARN] /predict failed:", r.status_code, r.text[:200], file=sys.stderr)
         except Exception as e:

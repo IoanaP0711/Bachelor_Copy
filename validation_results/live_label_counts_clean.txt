@@ -1,0 +1,4 @@
+   2607 OK
+     75 BENIGN
+     35 REVIEW
+     17 CRITICAL

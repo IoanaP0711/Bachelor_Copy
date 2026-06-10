@@ -1,0 +1,408 @@
+{
+  "time": 1777725248.329185,
+  "traffic_class": "web_https",
+  "likely_benign": true,
+  "repeat_level": "single",
+  "repeat_count": 1,
+  "ae_score": 9.030008316040039,
+  "raw_severity": "CRIT",
+  "final_severity": "MED",
+  "display_label": "REVIEW",
+  "explanation": "The autoencoder assigned anomaly score 9.030008, which maps to raw severity CRIT. The model score was far above the learned normal range. Flow: 10.122.104.120:44710 -> 80.97.208.175:443. Protocol context: TCP / TLS. Traffic class: web_https. This looks like encrypted web or app traffic, which is very common on normal systems. The destination port is 443, which is common in routine desktop traffic. The traffic also matches indicators of likely benign behavior. That does not mean the flow is guaranteed safe; it means the surrounding context looks consistent with normal use. After contextual analysis, the adjusted technical severity is MED and the dashboard label is REVIEW. Technical severity was reduced after contextual checks: strong benign traffic pattern; critical raw anomaly not allowed to be downgraded below REVIEW. Dashboard label reason: Unusual flow kept for review (CRIT raw, MED adjusted). Reason: strong benign traffic pattern, critical raw anomaly not allowed to be downgraded below REVIEW. This event appears isolated. Only 1 matching anomalous flow toward 80.97.208.175:443/TCP was seen in the last 45 seconds. This event is worth analyst review because it is unusual and not clearly explained away by context. It should be interpreted as suspicious or uncommon behavior, not as confirmed compromise."
+}
+{
+  "time": 1777725479.111177,
+  "traffic_class": "web_https",
+  "likely_benign": true,
+  "repeat_level": "single",
+  "repeat_count": 1,
+  "ae_score": 11.107325553894043,
+  "raw_severity": "CRIT",
+  "final_severity": "MED",
+  "display_label": "REVIEW",
+  "explanation": "The autoencoder assigned anomaly score 11.107326, which maps to raw severity CRIT. The model score was far above the learned normal range. Flow: 10.122.104.120:54104 -> 192.178.183.132:443. Protocol context: TCP / TLS. Traffic class: web_https. This looks like encrypted web or app traffic, which is very common on normal systems. The destination port is 443, which is common in routine desktop traffic. The traffic also matches indicators of likely benign behavior. That does not mean the flow is guaranteed safe; it means the surrounding context looks consistent with normal use. After contextual analysis, the adjusted technical severity is MED and the dashboard label is REVIEW. Technical severity was reduced after contextual checks: strong benign traffic pattern; critical raw anomaly not allowed to be downgraded below REVIEW. Dashboard label reason: Unusual flow kept for review (CRIT raw, MED adjusted). Reason: strong benign traffic pattern, critical raw anomaly not allowed to be downgraded below REVIEW. This event appears isolated. Only 1 matching anomalous flow toward 192.178.183.132:443/TCP was seen in the last 45 seconds. This event is worth analyst review because it is unusual and not clearly explained away by context. It should be interpreted as suspicious or uncommon behavior, not as confirmed compromise."
+}
+{
+  "time": 1777725600.505624,
+  "traffic_class": "web_https",
+  "likely_benign": true,
+  "repeat_level": "single",
+  "repeat_count": 1,
+  "ae_score": 10.11190128326416,
+  "raw_severity": "CRIT",
+  "final_severity": "MED",
+  "display_label": "REVIEW",
+  "explanation": "The autoencoder assigned anomaly score 10.111901, which maps to raw severity CRIT. The model score was far above the learned normal range. Flow: 10.122.104.120:59133 -> 192.178.183.91:443. Protocol context: UDP. Traffic class: web_https. This looks like encrypted web or app traffic, which is very common on normal systems. The destination port is 443, which is common in routine desktop traffic. The traffic also matches indicators of likely benign behavior. That does not mean the flow is guaranteed safe; it means the surrounding context looks consistent with normal use. After contextual analysis, the adjusted technical severity is MED and the dashboard label is REVIEW. Technical severity was reduced after contextual checks: strong benign traffic pattern; critical raw anomaly not allowed to be downgraded below REVIEW. Dashboard label reason: Unusual flow kept for review (CRIT raw, MED adjusted). Reason: strong benign traffic pattern, critical raw anomaly not allowed to be downgraded below REVIEW. This event appears isolated. Only 1 matching anomalous flow toward 192.178.183.91:443/UDP was seen in the last 45 seconds. This event is worth analyst review because it is unusual and not clearly explained away by context. It should be interpreted as suspicious or uncommon behavior, not as confirmed compromise."
+}
+{
+  "time": 1777725723.323575,
+  "traffic_class": "web_https",
+  "likely_benign": true,
+  "repeat_level": "single",
+  "repeat_count": 1,
+  "ae_score": 141.07086181640625,
+  "raw_severity": "CRIT",
+  "final_severity": "MED",
+  "display_label": "REVIEW",
+  "explanation": "The autoencoder assigned anomaly score 141.070862, which maps to raw severity CRIT. The model score was far above the learned normal range. Flow: 10.122.104.120:51314 -> 192.178.183.18:443. Protocol context: TCP / TLS. Traffic class: web_https. This looks like encrypted web or app traffic, which is very common on normal systems. The destination port is 443, which is common in routine desktop traffic. The traffic also matches indicators of likely benign behavior. That does not mean the flow is guaranteed safe; it means the surrounding context looks consistent with normal use. After contextual analysis, the adjusted technical severity is MED and the dashboard label is REVIEW. Technical severity was reduced after contextual checks: strong benign traffic pattern; critical raw anomaly not allowed to be downgraded below REVIEW. Dashboard label reason: Unusual flow kept for review (CRIT raw, MED adjusted). Reason: strong benign traffic pattern, critical raw anomaly not allowed to be downgraded below REVIEW. This event appears isolated. Only 1 matching anomalous flow toward 192.178.183.18:443/TCP was seen in the last 45 seconds. This event is worth analyst review because it is unusual and not clearly explained away by context. It should be interpreted as suspicious or uncommon behavior, not as confirmed compromise."
+}
+{
+  "time": 1777725994.035418,
+  "traffic_class": "web_https",
+  "likely_benign": true,
+  "repeat_level": "single",
+  "repeat_count": 1,
+  "ae_score": 184.69302368164062,
+  "raw_severity": "CRIT",
+  "final_severity": "MED",
+  "display_label": "REVIEW",
+  "explanation": "The autoencoder assigned anomaly score 184.693024, which maps to raw severity CRIT. The model score was far above the learned normal range. Flow: 10.122.104.120:54918 -> 172.64.155.209:443. Protocol context: TCP. Traffic class: web_https. This looks like encrypted web or app traffic, which is very common on normal systems. The destination port is 443, which is common in routine desktop traffic. The traffic also matches indicators of likely benign behavior. That does not mean the flow is guaranteed safe; it means the surrounding context looks consistent with normal use. After contextual analysis, the adjusted technical severity is MED and the dashboard label is REVIEW. Technical severity was reduced after contextual checks: strong benign traffic pattern; critical raw anomaly not allowed to be downgraded below REVIEW. Dashboard label reason: Unusual flow kept for review (CRIT raw, MED adjusted). Reason: strong benign traffic pattern, critical raw anomaly not allowed to be downgraded below REVIEW. This event appears isolated. Only 1 matching anomalous flow toward 172.64.155.209:443/TCP was seen in the last 45 seconds. This event is worth analyst review because it is unusual and not clearly explained away by context. It should be interpreted as suspicious or uncommon behavior, not as confirmed compromise."
+}
+{
+  "time": 1777726004.04033,
+  "traffic_class": "background_service",
+  "likely_benign": false,
+  "repeat_level": "repeated",
+  "repeat_count": 2,
+  "ae_score": 1.7361423969268799,
+  "raw_severity": "WARN",
+  "final_severity": "MED",
+  "display_label": "REVIEW",
+  "explanation": "The autoencoder assigned anomaly score 1.736142, which maps to raw severity WARN. The model score was slightly above the learned normal range. Flow: 10.122.104.120:43507 -> 1.1.1.1:9999. Protocol context: UDP. Traffic class: background_service. This traffic does not clearly match a common desktop category. The destination port is 9999, which is less typical for routine desktop traffic. After contextual analysis, the adjusted technical severity is MED and the dashboard label is REVIEW. Technical severity was increased after contextual checks: escalated because similar unknown or uncommon traffic repeated in the short window. Dashboard label reason: Unusual flow kept for review (WARN raw, MED adjusted). Similar anomalous behavior was seen 2 times toward 1.1.1.1:9999/UDP in the last 45 seconds. Repetition makes it more worth checking. This event is worth analyst review because it is unusual and not clearly explained away by context. It should be interpreted as suspicious or uncommon behavior, not as confirmed compromise."
+}
+{
+  "time": 1777726004.040376,
+  "traffic_class": "background_service",
+  "likely_benign": false,
+  "repeat_level": "persistent",
+  "repeat_count": 3,
+  "ae_score": 1.7361423969268799,
+  "raw_severity": "WARN",
+  "final_severity": "CRIT",
+  "display_label": "CRITICAL",
+  "explanation": "The autoencoder assigned anomaly score 1.736142, which maps to raw severity WARN. The model score was slightly above the learned normal range. Flow: 10.122.104.120:43681 -> 1.1.1.1:9999. Protocol context: UDP. Traffic class: background_service. This traffic does not clearly match a common desktop category. The destination port is 9999, which is less typical for routine desktop traffic. After contextual analysis, the adjusted technical severity is CRIT and the dashboard label is CRITICAL. Technical severity was increased after contextual checks: persistent repeated behavior; escalated aggressively because unknown or uncommon traffic became persistent. Dashboard label reason: Critical anomaly detected (WARN raw, CRIT adjusted), requires immediate attention. Reason: persistent repeated behavior. Similar anomalous behavior appears persistent. 3 matching anomalous flows toward 1.1.1.1:9999/UDP were seen in the last 45 seconds. Persistent repetition is more concerning than a one-off deviation. This should be treated as a high-priority event for investigation. Even so, the system is detecting unusual behavior, not proving malware by itself."
+}
+{
+  "time": 1777726026.051395,
+  "traffic_class": "background_service",
+  "likely_benign": false,
+  "repeat_level": "persistent",
+  "repeat_count": 4,
+  "ae_score": 1.7361423969268799,
+  "raw_severity": "WARN",
+  "final_severity": "CRIT",
+  "display_label": "CRITICAL",
+  "explanation": "The autoencoder assigned anomaly score 1.736142, which maps to raw severity WARN. The model score was slightly above the learned normal range. Flow: 10.122.104.120:46964 -> 1.1.1.1:9999. Protocol context: UDP. Traffic class: background_service. This traffic does not clearly match a common desktop category. The destination port is 9999, which is less typical for routine desktop traffic. After contextual analysis, the adjusted technical severity is CRIT and the dashboard label is CRITICAL. Technical severity was increased after contextual checks: persistent repeated behavior; escalated aggressively because unknown or uncommon traffic became persistent. Dashboard label reason: Critical anomaly detected (WARN raw, CRIT adjusted), requires immediate attention. Reason: persistent repeated behavior. Similar anomalous behavior appears persistent. 4 matching anomalous flows toward 1.1.1.1:9999/UDP were seen in the last 45 seconds. Persistent repetition is more concerning than a one-off deviation. This should be treated as a high-priority event for investigation. Even so, the system is detecting unusual behavior, not proving malware by itself."
+}
+{
+  "time": 1777726047.395475,
+  "traffic_class": "background_service",
+  "likely_benign": false,
+  "repeat_level": "persistent",
+  "repeat_count": 4,
+  "ae_score": 1.6969215869903564,
+  "raw_severity": "WARN",
+  "final_severity": "CRIT",
+  "display_label": "CRITICAL",
+  "explanation": "The autoencoder assigned anomaly score 1.696922, which maps to raw severity WARN. The model score was slightly above the learned normal range. Flow: 10.122.104.120:32995 -> 1.1.1.1:9999. Protocol context: UDP. Traffic class: background_service. This traffic does not clearly match a common desktop category. The destination port is 9999, which is less typical for routine desktop traffic. After contextual analysis, the adjusted technical severity is CRIT and the dashboard label is CRITICAL. Technical severity was increased after contextual checks: persistent repeated behavior; escalated aggressively because unknown or uncommon traffic became persistent. Dashboard label reason: Critical anomaly detected (WARN raw, CRIT adjusted), requires immediate attention. Reason: persistent repeated behavior. Similar anomalous behavior appears persistent. 4 matching anomalous flows toward 1.1.1.1:9999/UDP were seen in the last 45 seconds. Persistent repetition is more concerning than a one-off deviation. This should be treated as a high-priority event for investigation. Even so, the system is detecting unusual behavior, not proving malware by itself."
+}
+{
+  "time": 1777726064.731903,
+  "traffic_class": "background_service",
+  "likely_benign": false,
+  "repeat_level": "persistent",
+  "repeat_count": 3,
+  "ae_score": 1.7361423969268799,
+  "raw_severity": "WARN",
+  "final_severity": "CRIT",
+  "display_label": "CRITICAL",
+  "explanation": "The autoencoder assigned anomaly score 1.736142, which maps to raw severity WARN. The model score was slightly above the learned normal range. Flow: 10.122.104.120:57461 -> 1.1.1.1:9999. Protocol context: UDP. Traffic class: background_service. This traffic does not clearly match a common desktop category. The destination port is 9999, which is less typical for routine desktop traffic. After contextual analysis, the adjusted technical severity is CRIT and the dashboard label is CRITICAL. Technical severity was increased after contextual checks: persistent repeated behavior; escalated aggressively because unknown or uncommon traffic became persistent. Dashboard label reason: Critical anomaly detected (WARN raw, CRIT adjusted), requires immediate attention. Reason: persistent repeated behavior. Similar anomalous behavior appears persistent. 3 matching anomalous flows toward 1.1.1.1:9999/UDP were seen in the last 45 seconds. Persistent repetition is more concerning than a one-off deviation. This should be treated as a high-priority event for investigation. Even so, the system is detecting unusual behavior, not proving malware by itself."
+}
+{
+  "time": 1777726073.408451,
+  "traffic_class": "background_service",
+  "likely_benign": false,
+  "repeat_level": "persistent",
+  "repeat_count": 3,
+  "ae_score": 1.7361423969268799,
+  "raw_severity": "WARN",
+  "final_severity": "CRIT",
+  "display_label": "CRITICAL",
+  "explanation": "The autoencoder assigned anomaly score 1.736142, which maps to raw severity WARN. The model score was slightly above the learned normal range. Flow: 10.122.104.120:55060 -> 1.1.1.1:9999. Protocol context: UDP. Traffic class: background_service. This traffic does not clearly match a common desktop category. The destination port is 9999, which is less typical for routine desktop traffic. After contextual analysis, the adjusted technical severity is CRIT and the dashboard label is CRITICAL. Technical severity was increased after contextual checks: persistent repeated behavior; escalated aggressively because unknown or uncommon traffic became persistent. Dashboard label reason: Critical anomaly detected (WARN raw, CRIT adjusted), requires immediate attention. Reason: persistent repeated behavior. Similar anomalous behavior appears persistent. 3 matching anomalous flows toward 1.1.1.1:9999/UDP were seen in the last 45 seconds. Persistent repetition is more concerning than a one-off deviation. This should be treated as a high-priority event for investigation. Even so, the system is detecting unusual behavior, not proving malware by itself."
+}
+{
+  "time": 1777726083.413303,
+  "traffic_class": "background_service",
+  "likely_benign": false,
+  "repeat_level": "persistent",
+  "repeat_count": 4,
+  "ae_score": 1.7361423969268799,
+  "raw_severity": "WARN",
+  "final_severity": "CRIT",
+  "display_label": "CRITICAL",
+  "explanation": "The autoencoder assigned anomaly score 1.736142, which maps to raw severity WARN. The model score was slightly above the learned normal range. Flow: 10.122.104.120:35366 -> 1.1.1.1:9999. Protocol context: UDP. Traffic class: background_service. This traffic does not clearly match a common desktop category. The destination port is 9999, which is less typical for routine desktop traffic. After contextual analysis, the adjusted technical severity is CRIT and the dashboard label is CRITICAL. Technical severity was increased after contextual checks: persistent repeated behavior; escalated aggressively because unknown or uncommon traffic became persistent. Dashboard label reason: Critical anomaly detected (WARN raw, CRIT adjusted), requires immediate attention. Reason: persistent repeated behavior. Similar anomalous behavior appears persistent. 4 matching anomalous flows toward 1.1.1.1:9999/UDP were seen in the last 45 seconds. Persistent repetition is more concerning than a one-off deviation. This should be treated as a high-priority event for investigation. Even so, the system is detecting unusual behavior, not proving malware by itself."
+}
+{
+  "time": 1777726104.090255,
+  "traffic_class": "background_service",
+  "likely_benign": false,
+  "repeat_level": "persistent",
+  "repeat_count": 4,
+  "ae_score": 1.6969215869903564,
+  "raw_severity": "WARN",
+  "final_severity": "CRIT",
+  "display_label": "CRITICAL",
+  "explanation": "The autoencoder assigned anomaly score 1.696922, which maps to raw severity WARN. The model score was slightly above the learned normal range. Flow: 10.122.104.120:46268 -> 1.1.1.1:9999. Protocol context: UDP. Traffic class: background_service. This traffic does not clearly match a common desktop category. The destination port is 9999, which is less typical for routine desktop traffic. After contextual analysis, the adjusted technical severity is CRIT and the dashboard label is CRITICAL. Technical severity was increased after contextual checks: persistent repeated behavior; escalated aggressively because unknown or uncommon traffic became persistent. Dashboard label reason: Critical anomaly detected (WARN raw, CRIT adjusted), requires immediate attention. Reason: persistent repeated behavior. Similar anomalous behavior appears persistent. 4 matching anomalous flows toward 1.1.1.1:9999/UDP were seen in the last 45 seconds. Persistent repetition is more concerning than a one-off deviation. This should be treated as a high-priority event for investigation. Even so, the system is detecting unusual behavior, not proving malware by itself."
+}
+{
+  "time": 1777726110.093566,
+  "traffic_class": "background_service",
+  "likely_benign": false,
+  "repeat_level": "persistent",
+  "repeat_count": 4,
+  "ae_score": 1.6969215869903564,
+  "raw_severity": "WARN",
+  "final_severity": "CRIT",
+  "display_label": "CRITICAL",
+  "explanation": "The autoencoder assigned anomaly score 1.696922, which maps to raw severity WARN. The model score was slightly above the learned normal range. Flow: 10.122.104.120:40696 -> 1.1.1.1:9999. Protocol context: UDP. Traffic class: background_service. This traffic does not clearly match a common desktop category. The destination port is 9999, which is less typical for routine desktop traffic. After contextual analysis, the adjusted technical severity is CRIT and the dashboard label is CRITICAL. Technical severity was increased after contextual checks: persistent repeated behavior; escalated aggressively because unknown or uncommon traffic became persistent. Dashboard label reason: Critical anomaly detected (WARN raw, CRIT adjusted), requires immediate attention. Reason: persistent repeated behavior. Similar anomalous behavior appears persistent. 4 matching anomalous flows toward 1.1.1.1:9999/UDP were seen in the last 45 seconds. Persistent repetition is more concerning than a one-off deviation. This should be treated as a high-priority event for investigation. Even so, the system is detecting unusual behavior, not proving malware by itself."
+}
+{
+  "time": 1777726117.430176,
+  "traffic_class": "background_service",
+  "likely_benign": false,
+  "repeat_level": "persistent",
+  "repeat_count": 5,
+  "ae_score": 1.6969215869903564,
+  "raw_severity": "WARN",
+  "final_severity": "CRIT",
+  "display_label": "CRITICAL",
+  "explanation": "The autoencoder assigned anomaly score 1.696922, which maps to raw severity WARN. The model score was slightly above the learned normal range. Flow: 10.122.104.120:54293 -> 1.1.1.1:9999. Protocol context: UDP. Traffic class: background_service. This traffic does not clearly match a common desktop category. The destination port is 9999, which is less typical for routine desktop traffic. After contextual analysis, the adjusted technical severity is CRIT and the dashboard label is CRITICAL. Technical severity was increased after contextual checks: persistent repeated behavior; escalated aggressively because unknown or uncommon traffic became persistent. Dashboard label reason: Critical anomaly detected (WARN raw, CRIT adjusted), requires immediate attention. Reason: persistent repeated behavior. Similar anomalous behavior appears persistent. 5 matching anomalous flows toward 1.1.1.1:9999/UDP were seen in the last 45 seconds. Persistent repetition is more concerning than a one-off deviation. This should be treated as a high-priority event for investigation. Even so, the system is detecting unusual behavior, not proving malware by itself."
+}
+{
+  "time": 1777726121.432394,
+  "traffic_class": "background_service",
+  "likely_benign": false,
+  "repeat_level": "persistent",
+  "repeat_count": 5,
+  "ae_score": 1.7361423969268799,
+  "raw_severity": "WARN",
+  "final_severity": "CRIT",
+  "display_label": "CRITICAL",
+  "explanation": "The autoencoder assigned anomaly score 1.736142, which maps to raw severity WARN. The model score was slightly above the learned normal range. Flow: 10.122.104.120:50182 -> 1.1.1.1:9999. Protocol context: UDP. Traffic class: background_service. This traffic does not clearly match a common desktop category. The destination port is 9999, which is less typical for routine desktop traffic. After contextual analysis, the adjusted technical severity is CRIT and the dashboard label is CRITICAL. Technical severity was increased after contextual checks: persistent repeated behavior; escalated aggressively because unknown or uncommon traffic became persistent. Dashboard label reason: Critical anomaly detected (WARN raw, CRIT adjusted), requires immediate attention. Reason: persistent repeated behavior. Similar anomalous behavior appears persistent. 5 matching anomalous flows toward 1.1.1.1:9999/UDP were seen in the last 45 seconds. Persistent repetition is more concerning than a one-off deviation. This should be treated as a high-priority event for investigation. Even so, the system is detecting unusual behavior, not proving malware by itself."
+}
+{
+  "time": 1777726135.439495,
+  "traffic_class": "background_service",
+  "likely_benign": false,
+  "repeat_level": "persistent",
+  "repeat_count": 5,
+  "ae_score": 1.7361423969268799,
+  "raw_severity": "WARN",
+  "final_severity": "CRIT",
+  "display_label": "CRITICAL",
+  "explanation": "The autoencoder assigned anomaly score 1.736142, which maps to raw severity WARN. The model score was slightly above the learned normal range. Flow: 10.122.104.120:46749 -> 1.1.1.1:9999. Protocol context: UDP. Traffic class: background_service. This traffic does not clearly match a common desktop category. The destination port is 9999, which is less typical for routine desktop traffic. After contextual analysis, the adjusted technical severity is CRIT and the dashboard label is CRITICAL. Technical severity was increased after contextual checks: persistent repeated behavior; escalated aggressively because unknown or uncommon traffic became persistent. Dashboard label reason: Critical anomaly detected (WARN raw, CRIT adjusted), requires immediate attention. Reason: persistent repeated behavior. Similar anomalous behavior appears persistent. 5 matching anomalous flows toward 1.1.1.1:9999/UDP were seen in the last 45 seconds. Persistent repetition is more concerning than a one-off deviation. This should be treated as a high-priority event for investigation. Even so, the system is detecting unusual behavior, not proving malware by itself."
+}
+{
+  "time": 1777726140.108494,
+  "traffic_class": "background_service",
+  "likely_benign": false,
+  "repeat_level": "persistent",
+  "repeat_count": 6,
+  "ae_score": 1.6969215869903564,
+  "raw_severity": "WARN",
+  "final_severity": "CRIT",
+  "display_label": "CRITICAL",
+  "explanation": "The autoencoder assigned anomaly score 1.696922, which maps to raw severity WARN. The model score was slightly above the learned normal range. Flow: 10.122.104.120:59635 -> 1.1.1.1:9999. Protocol context: UDP. Traffic class: background_service. This traffic does not clearly match a common desktop category. The destination port is 9999, which is less typical for routine desktop traffic. After contextual analysis, the adjusted technical severity is CRIT and the dashboard label is CRITICAL. Technical severity was increased after contextual checks: persistent repeated behavior; escalated aggressively because unknown or uncommon traffic became persistent. Dashboard label reason: Critical anomaly detected (WARN raw, CRIT adjusted), requires immediate attention. Reason: persistent repeated behavior. Similar anomalous behavior appears persistent. 6 matching anomalous flows toward 1.1.1.1:9999/UDP were seen in the last 45 seconds. Persistent repetition is more concerning than a one-off deviation. This should be treated as a high-priority event for investigation. Even so, the system is detecting unusual behavior, not proving malware by itself."
+}
+{
+  "time": 1777726153.448493,
+  "traffic_class": "background_service",
+  "likely_benign": false,
+  "repeat_level": "persistent",
+  "repeat_count": 6,
+  "ae_score": 1.7361423969268799,
+  "raw_severity": "WARN",
+  "final_severity": "CRIT",
+  "display_label": "CRITICAL",
+  "explanation": "The autoencoder assigned anomaly score 1.736142, which maps to raw severity WARN. The model score was slightly above the learned normal range. Flow: 10.122.104.120:41633 -> 1.1.1.1:9999. Protocol context: UDP. Traffic class: background_service. This traffic does not clearly match a common desktop category. The destination port is 9999, which is less typical for routine desktop traffic. After contextual analysis, the adjusted technical severity is CRIT and the dashboard label is CRITICAL. Technical severity was increased after contextual checks: persistent repeated behavior; escalated aggressively because unknown or uncommon traffic became persistent. Dashboard label reason: Critical anomaly detected (WARN raw, CRIT adjusted), requires immediate attention. Reason: persistent repeated behavior. Similar anomalous behavior appears persistent. 6 matching anomalous flows toward 1.1.1.1:9999/UDP were seen in the last 45 seconds. Persistent repetition is more concerning than a one-off deviation. This should be treated as a high-priority event for investigation. Even so, the system is detecting unusual behavior, not proving malware by itself."
+}
+{
+  "time": 1777726162.119257,
+  "traffic_class": "background_service",
+  "likely_benign": false,
+  "repeat_level": "persistent",
+  "repeat_count": 6,
+  "ae_score": 1.6969215869903564,
+  "raw_severity": "WARN",
+  "final_severity": "CRIT",
+  "display_label": "CRITICAL",
+  "explanation": "The autoencoder assigned anomaly score 1.696922, which maps to raw severity WARN. The model score was slightly above the learned normal range. Flow: 10.122.104.120:38480 -> 1.1.1.1:9999. Protocol context: UDP. Traffic class: background_service. This traffic does not clearly match a common desktop category. The destination port is 9999, which is less typical for routine desktop traffic. After contextual analysis, the adjusted technical severity is CRIT and the dashboard label is CRITICAL. Technical severity was increased after contextual checks: persistent repeated behavior; escalated aggressively because unknown or uncommon traffic became persistent. Dashboard label reason: Critical anomaly detected (WARN raw, CRIT adjusted), requires immediate attention. Reason: persistent repeated behavior. Similar anomalous behavior appears persistent. 6 matching anomalous flows toward 1.1.1.1:9999/UDP were seen in the last 45 seconds. Persistent repetition is more concerning than a one-off deviation. This should be treated as a high-priority event for investigation. Even so, the system is detecting unusual behavior, not proving malware by itself."
+}
+{
+  "time": 1777726162.119314,
+  "traffic_class": "background_service",
+  "likely_benign": false,
+  "repeat_level": "persistent",
+  "repeat_count": 7,
+  "ae_score": 1.6969215869903564,
+  "raw_severity": "WARN",
+  "final_severity": "CRIT",
+  "display_label": "CRITICAL",
+  "explanation": "The autoencoder assigned anomaly score 1.696922, which maps to raw severity WARN. The model score was slightly above the learned normal range. Flow: 10.122.104.120:36446 -> 1.1.1.1:9999. Protocol context: UDP. Traffic class: background_service. This traffic does not clearly match a common desktop category. The destination port is 9999, which is less typical for routine desktop traffic. After contextual analysis, the adjusted technical severity is CRIT and the dashboard label is CRITICAL. Technical severity was increased after contextual checks: persistent repeated behavior; escalated aggressively because unknown or uncommon traffic became persistent. Dashboard label reason: Critical anomaly detected (WARN raw, CRIT adjusted), requires immediate attention. Reason: persistent repeated behavior. Similar anomalous behavior appears persistent. 7 matching anomalous flows toward 1.1.1.1:9999/UDP were seen in the last 45 seconds. Persistent repetition is more concerning than a one-off deviation. This should be treated as a high-priority event for investigation. Even so, the system is detecting unusual behavior, not proving malware by itself."
+}
+{
+  "time": 1777726163.453255,
+  "traffic_class": "background_service",
+  "likely_benign": false,
+  "repeat_level": "persistent",
+  "repeat_count": 7,
+  "ae_score": 1.6969215869903564,
+  "raw_severity": "WARN",
+  "final_severity": "CRIT",
+  "display_label": "CRITICAL",
+  "explanation": "The autoencoder assigned anomaly score 1.696922, which maps to raw severity WARN. The model score was slightly above the learned normal range. Flow: 10.122.104.120:41734 -> 1.1.1.1:9999. Protocol context: UDP. Traffic class: background_service. This traffic does not clearly match a common desktop category. The destination port is 9999, which is less typical for routine desktop traffic. After contextual analysis, the adjusted technical severity is CRIT and the dashboard label is CRITICAL. Technical severity was increased after contextual checks: persistent repeated behavior; escalated aggressively because unknown or uncommon traffic became persistent. Dashboard label reason: Critical anomaly detected (WARN raw, CRIT adjusted), requires immediate attention. Reason: persistent repeated behavior. Similar anomalous behavior appears persistent. 7 matching anomalous flows toward 1.1.1.1:9999/UDP were seen in the last 45 seconds. Persistent repetition is more concerning than a one-off deviation. This should be treated as a high-priority event for investigation. Even so, the system is detecting unusual behavior, not proving malware by itself."
+}
+{
+  "time": 1777726182.129361,
+  "traffic_class": "background_service",
+  "likely_benign": false,
+  "repeat_level": "persistent",
+  "repeat_count": 6,
+  "ae_score": 1.7361423969268799,
+  "raw_severity": "WARN",
+  "final_severity": "CRIT",
+  "display_label": "CRITICAL",
+  "explanation": "The autoencoder assigned anomaly score 1.736142, which maps to raw severity WARN. The model score was slightly above the learned normal range. Flow: 10.122.104.120:53658 -> 1.1.1.1:9999. Protocol context: UDP. Traffic class: background_service. This traffic does not clearly match a common desktop category. The destination port is 9999, which is less typical for routine desktop traffic. After contextual analysis, the adjusted technical severity is CRIT and the dashboard label is CRITICAL. Technical severity was increased after contextual checks: persistent repeated behavior; escalated aggressively because unknown or uncommon traffic became persistent. Dashboard label reason: Critical anomaly detected (WARN raw, CRIT adjusted), requires immediate attention. Reason: persistent repeated behavior. Similar anomalous behavior appears persistent. 6 matching anomalous flows toward 1.1.1.1:9999/UDP were seen in the last 45 seconds. Persistent repetition is more concerning than a one-off deviation. This should be treated as a high-priority event for investigation. Even so, the system is detecting unusual behavior, not proving malware by itself."
+}
+{
+  "time": 1777726212.144536,
+  "traffic_class": "background_service",
+  "likely_benign": false,
+  "repeat_level": "repeated",
+  "repeat_count": 2,
+  "ae_score": 1.7361423969268799,
+  "raw_severity": "WARN",
+  "final_severity": "MED",
+  "display_label": "REVIEW",
+  "explanation": "The autoencoder assigned anomaly score 1.736142, which maps to raw severity WARN. The model score was slightly above the learned normal range. Flow: 10.122.104.120:49831 -> 1.1.1.1:9999. Protocol context: UDP. Traffic class: background_service. This traffic does not clearly match a common desktop category. The destination port is 9999, which is less typical for routine desktop traffic. After contextual analysis, the adjusted technical severity is MED and the dashboard label is REVIEW. Technical severity was increased after contextual checks: escalated because similar unknown or uncommon traffic repeated in the short window. Dashboard label reason: Unusual flow kept for review (WARN raw, MED adjusted). Similar anomalous behavior was seen 2 times toward 1.1.1.1:9999/UDP in the last 45 seconds. Repetition makes it more worth checking. This event is worth analyst review because it is unusual and not clearly explained away by context. It should be interpreted as suspicious or uncommon behavior, not as confirmed compromise."
+}
+{
+  "time": 1777726297.549728,
+  "traffic_class": "web_https",
+  "likely_benign": true,
+  "repeat_level": "single",
+  "repeat_count": 1,
+  "ae_score": 12.354358673095703,
+  "raw_severity": "CRIT",
+  "final_severity": "MED",
+  "display_label": "REVIEW",
+  "explanation": "The autoencoder assigned anomaly score 12.354359, which maps to raw severity CRIT. The model score was far above the learned normal range. Flow: 10.122.104.120:54386 -> 142.251.110.94:443. Protocol context: TCP / TLS. Traffic class: web_https. This looks like encrypted web or app traffic, which is very common on normal systems. The destination port is 443, which is common in routine desktop traffic. The traffic also matches indicators of likely benign behavior. That does not mean the flow is guaranteed safe; it means the surrounding context looks consistent with normal use. After contextual analysis, the adjusted technical severity is MED and the dashboard label is REVIEW. Technical severity was reduced after contextual checks: strong benign traffic pattern; critical raw anomaly not allowed to be downgraded below REVIEW. Dashboard label reason: Unusual flow kept for review (CRIT raw, MED adjusted). Reason: strong benign traffic pattern, critical raw anomaly not allowed to be downgraded below REVIEW. This event appears isolated. Only 1 matching anomalous flow toward 142.251.110.94:443/TCP was seen in the last 45 seconds. This event is worth analyst review because it is unusual and not clearly explained away by context. It should be interpreted as suspicious or uncommon behavior, not as confirmed compromise."
+}
+{
+  "time": 1777726466.271504,
+  "traffic_class": "web_http",
+  "likely_benign": false,
+  "repeat_level": "single",
+  "repeat_count": 1,
+  "ae_score": 33.376922607421875,
+  "raw_severity": "CRIT",
+  "final_severity": "MED",
+  "display_label": "REVIEW",
+  "explanation": "The autoencoder assigned anomaly score 33.376923, which maps to raw severity CRIT. The model score was far above the learned normal range. Flow: 10.122.104.120:41816 -> 34.104.35.123:80. Protocol context: TCP / HTTP. Traffic class: web_http. This looks like normal web traffic, which is common during everyday browsing or app use. The destination port is 80, which is common in routine desktop traffic. After contextual analysis, the adjusted technical severity is MED and the dashboard label is REVIEW. Technical severity was reduced after contextual checks: strong benign traffic pattern; critical raw anomaly not allowed to be downgraded below REVIEW. Dashboard label reason: Unusual flow kept for review (CRIT raw, MED adjusted). Reason: strong benign traffic pattern, critical raw anomaly not allowed to be downgraded below REVIEW. This event appears isolated. Only 1 matching anomalous flow toward 34.104.35.123:80/TCP was seen in the last 45 seconds. This event is worth analyst review because it is unusual and not clearly explained away by context. It should be interpreted as suspicious or uncommon behavior, not as confirmed compromise."
+}
+{
+  "time": 1777726541.642248,
+  "traffic_class": "web_https",
+  "likely_benign": true,
+  "repeat_level": "single",
+  "repeat_count": 1,
+  "ae_score": 37488.078125,
+  "raw_severity": "CRIT",
+  "final_severity": "MED",
+  "display_label": "REVIEW",
+  "explanation": "The autoencoder assigned anomaly score 37488.078125, which maps to raw severity CRIT. The model score was far above the learned normal range. Flow: 10.122.104.120:34101 -> 185.60.218.24:443. Protocol context: UDP. Traffic class: web_https. This looks like encrypted web or app traffic, which is very common on normal systems. The destination port is 443, which is common in routine desktop traffic. The traffic also matches indicators of likely benign behavior. That does not mean the flow is guaranteed safe; it means the surrounding context looks consistent with normal use. After contextual analysis, the adjusted technical severity is MED and the dashboard label is REVIEW. Technical severity was reduced after contextual checks: strong benign traffic pattern; critical raw anomaly not allowed to be downgraded below REVIEW. Dashboard label reason: Unusual flow kept for review (CRIT raw, MED adjusted). Reason: strong benign traffic pattern, critical raw anomaly not allowed to be downgraded below REVIEW. This event appears isolated. Only 1 matching anomalous flow toward 185.60.218.24:443/UDP was seen in the last 45 seconds. This event is worth analyst review because it is unusual and not clearly explained away by context. It should be interpreted as suspicious or uncommon behavior, not as confirmed compromise."
+}
+{
+  "time": 1777726546.378753,
+  "traffic_class": "web_https",
+  "likely_benign": true,
+  "repeat_level": "single",
+  "repeat_count": 1,
+  "ae_score": 18.767608642578125,
+  "raw_severity": "CRIT",
+  "final_severity": "MED",
+  "display_label": "REVIEW",
+  "explanation": "The autoencoder assigned anomaly score 18.767609, which maps to raw severity CRIT. The model score was far above the learned normal range. Flow: 10.122.104.120:35420 -> 142.251.14.19:443. Protocol context: TCP / TLS. Traffic class: web_https. This looks like encrypted web or app traffic, which is very common on normal systems. The destination port is 443, which is common in routine desktop traffic. The traffic also matches indicators of likely benign behavior. That does not mean the flow is guaranteed safe; it means the surrounding context looks consistent with normal use. After contextual analysis, the adjusted technical severity is MED and the dashboard label is REVIEW. Technical severity was reduced after contextual checks: strong benign traffic pattern; critical raw anomaly not allowed to be downgraded below REVIEW. Dashboard label reason: Unusual flow kept for review (CRIT raw, MED adjusted). Reason: strong benign traffic pattern, critical raw anomaly not allowed to be downgraded below REVIEW. This event appears isolated. Only 1 matching anomalous flow toward 142.251.14.19:443/TCP was seen in the last 45 seconds. This event is worth analyst review because it is unusual and not clearly explained away by context. It should be interpreted as suspicious or uncommon behavior, not as confirmed compromise."
+}
+{
+  "time": 1777726574.325263,
+  "traffic_class": "web_https",
+  "likely_benign": true,
+  "repeat_level": "single",
+  "repeat_count": 1,
+  "ae_score": 13.25904369354248,
+  "raw_severity": "CRIT",
+  "final_severity": "MED",
+  "display_label": "REVIEW",
+  "explanation": "The autoencoder assigned anomaly score 13.259044, which maps to raw severity CRIT. The model score was far above the learned normal range. Flow: 10.122.104.120:57871 -> 142.251.110.95:443. Protocol context: UDP. Traffic class: web_https. This looks like encrypted web or app traffic, which is very common on normal systems. The destination port is 443, which is common in routine desktop traffic. The traffic also matches indicators of likely benign behavior. That does not mean the flow is guaranteed safe; it means the surrounding context looks consistent with normal use. After contextual analysis, the adjusted technical severity is MED and the dashboard label is REVIEW. Technical severity was reduced after contextual checks: strong benign traffic pattern; critical raw anomaly not allowed to be downgraded below REVIEW. Dashboard label reason: Unusual flow kept for review (CRIT raw, MED adjusted). Reason: strong benign traffic pattern, critical raw anomaly not allowed to be downgraded below REVIEW. This event appears isolated. Only 1 matching anomalous flow toward 142.251.110.95:443/UDP was seen in the last 45 seconds. This event is worth analyst review because it is unusual and not clearly explained away by context. It should be interpreted as suspicious or uncommon behavior, not as confirmed compromise."
+}
+{
+  "time": 1777726612.344463,
+  "traffic_class": "web_https",
+  "likely_benign": true,
+  "repeat_level": "single",
+  "repeat_count": 1,
+  "ae_score": 31.318410873413086,
+  "raw_severity": "CRIT",
+  "final_severity": "MED",
+  "display_label": "REVIEW",
+  "explanation": "The autoencoder assigned anomaly score 31.318411, which maps to raw severity CRIT. The model score was far above the learned normal range. Flow: 10.122.104.120:41840 -> 142.251.13.132:443. Protocol context: UDP. Traffic class: web_https. This looks like encrypted web or app traffic, which is very common on normal systems. The destination port is 443, which is common in routine desktop traffic. The traffic also matches indicators of likely benign behavior. That does not mean the flow is guaranteed safe; it means the surrounding context looks consistent with normal use. After contextual analysis, the adjusted technical severity is MED and the dashboard label is REVIEW. Technical severity was reduced after contextual checks: strong benign traffic pattern; critical raw anomaly not allowed to be downgraded below REVIEW. Dashboard label reason: Unusual flow kept for review (CRIT raw, MED adjusted). Reason: strong benign traffic pattern, critical raw anomaly not allowed to be downgraded below REVIEW. This event appears isolated. Only 1 matching anomalous flow toward 142.251.13.132:443/UDP was seen in the last 45 seconds. This event is worth analyst review because it is unusual and not clearly explained away by context. It should be interpreted as suspicious or uncommon behavior, not as confirmed compromise."
+}
+{
+  "time": 1777726616.354798,
+  "traffic_class": "web_https",
+  "likely_benign": true,
+  "repeat_level": "single",
+  "repeat_count": 1,
+  "ae_score": 11.823233604431152,
+  "raw_severity": "CRIT",
+  "final_severity": "MED",
+  "display_label": "REVIEW",
+  "explanation": "The autoencoder assigned anomaly score 11.823234, which maps to raw severity CRIT. The model score was far above the learned normal range. Flow: 10.122.104.120:56836 -> 143.204.11.111:443. Protocol context: TCP / TLS. Traffic class: web_https. This looks like encrypted web or app traffic, which is very common on normal systems. The destination port is 443, which is common in routine desktop traffic. The traffic also matches indicators of likely benign behavior. That does not mean the flow is guaranteed safe; it means the surrounding context looks consistent with normal use. After contextual analysis, the adjusted technical severity is MED and the dashboard label is REVIEW. Technical severity was reduced after contextual checks: strong benign traffic pattern; critical raw anomaly not allowed to be downgraded below REVIEW. Dashboard label reason: Unusual flow kept for review (CRIT raw, MED adjusted). Reason: strong benign traffic pattern, critical raw anomaly not allowed to be downgraded below REVIEW. This event appears isolated. Only 1 matching anomalous flow toward 143.204.11.111:443/TCP was seen in the last 45 seconds. This event is worth analyst review because it is unusual and not clearly explained away by context. It should be interpreted as suspicious or uncommon behavior, not as confirmed compromise."
+}
+{
+  "time": 1777726707.058557,
+  "traffic_class": "web_https",
+  "likely_benign": true,
+  "repeat_level": "single",
+  "repeat_count": 1,
+  "ae_score": 100.14160919189453,
+  "raw_severity": "CRIT",
+  "final_severity": "MED",
+  "display_label": "REVIEW",
+  "explanation": "The autoencoder assigned anomaly score 100.141609, which maps to raw severity CRIT. The model score was far above the learned normal range. Flow: 10.122.104.120:48916 -> 3.160.246.48:443. Protocol context: TCP / TLS. Traffic class: web_https. This looks like encrypted web or app traffic, which is very common on normal systems. The destination port is 443, which is common in routine desktop traffic. The traffic also matches indicators of likely benign behavior. That does not mean the flow is guaranteed safe; it means the surrounding context looks consistent with normal use. After contextual analysis, the adjusted technical severity is MED and the dashboard label is REVIEW. Technical severity was reduced after contextual checks: strong benign traffic pattern; critical raw anomaly not allowed to be downgraded below REVIEW. Dashboard label reason: Unusual flow kept for review (CRIT raw, MED adjusted). Reason: strong benign traffic pattern, critical raw anomaly not allowed to be downgraded below REVIEW. This event appears isolated. Only 1 matching anomalous flow toward 3.160.246.48:443/TCP was seen in the last 45 seconds. This event is worth analyst review because it is unusual and not clearly explained away by context. It should be interpreted as suspicious or uncommon behavior, not as confirmed compromise."
+}
+{
+  "time": 1777726722.39919,
+  "traffic_class": "web_https",
+  "likely_benign": true,
+  "repeat_level": "single",
+  "repeat_count": 1,
+  "ae_score": 10.277145385742188,
+  "raw_severity": "CRIT",
+  "final_severity": "MED",
+  "display_label": "REVIEW",
+  "explanation": "The autoencoder assigned anomaly score 10.277145, which maps to raw severity CRIT. The model score was far above the learned normal range. Flow: 10.122.104.120:56471 -> 142.251.110.102:443. Protocol context: UDP. Traffic class: web_https. This looks like encrypted web or app traffic, which is very common on normal systems. The destination port is 443, which is common in routine desktop traffic. The traffic also matches indicators of likely benign behavior. That does not mean the flow is guaranteed safe; it means the surrounding context looks consistent with normal use. After contextual analysis, the adjusted technical severity is MED and the dashboard label is REVIEW. Technical severity was reduced after contextual checks: strong benign traffic pattern; critical raw anomaly not allowed to be downgraded below REVIEW. Dashboard label reason: Unusual flow kept for review (CRIT raw, MED adjusted). Reason: strong benign traffic pattern, critical raw anomaly not allowed to be downgraded below REVIEW. This event appears isolated. Only 1 matching anomalous flow toward 142.251.110.102:443/UDP was seen in the last 45 seconds. This event is worth analyst review because it is unusual and not clearly explained away by context. It should be interpreted as suspicious or uncommon behavior, not as confirmed compromise."
+}
+{
+  "time": 1777726798.457172,
+  "traffic_class": "web_https",
+  "likely_benign": true,
+  "repeat_level": "single",
+  "repeat_count": 1,
+  "ae_score": 19.963396072387695,
+  "raw_severity": "CRIT",
+  "final_severity": "MED",
+  "display_label": "REVIEW",
+  "explanation": "The autoencoder assigned anomaly score 19.963396, which maps to raw severity CRIT. The model score was far above the learned normal range. Flow: 10.122.104.120:41756 -> 3.160.246.21:443. Protocol context: TCP / TLS. Traffic class: web_https. This looks like encrypted web or app traffic, which is very common on normal systems. The destination port is 443, which is common in routine desktop traffic. The traffic also matches indicators of likely benign behavior. That does not mean the flow is guaranteed safe; it means the surrounding context looks consistent with normal use. After contextual analysis, the adjusted technical severity is MED and the dashboard label is REVIEW. Technical severity was reduced after contextual checks: strong benign traffic pattern; critical raw anomaly not allowed to be downgraded below REVIEW. Dashboard label reason: Unusual flow kept for review (CRIT raw, MED adjusted). Reason: strong benign traffic pattern, critical raw anomaly not allowed to be downgraded below REVIEW. This event appears isolated. Only 1 matching anomalous flow toward 3.160.246.21:443/TCP was seen in the last 45 seconds. This event is worth analyst review because it is unusual and not clearly explained away by context. It should be interpreted as suspicious or uncommon behavior, not as confirmed compromise."
+}

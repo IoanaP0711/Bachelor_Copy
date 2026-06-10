@@ -385,6 +385,11 @@ def adjust_final_severity(alert: Dict[str, Any]) -> Dict[str, Any]:
     dport = _to_int(alert.get("dest_port", alert.get("dport")))
     repeat_level = _repeat_level(alert)
 
+    is_strong_local_discovery = (
+        traffic_class == "local_discovery"
+        and bool(alert.get("likely_benign", False))
+    )
+
     common_desktop = _is_common_desktop_traffic(
         traffic_class=traffic_class,
         protocol=protocol,
@@ -401,7 +406,7 @@ def adjust_final_severity(alert: Dict[str, Any]) -> Dict[str, Any]:
     if common_desktop and not is_unknown:
         if is_strongly_benign:
             final_num = max(0, final_num - 2)
-            reasons.append("strong benign traffic pattern")
+            reasons.append("traffic matches a common benign pattern")
         elif is_soft_benign:
             final_num = max(0, final_num - 1)
             reasons.append("common benign desktop traffic")
@@ -414,15 +419,10 @@ def adjust_final_severity(alert: Dict[str, Any]) -> Dict[str, Any]:
         if final_num < raw_num:
             reasons.append("unknown traffic kept visible")
 
-            is_strong_local_discovery = (
-        traffic_class == "local_discovery"
-        and bool(alert.get("likely_benign", False))
-    )
-
     if repeat_level == "persistent" and not is_strong_local_discovery:
         final_num = min(3, final_num + 1)
         reasons.append("persistent repeated behavior")
-        
+
     final_num = max(0, min(3, final_num))
     final_severity = NUM_TO_SEV[final_num]
 
@@ -447,7 +447,7 @@ def make_display_label_with_reason(alert: Dict[str, Any]) -> tuple[str, str]:
 
     if raw_sev == "crit" and final_sev in {"ok", "warn"} and not is_strong_local_discovery:
         final_sev = "med"
-        reasons.append("critical raw anomaly not allowed to be downgraded below REVIEW")
+        reasons.append("high raw anomaly score kept visible for review")
 
     alert["final_severity"] = final_sev
     alert["severity"] = final_sev

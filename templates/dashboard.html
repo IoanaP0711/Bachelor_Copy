@@ -1,0 +1,235 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>RT-IDS Dashboard</title>
+  <link rel="stylesheet" href="/static/dashboard.css">
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-title">Real-Time IDS Dashboard</div>
+      <div class="brand-subtitle">
+        Autoencoder anomaly detection with contextual interpretation layer
+        <span class="pill" id="statusPill">…</span>
+      </div>
+    </div>
+
+    <nav class="main-nav" aria-label="Dashboard navigation">
+      <a href="/" class="active" data-nav="dashboard">Dashboard</a>
+      <a href="/ui/system" data-nav="system">System</a>
+      <a href="/ui/alerts" data-nav="alerts">Alerts</a>
+      <a href="/ui/recent" data-nav="recent">Recent Traffic</a>
+    </nav>
+  </header>
+
+  <div class="grid">
+    <div class="card">
+      <div class="label">Bands</div>
+      <div class="value" id="thr">—</div>
+      <div class="label muted">Raw model bands (OK / WARN / MED / CRIT)</div>
+    </div>
+
+    <div class="card">
+      <div class="label">Buffered alerts</div>
+      <div class="value" id="buf">0</div>
+      <div class="label muted">last 200 anomaly alerts kept</div>
+    </div>
+
+    <div class="card">
+      <div class="label">Throughput</div>
+      <div class="value" id="fps">0.0</div>
+      <div class="label muted">req/sec (rolling)</div>
+    </div>
+
+    <div class="card">
+      <div class="label">CPU</div>
+      <div class="value" id="cpu">—</div>
+      <div class="label muted">process CPU %</div>
+    </div>
+
+    <div class="card">
+      <div class="label">Memory</div>
+      <div class="value" id="rss">—</div>
+      <div class="label muted">RSS MB</div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button id="toggleBtn" onclick="toggle()">Pause</button>
+    <button onclick="clearAlerts()">Clear alerts</button>
+    <span class="label">Limit:</span>
+    <input id="limit" type="number" min="1" max="200" value="50"/>
+    <span class="label muted" id="lastUpdate">—</span>
+  </div>
+
+  <div class="table-hint">Click a row to open the full alert explanation.</div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 150px;">Time</th>
+          <th style="width: 220px;">Source</th>
+          <th style="width: 220px;">Destination</th>
+          <th style="width: 90px;">Proto</th>
+          <th style="width: 90px;">Repeat</th>
+          <th style="width: 130px;">Final label</th>
+          <th style="width: 320px;">Reason</th>
+          <th class="details-sticky" style="width: 90px;">Details</th>
+        </tr>
+      </thead>
+
+      <tbody id="rows">
+        <tr>
+          <td colspan="8" class="muted">Loading…</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div id="modalBackdrop" class="modal-backdrop" onclick="closeExplanationModal()"></div>
+
+  <div id="explanationModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-head">
+      <div>
+        <h2 id="modalTitle" class="modal-title">Alert explanation</h2>
+        <div class="modal-subtitle">
+          Final decision, context, technical evidence, and full explanation.
+        </div>
+      </div>
+      <button class="modal-close" onclick="closeExplanationModal()">Close</button>
+    </div>
+
+    <div class="modal-section modal-section-primary">
+      <h3>1. Summary</h3>
+
+      <div class="modal-summary-grid">
+        <div class="modal-kpi">
+          <div class="modal-label">Final label</div>
+          <div class="modal-value strong" id="modalDisplayLabel">-</div>
+        </div>
+
+        <div class="modal-kpi">
+          <div class="modal-label">Anomaly score</div>
+          <div class="modal-value mono strong" id="modalScore">-</div>
+        </div>
+
+        <div class="modal-kpi">
+          <div class="modal-label">Raw model severity</div>
+          <div class="modal-value" id="modalRawSeverity">-</div>
+        </div>
+
+        <div class="modal-kpi">
+          <div class="modal-label">Context-adjusted severity</div>
+          <div class="modal-value" id="modalFinalSeverity">-</div>
+        </div>
+      </div>
+
+      <div class="modal-grid modal-grid-readable">
+        <div class="modal-label">Short reason</div>
+        <div class="modal-value" id="modalShortReason">-</div>
+
+        <div class="modal-label">Recommended check</div>
+        <div class="modal-value" id="modalWhatToCheck">-</div>
+
+        <div class="modal-label">Final label reason</div>
+        <div class="modal-value" id="modalDisplayLabelReason">-</div>
+
+        <div class="modal-label">Interpretation</div>
+        <div class="modal-value" id="modalInterpretation">-</div>
+
+        <div class="modal-label">Backend summary</div>
+        <div class="modal-value" id="modalSummary">-</div>
+
+        <div class="modal-label">Adjustment reason</div>
+        <div class="modal-value" id="modalAdjustmentReason">-</div>
+
+        <div class="modal-label">Possible explanation</div>
+        <div class="modal-value" id="modalPossibleExplanation">-</div>
+
+        <div class="modal-label">Raw model flag</div>
+        <div class="modal-value" id="modalModelFlag">-</div>
+
+        <div class="modal-label">Flow ID</div>
+        <div class="modal-value mono" id="modalFlowId">-</div>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <h3>2. Context</h3>
+
+      <div class="modal-grid modal-grid-readable">
+        <div class="modal-label">Source</div>
+        <div class="modal-value mono" id="modalSource">-</div>
+
+        <div class="modal-label">Destination</div>
+        <div class="modal-value mono" id="modalDestination">-</div>
+
+        <div class="modal-label">Protocol</div>
+        <div class="modal-value mono" id="modalProto">-</div>
+
+        <div class="modal-label">Traffic class</div>
+        <div class="modal-value mono" id="modalClass">-</div>
+
+        <div class="modal-label">Context tags</div>
+        <div class="modal-value" id="modalContextTags">-</div>
+
+        <div class="modal-label">Repeat level</div>
+        <div class="modal-value" id="modalRepeatLevel">-</div>
+
+        <div class="modal-label">Repeat count</div>
+        <div class="modal-value" id="modalRepeatCount">-</div>
+
+        <div class="modal-label">Repeat window</div>
+        <div class="modal-value" id="modalRepeatWindow">-</div>
+
+        <div class="modal-label">Traffic note</div>
+        <div class="modal-value" id="modalTrafficNote">-</div>
+
+        <div class="modal-label">Likely benign</div>
+        <div class="modal-value" id="modalLikelyBenign">-</div>
+
+        <div class="modal-label">Benign reason</div>
+        <div class="modal-value" id="modalBenignReason">-</div>
+
+        <div class="modal-label">Repetition key</div>
+        <div class="modal-value mono" id="modalRepeatKey">-</div>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <h3>3. Technical evidence</h3>
+
+      <div class="modal-grid modal-grid-readable">
+        <div class="modal-label">Top anomaly contributors</div>
+        <div class="modal-value" id="modalTopFeatures">-</div>
+
+        <div class="modal-label">Inference time</div>
+        <div class="modal-value mono" id="modalInferMs">-</div>
+
+        <div class="modal-label">Total processing time</div>
+        <div class="modal-value mono" id="modalTotalMs">-</div>
+
+        <div class="modal-label">Throughput</div>
+        <div class="modal-value mono" id="modalThroughput">-</div>
+
+        <div class="modal-label">CPU / RSS</div>
+        <div class="modal-value mono" id="modalSystem">-</div>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <h3>4. Full explanation</h3>
+      <div class="modal-text" id="modalExplanation">-</div>
+    </div>
+  </div>
+
+  <footer class="ui-footer">
+    Technical API endpoints are available for testing and integration.
+  </footer>
+
+  <script src="/static/dashboard.js"></script>
+</body>
+</html>

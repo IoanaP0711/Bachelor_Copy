@@ -15,7 +15,7 @@ APP_PORT="${APP_PORT:-8000}"
 SURICATA_CONFIG="${SURICATA_CONFIG:-/etc/suricata/suricata.yaml}"
 SURICATA_INTERFACE="${SURICATA_INTERFACE:-auto}"
 SURICATA_EVE_PATH="${SURICATA_EVE_PATH:-/var/log/suricata/eve.json}"
-
+PYTHON_BIN="${PYTHON_BIN:-python3}"
 
 detect_interface() {
   USB_IFACE="$(ip -br addr | awk '$1 ~ /^enx/ && $2 != "DOWN" {print $1; exit}')"
@@ -36,6 +36,10 @@ if [ "$SURICATA_INTERFACE" = "auto" ]; then
 fi
 
 DASHBOARD_IP="$(ip -4 addr show "$SURICATA_INTERFACE" | awk '/inet / {print $2}' | cut -d/ -f1 | head -n 1)"
+
+if [ -z "$DASHBOARD_IP" ]; then
+  DASHBOARD_IP="$(hostname -I | awk '{print $1}')"
+fi
 
 echo "Starting Bachelor IDS..."
 echo "Project: $PROJECT_DIR"
@@ -58,9 +62,26 @@ SERVER_PID=$!
 
 sleep 3
 
+echo "Waiting for Suricata eve.json..."
+for i in {1..10}; do
+  if [ -f "$SURICATA_EVE_PATH" ]; then
+    break
+  fi
+  sleep 1
+done
+
 echo "Starting bridge..."
-sudo tail -n 0 -f "$SURICATA_EVE_PATH" | python3 src/realtime/run_live_suricata.py &
+sudo tail -n 0 -f "$SURICATA_EVE_PATH" | "$PYTHON_BIN" src/realtime/run_live_suricata.py &
 BRIDGE_PID=$!
+
+cleanup() {
+  echo "Stopping..."
+  kill "$SERVER_PID" "$BRIDGE_PID" 2>/dev/null || true
+  sudo pkill suricata 2>/dev/null || true
+  exit
+}
+
+trap cleanup INT TERM
 
 echo ""
 echo "Running."
@@ -68,8 +89,6 @@ echo "Open:"
 echo "  http://127.0.0.1:$APP_PORT"
 echo "  http://$DASHBOARD_IP:$APP_PORT"
 echo ""
-echo "Press CTRL+C to stop server and bridge."
-
-trap "echo 'Stopping...'; kill $SERVER_PID $BRIDGE_PID 2>/dev/null || true; exit" INT TERM
+echo "Press CTRL+C to stop server, bridge, and Suricata."
 
 wait

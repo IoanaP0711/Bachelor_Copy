@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>RT-IDS System Status</title>
+  <link rel="stylesheet" href="/static/dashboard.css">
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-title">System Status</div>
+      <div class="brand-subtitle">
+        User-friendly overview of the IDS backend, model status, resource usage, and live buffers.
+        <span class="pill" id="statusPill">…</span>
+      </div>
+    </div>
+
+    <nav class="main-nav" aria-label="Dashboard navigation">
+      <a href="/" data-nav="dashboard">Dashboard</a>
+      <a href="/ui/system" class="active" data-nav="system">System</a>
+      <a href="/ui/alerts" data-nav="alerts">Alerts</a>
+      <a href="/ui/recent" data-nav="recent">Recent Traffic</a>
+    </nav>
+  </header>
+
+  <div class="grid">
+    <div class="card">
+      <div class="label">Backend status</div>
+      <div class="value" id="backendStatus">—</div>
+      <div class="label muted">FastAPI health state</div>
+    </div>
+
+    <div class="card">
+      <div class="label">Model</div>
+      <div class="value" id="modelPath">—</div>
+      <div class="label muted">Active autoencoder model</div>
+    </div>
+
+    <div class="card">
+      <div class="label">Features</div>
+      <div class="value" id="featureCount">—</div>
+      <div class="label muted">Number of model input features</div>
+    </div>
+
+    <div class="card">
+      <div class="label">Buffered alerts</div>
+      <div class="value" id="alertsBuffered">—</div>
+      <div class="label muted">Alerts currently kept in memory</div>
+    </div>
+
+    <div class="card">
+      <div class="label">Recent traffic</div>
+      <div class="value" id="recentBuffered">—</div>
+      <div class="label muted">Recent flows currently kept in memory</div>
+    </div>
+
+    <div class="card">
+      <div class="label">Throughput</div>
+      <div class="value" id="throughput">—</div>
+      <div class="label muted">Requests per second, rolling window</div>
+    </div>
+
+    <div class="card">
+      <div class="label">CPU</div>
+      <div class="value" id="cpu">—</div>
+      <div class="label muted">FastAPI process CPU usage</div>
+    </div>
+
+    <div class="card">
+      <div class="label">Memory</div>
+      <div class="value" id="rss">—</div>
+      <div class="label muted">FastAPI process RSS memory</div>
+    </div>
+
+    <div class="card">
+      <div class="label">Repeat memory</div>
+      <div class="value" id="repeatKeys">—</div>
+      <div class="label muted">Active repeated-behavior keys</div>
+    </div>
+
+    <div class="card">
+      <div class="label">Threshold bands</div>
+      <div class="value" id="bands">—</div>
+      <div class="label muted">Raw model OK / WARN / CRIT bands</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label">Available display labels</div>
+    <div class="value" id="displayLabels">—</div>
+  </div>
+
+  <div class="controls">
+    <button onclick="loadSystemStatus()">Refresh</button>
+    <span class="label muted" id="lastUpdate">—</span>
+  </div>
+
+  <footer class="ui-footer">
+    Technical API endpoints are available for testing and integration.
+  </footer>
+
+  <script src="/static/ui_common.js"></script>
+  <script src="/static/ui_system.js"></script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>RT-IDS Recent Traffic</title>
+  <link rel="stylesheet" href="/static/dashboard.css">
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-title">Recent Traffic</div>
+      <div class="brand-subtitle">
+        User-friendly view of the most recent processed flows.
+        <span class="pill ok">OK</span>
+      </div>
+    </div>
+
+    <nav class="main-nav" aria-label="Dashboard navigation">
+      <a href="/" data-nav="dashboard">Dashboard</a>
+      <a href="/ui/system" data-nav="system">System</a>
+      <a href="/ui/alerts" data-nav="alerts">Alerts</a>
+      <a href="/ui/recent" class="active" data-nav="recent">Recent Traffic</a>
+    </nav>
+  </header>
+
+  <div class="controls">
+    <span class="label">Limit:</span>
+    <input id="limit" type="number" min="1" max="300" value="50"/>
+    <button onclick="loadRecent()">Refresh</button>
+    <span class="label muted" id="lastUpdate">—</span>
+  </div>
+
+  <div class="table-hint">
+    This page presents recent processed traffic in a user-facing table.
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 150px;">Time</th>
+          <th style="width: 220px;">Source</th>
+          <th style="width: 220px;">Destination</th>
+          <th style="width: 90px;">Proto</th>
+          <th style="width: 120px;">Traffic class</th>
+          <th style="width: 100px;">Repeat</th>
+          <th style="width: 130px;">Final label</th>
+          <th style="width: 120px;">Raw severity</th>
+          <th style="width: 120px;">Score</th>
+          <th style="width: 360px;">Summary</th>
+        </tr>
+      </thead>
+
+      <tbody id="rows">
+        <tr>
+          <td colspan="10" class="muted">Loading…</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer class="ui-footer">
+    Technical API endpoints are available for testing and integration.
+  </footer>
+
+  <script src="/static/ui_common.js"></script>
+  <script src="/static/ui_recent.js"></script>
+</body>
+</html>
