@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Alert Details</title>
+
+    <link
+        rel="stylesheet"
+        href="/static/dashboard.css"
+    >
+</head>
+
+<body>
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-title">
+                Alert Details
+            </div>
+
+            <div class="brand-subtitle">
+                Investigation view for a stored IDS alert.
+            </div>
+        </div>
+
+        <nav
+            class="main-nav"
+            aria-label="Dashboard navigation"
+        >
+            <a
+                href="/"
+                data-nav="dashboard"
+            >
+                Dashboard
+            </a>
+
+            <a
+                href="/ui/system"
+                data-nav="system"
+            >
+                System
+            </a>
+
+            <a
+                href="/ui/alerts"
+                class="active"
+                data-nav="alerts"
+            >
+                Alerts
+            </a>
+
+            <a
+                href="/ui/recent"
+                data-nav="recent"
+            >
+                Recent Traffic
+            </a>
+
+            <a
+                href="/ui/metrics"
+                data-nav="metrics"
+            >
+                Metrics
+            </a>
+
+            <a href="/ui/patterns" data-nav="patterns">Patterns</a>
+            <a href="/ui/network" data-nav="network">Network Map</a>
+            <a href="/ui/blocklist" data-nav="blocklist">Blocklist</a>
+            <a href="/ui/help" data-nav="help">Help</a>
+
+            <a
+                href="/logout"
+                class="logout-nav-link"
+            >
+                Logout
+            </a>
+        </nav>
+    </header>
+
+    <main class="alert-detail-page">
+        <header class="alert-detail-header">
+            <div>
+                <p class="page-kicker">
+                    Investigation view
+                </p>
+
+                <h1>Alert Details</h1>
+
+                <p class="page-subtitle">
+                    Detailed view for the selected IDS alert.
+                </p>
+            </div>
+
+            <div class="alert-detail-header-actions">
+                <a
+                    id="downloadJsonReportBtn"
+                    class="detail-back-btn"
+                    href="#"
+                    role="button"
+                >
+                    Download JSON Report
+                </a>
+
+                <a
+                    class="detail-back-btn"
+                    href="/ui/alerts"
+                >
+                    Back to alerts
+                </a>
+            </div>
+        </header>
+
+        <!-- Alert not found state -->
+        <section
+            id="alertNotFound"
+            class="detail-empty hidden"
+        >
+            <h2>Alert not found</h2>
+
+            <p>
+                The selected alert could not be found in the
+                current alert buffer. It may have been cleared
+                or removed from memory.
+            </p>
+
+            <a
+                class="detail-back-btn"
+                href="/ui/alerts"
+            >
+                Back to alerts
+            </a>
+        </section>
+
+        <!-- Main alert detail content -->
+        <section
+            id="alertDetailContent"
+            class="hidden"
+        >
+            <!-- Summary -->
+            <section class="detail-summary-grid">
+                <article class="detail-card">
+                    <span class="detail-label">
+                        Final decision
+                    </span>
+
+                    <span
+                        id="finalDecisionBadge"
+                        class="detail-badge"
+                    >
+                        -
+                    </span>
+                </article>
+
+                <article class="detail-card">
+                    <span class="detail-label">
+                        Raw model severity
+                    </span>
+
+                    <span
+                        id="rawSeverityBadge"
+                        class="detail-badge"
+                    >
+                        -
+                    </span>
+                </article>
+
+                <article class="detail-card">
+                    <span class="detail-label">
+                        Anomaly score
+                    </span>
+
+                    <strong id="anomalyScore">
+                        -
+                    </strong>
+                </article>
+            </section>
+
+            <!-- Human review workflow -->
+            <section class="detail-card alert-status-workflow-card">
+                <div class="alert-status-workflow-header">
+                    <div>
+                        <h2>Human review status</h2>
+
+                        <p class="muted-text">
+                            Status is human review state, not model severity.
+                            Changing it does not alter the final decision.
+                        </p>
+                    </div>
+
+                    <span
+                        id="alertStatusCurrentBadge"
+                        class="human-status-badge human-status-new"
+                    >
+                        New
+                    </span>
+                </div>
+
+                <div class="alert-status-controls">
+                    <label for="alertStatusSelect">
+                        Review status
+                    </label>
+
+                    <select id="alertStatusSelect">
+                        <option value="New">New</option>
+                        <option value="Seen">Seen</option>
+                        <option value="Under review">Under review</option>
+                        <option value="Resolved">Resolved</option>
+                        <option value="False positive">False positive</option>
+                    </select>
+
+                    <button
+                        id="saveAlertStatusBtn"
+                        class="save-alert-status-btn"
+                        type="button"
+                    >
+                        Save status
+                    </button>
+                </div>
+
+                <p
+                    id="alertStatusUpdatedAt"
+                    class="alert-status-updated-at"
+                >
+                    Not updated yet.
+                </p>
+
+                <p
+                    id="alertStatusMessage"
+                    class="alert-status-message"
+                    role="status"
+                    aria-live="polite"
+                ></p>
+            </section>
+
+            <!-- Raw versus final and traffic information -->
+            <section class="detail-grid">
+                <article class="detail-card">
+                    <h2>Raw → Final comparison</h2>
+
+                    <div class="comparison-row">
+                        <div>
+                            <span class="detail-label">
+                                Raw → Final
+                            </span>
+
+                            <div
+                                id="detailRawFinalComparison"
+                                class="raw-final-detail"
+                            >
+                                <span class="raw-final-field">
+                                    <span class="raw-final-values">
+                                        <span class="badge badge-muted">
+                                            -
+                                        </span>
+
+                                        <span
+                                            class="raw-final-arrow"
+                                            aria-hidden="true"
+                                        >
+                                            →
+                                        </span>
+
+                                        <span class="badge badge-muted">
+                                            -
+                                        </span>
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="detail-text-block">
+                        <span>Short reason</span>
+
+                        <p id="shortReason">
+                            -
+                        </p>
+                    </div>
+
+                    <div class="detail-text-block">
+                        <span>Contextual reason</span>
+
+                        <p id="contextualReason">
+                            -
+                        </p>
+                    </div>
+                </article>
+
+                <article class="detail-card">
+                    <h2>Traffic information</h2>
+
+                    <div class="detail-kv-grid">
+                        <div>
+                            <span>Source IP</span>
+
+                            <strong id="sourceIp">
+                                -
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Source port</span>
+
+                            <strong id="sourcePort">
+                                -
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Destination IP</span>
+
+                            <strong id="destinationIp">
+                                -
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Destination port</span>
+
+                            <strong id="destinationPort">
+                                -
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Protocol</span>
+
+                            <strong id="protocol">
+                                -
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Traffic class</span>
+
+                            <strong id="trafficClass">
+                                -
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Repeat count</span>
+
+                            <strong id="repeatCount">
+                                -
+                            </strong>
+                        </div>
+                    </div>
+                </article>
+            </section>
+
+            <!-- Temporal context -->
+            <section class="detail-card temporal-context-card">
+                <div class="temporal-context-header">
+                    <div>
+                        <h2>Temporal context</h2>
+
+                        <p class="muted-text">
+                            Historical observations related to
+                            this flow. Counts include the selected
+                            alert when it is available in the
+                            history.
+                        </p>
+                    </div>
+
+                    <span
+                        id="temporalHistoryScope"
+                        class="temporal-scope-badge"
+                    >
+                        -
+                    </span>
+                </div>
+
+                <div class="temporal-context-grid">
+                    <div class="temporal-context-item">
+                        <span>
+                            Similar flows from same source IP
+                        </span>
+
+                        <strong id="temporalSameSourceCount">
+                            -
+                        </strong>
+                    </div>
+
+                    <div class="temporal-context-item">
+                        <span>
+                            Same source + destination + port +
+                            protocol
+                        </span>
+
+                        <strong id="temporalSameFlowCount">
+                            -
+                        </strong>
+                    </div>
+
+                    <div class="temporal-context-item">
+                        <span>First seen</span>
+
+                        <strong id="temporalFirstSeen">
+                            -
+                        </strong>
+                    </div>
+
+                    <div class="temporal-context-item">
+                        <span>Last seen</span>
+
+                        <strong id="temporalLastSeen">
+                            -
+                        </strong>
+                    </div>
+
+                    <div class="temporal-context-item">
+                        <span>Repeat count</span>
+
+                        <strong id="temporalRepeatCount">
+                            -
+                        </strong>
+                    </div>
+
+                    <div class="temporal-context-item">
+                        <span>Time window</span>
+
+                        <strong id="temporalTimeWindow">
+                            -
+                        </strong>
+                    </div>
+                </div>
+
+                <p
+                    id="temporalSeenBasis"
+                    class="temporal-context-note"
+                >
+                    -
+                </p>
+            </section>
+
+            <!-- Recommended operator check -->
+            <section class="detail-card recommended-check-card">
+                <h2>Recommended check</h2>
+
+                <p class="muted-text">
+                    Suggested information for the operator to
+                    verify next.
+                </p>
+
+                <p id="recommendedAction">
+                    -
+                </p>
+            </section>
+
+<section class="detail-card blocklist-action-card">
+    <div class="blocklist-action-header">
+        <div>
+            <h2>Source IP blocklist</h2>
+
+            <p class="muted-text">
+                This operator action is separate from the final decision,
+                human review status, and false-positive feedback.
+            </p>
+        </div>
+
+        <span
+            id="sourceBlocklistBadge"
+            class="blocklist-source-badge blocklist-source-not-listed"
+        >
+            Not in blocklist
+        </span>
+    </div>
+
+    <div class="blocklist-source-summary">
+        <div>
+            <span>Source IP</span>
+            <strong id="blocklistSourceIp" class="mono">-</strong>
+        </div>
+
+        <div>
+            <span>Firewall enforcement state</span>
+            <strong id="blocklistSourceEnforcement">Not enforced</strong>
+        </div>
+    </div>
+
+    <p id="blocklistSourceNotice" class="blocklist-source-notice">
+        Stored in the operator blocklist. Firewall enforcement is not enabled.
+    </p>
+
+    <p
+        id="blocklistDemoWarning"
+        class="blocklist-demo-warning hidden"
+    >
+        This alert is replay/demo-derived. Adding its source IP records a
+        demonstration action and does not imply newly captured live traffic.
+    </p>
+
+    <div class="blocklist-action-buttons">
+        <button
+            id="addSourceToBlocklistBtn"
+            type="button"
+            class="blocklist-primary-btn"
+        >
+            Add source IP to blocklist
+        </button>
+
+        <a
+            id="openBlocklistPageLink"
+            class="detail-back-btn hidden"
+            href="/ui/blocklist"
+        >
+            Open Blocklist page
+        </a>
+
+        <a
+            class="blocklist-help-link"
+            href="/ui/help#blocklist"
+        >
+            Blocklist help
+        </a>
+    </div>
+
+    <p
+        id="sourceBlocklistMessage"
+        class="blocklist-message"
+        role="status"
+        aria-live="polite"
+    ></p>
+</section>
+
+                        <!-- Analyst feedback collection -->
+            <section class="detail-card analyst-feedback-card">
+                <h2>Analyst feedback</h2>
+
+                <p class="muted-text">
+                    Record that this alert was reviewed and
+                    considered a false positive. This does not
+                    whitelist the traffic or retrain the model.
+                </p>
+
+                <div class="analyst-feedback-actions">
+                    <button
+                        id="markFalsePositiveBtn"
+                        class="false-positive-btn"
+                        type="button"
+                    >
+                        Mark as false positive
+                    </button>
+
+                    <span
+                        id="feedbackStateBadge"
+                        class="feedback-state-badge hidden"
+                    >
+                        False positive recorded
+                    </span>
+                </div>
+
+                <p
+                    id="feedbackMessage"
+                    class="feedback-message"
+                    role="status"
+                    aria-live="polite"
+                ></p>
+            </section>
+
+            <!-- Feature contributor chart -->
+            <section class="detail-card contributor-chart-card">
+                <h2>Feature contribution chart</h2>
+
+                <p class="muted-text">
+                    Reconstruction error contribution for each
+                    available model feature. Larger values
+                    contributed more strongly to the anomaly
+                    score.
+                </p>
+
+                <div
+                    id="contributorsChartStatus"
+                    class="contributor-chart-empty hidden"
+                    role="status"
+                >
+                    No contributor data available.
+                </div>
+
+                <div
+                    id="contributorsChart"
+                    class="contributor-chart"
+                    aria-label="Horizontal feature contributor bar chart"
+                ></div>
+
+                <details
+                    id="contributorsFallback"
+                    class="contributors-fallback"
+                >
+                    <summary>
+                        Show contributor values
+                    </summary>
+
+                    <div
+                        id="contributorsList"
+                        class="contributors-list"
+                    >
+                        <p class="muted-text">
+                            No contributor data available.
+                        </p>
+                    </div>
+                </details>
+            </section>
+
+            <!-- Layered explanation -->
+            <section class="detail-card layered-explanation-card">
+                <h2>Layered explanation</h2>
+
+                <p class="muted-text">
+                    Choose the explanation level depending on
+                    the user's knowledge level.
+                </p>
+
+                <div
+                    id="layeredExplanation"
+                    class="layered-explanation"
+                ></div>
+            </section>
+        </section>
+    </main>
+
+<dialog id="alertBlocklistDialog" class="blocklist-dialog">
+    <form method="dialog" class="blocklist-dialog-card">
+        <div class="blocklist-dialog-header">
+            <div>
+                <p class="page-kicker">Confirm operator action</p>
+                <h2>Add source IP to blocklist</h2>
+            </div>
+
+            <button
+                id="closeAlertBlocklistDialogBtn"
+                type="button"
+                class="blocklist-dialog-close"
+                aria-label="Close confirmation"
+            >
+                ×
+            </button>
+        </div>
+
+        <div class="blocklist-confirm-grid">
+            <div>
+                <span>IP address</span>
+                <strong id="confirmBlocklistIp" class="mono">-</strong>
+            </div>
+
+            <div>
+                <span>Alert final decision</span>
+                <strong id="confirmBlocklistDecision">-</strong>
+            </div>
+
+            <div>
+                <span>Firewall enforcement state</span>
+                <strong>Not enforced</strong>
+            </div>
+        </div>
+
+        <label class="blocklist-dialog-reason-field">
+            <span>Reason</span>
+            <input
+                id="confirmBlocklistReason"
+                type="text"
+                maxlength="500"
+                value="Suspicious source IP selected by the operator"
+                required
+            >
+        </label>
+
+        <p class="blocklist-dialog-caution">
+            A detection result is not proof that an attack occurred. Verify
+            the address and its network role before continuing.
+        </p>
+
+        <p class="blocklist-dialog-caution">
+            Stored in the operator blocklist. Firewall enforcement is not enabled.
+        </p>
+
+        <div
+            id="alertBlocklistSafetyWarnings"
+            class="blocklist-dialog-warning hidden"
+        ></div>
+
+        <div class="blocklist-dialog-actions">
+            <button
+                id="cancelAlertBlocklistBtn"
+                type="button"
+                class="blocklist-secondary-btn"
+            >
+                Cancel
+            </button>
+
+            <button
+                id="confirmAlertBlocklistBtn"
+                type="button"
+                class="blocklist-danger-btn"
+            >
+                Add address
+            </button>
+        </div>
+    </form>
+</dialog>
+
+    <script>
+        window.ALERT_DETAIL_ID = "{{ alert_id }}";
+    </script>
+
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+    <script src="/static/ui_common.js"></script>
+    <script src="/static/ui_alert_detail.js"></script>
+</body>
+</html>

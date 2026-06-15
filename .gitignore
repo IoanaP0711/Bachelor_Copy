@@ -44,3 +44,31 @@ UNSW-NB15_1.csv
 UNSW-NB15_2.csv
 UNSW-NB15_3.csv
 UNSW-NB15_4.csv
+
+# Runtime application state
+data/alert_status.json
+data/blocked_ips.json
+data/blocklist_history.jsonl
+data/feedback_history.jsonl
+data/replay_events.jsonl
+
+# Generated reports
+reports/
+
+# Temporary terminal output
+terminal.txt
+
+# Generated validation data
+validation_results/api_predict_backup_*.jsonl
+validation_results/full_validation_log.jsonl
+validation_results/live_snapshot.jsonl
+
+# Python runtime files
+__pycache__/
+*.pyc
+
+# Local environment
+.env
+venv/
+venv_api/
+venv_tf/

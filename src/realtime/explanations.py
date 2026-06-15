@@ -846,6 +846,429 @@ def _what_to_check_text(alert: Dict[str, Any]) -> str:
         "and whether similar behavior repeats."
     )
 
+def _prepare_layered_explanation_alert(alert: Dict[str, Any]) -> Dict[str, Any]:
+    if not isinstance(alert, dict):
+        alert = {}
+
+    if "final_severity" not in alert:
+        alert = adjust_final_severity(alert)
+
+    display_label = alert.get("final_label", alert.get("display_label"))
+    if not display_label or not alert.get("display_label_reason"):
+        display_label, display_reason = make_display_label_with_reason(alert)
+        alert["display_label"] = display_label
+        alert["final_label"] = display_label
+        alert["display_label_reason"] = display_reason
+
+    return alert
+
+
+def _human_traffic_class(traffic_class: str) -> str:
+    traffic_class = _safe_lower(traffic_class, "unknown")
+    return {
+        "dns": "name lookup activity",
+        "web_http": "normal web activity",
+        "web_https": "encrypted web or application activity",
+        "local_discovery": "local network discovery activity",
+        "streaming": "media, streaming, or nearby-device activity",
+        "chat_messaging": "chat, call, or messaging activity",
+        "software_update": "software update activity",
+        "time_sync": "time synchronization activity",
+        "background_app": "background application activity",
+        "development_tool": "developer tool or local service activity",
+        "remote_access": "remote access activity",
+        "file_transfer": "file transfer activity",
+        "unknown": "network activity that is not clearly recognized",
+        "other": "network activity that is not clearly recognized",
+        "failed": "network activity that could not be classified clearly",
+        "": "network activity that is not clearly recognized",
+    }.get(traffic_class, traffic_class.replace("_", " ") + " activity")
+
+
+def _flow_text(alert: Dict[str, Any], include_ports: bool = True) -> str:
+    src_ip = _clean_ip(alert.get("src_ip"))
+    dest_ip = _clean_ip(alert.get("dest_ip"))
+    src_port = _to_int(alert.get("src_port", alert.get("sport")))
+    dest_port = _to_int(alert.get("dest_port", alert.get("dport")))
+
+    src = src_ip
+    dst = dest_ip
+
+    if include_ports and src_port is not None:
+        src += f":{src_port}"
+    if include_ports and dest_port is not None:
+        dst += f":{dest_port}"
+
+    return f"{src} -> {dst}"
+
+
+def _context_changed_raw_output(alert: Dict[str, Any]) -> bool:
+    raw_severity = _normalize_severity(alert.get("raw_severity", alert.get("severity")))
+    final_severity = _normalize_severity(alert.get("final_severity", raw_severity))
+    return raw_severity != final_severity
+
+
+def _context_change_simple_text(alert: Dict[str, Any]) -> str:
+    if not _context_changed_raw_output(alert):
+        return ""
+
+    raw_severity = _normalize_severity(alert.get("raw_severity", alert.get("severity")))
+    final_severity = _normalize_severity(alert.get("final_severity", raw_severity))
+
+    if SEV_TO_NUM[final_severity] < SEV_TO_NUM[raw_severity]:
+        return (
+            "The first automatic warning was lowered after the system checked the surrounding context "
+            "and found signs of normal activity."
+        )
+
+    return (
+        "The first automatic warning was raised after the system checked the surrounding context "
+        "and found that the behavior repeated or looked more concerning."
+    )
+
+
+def _context_change_analyst_text(alert: Dict[str, Any]) -> str:
+    raw_severity = _normalize_severity(alert.get("raw_severity", alert.get("severity")))
+    final_severity = _normalize_severity(alert.get("final_severity", raw_severity))
+    raw_text = _severity_display(raw_severity)
+    final_text = _severity_display(final_severity)
+
+    if _context_changed_raw_output(alert):
+        reasons = list(alert.get("adjustment_reasons", []))
+        reason_text = f" Reason: {', '.join(str(r) for r in reasons)}." if reasons else ""
+        return (
+            f"Context changed the raw model output from {raw_text} to {final_text} "
+            f"before the final dashboard decision was shown.{reason_text}"
+        )
+
+    return f"Context did not change the raw model output; it remained {raw_text}."
+
+
+def _context_change_technical_text(alert: Dict[str, Any]) -> str:
+    raw_severity = _normalize_severity(alert.get("raw_severity", alert.get("severity")))
+    final_severity = _normalize_severity(alert.get("final_severity", raw_severity))
+    raw_text = _severity_display(raw_severity)
+    final_text = _severity_display(final_severity)
+
+    if _context_changed_raw_output(alert):
+        return (
+            f"Contextual filtering changed the raw model severity from {raw_text} to {final_text}. "
+            f"{_adjustment_reason_text(alert)}"
+        )
+
+    return (
+        f"Contextual filtering did not change the raw model severity; it stayed {raw_text}. "
+        f"{_adjustment_reason_text(alert)}"
+    )
+
+
+def _format_score(score: float) -> str:
+    return f"{score:.6f}"
+
+
+def _format_repetition_for_analyst(alert: Dict[str, Any]) -> str:
+    repeat_level = _repeat_level(alert)
+    current_count = _repeat_current_count(alert)
+    window_s = _repeat_window_s(alert)
+
+    if repeat_level == "single":
+        return f"No repeated behavior was observed in the last {window_s} seconds."
+
+    if repeat_level == "repeated":
+        return f"Repeated behavior was observed: {current_count} similar flows in the last {window_s} seconds."
+
+    return f"Persistent repeated behavior was observed: {current_count} similar flows in the last {window_s} seconds."
+
+
+def _format_contributors(alert: Dict[str, Any], limit: int = 5) -> str:
+    candidates = (
+        alert.get("top_features"),
+        alert.get("top_contributors"),
+        alert.get("top_anomaly_contributors"),
+        alert.get("contributors"),
+        alert.get("feature_contributions"),
+        alert.get("contribution_summary"),
+    )
+
+    contributors: List[tuple[str, Any]] = []
+
+    for obj in candidates:
+        if not obj:
+            continue
+
+        if isinstance(obj, dict):
+            items = list(obj.items())
+
+            def sort_key(item: tuple[str, Any]) -> float:
+                try:
+                    return abs(float(item[1]))
+                except (TypeError, ValueError):
+                    return 0.0
+
+            for key, value in sorted(items, key=sort_key, reverse=True)[:limit]:
+                contributors.append((str(key), value))
+            break
+
+        if isinstance(obj, list):
+            for item in obj[:limit]:
+                if isinstance(item, dict):
+                    name = (
+                        item.get("feature")
+                        or item.get("name")
+                        or item.get("key")
+                        or item.get("column")
+                        or "unknown_feature"
+                    )
+                    value = (
+                        item.get("err")
+                        if "err" in item
+                        else item.get(
+                            "value",
+                            item.get("contribution", item.get("score", item.get("error", ""))),
+                        )
+                    )
+                    contributors.append((str(name), value))
+                elif isinstance(item, (list, tuple)) and item:
+                    name = str(item[0])
+                    value = item[1] if len(item) > 1 else ""
+                    contributors.append((name, value))
+                else:
+                    contributors.append((str(item), ""))
+            break
+
+    if not contributors:
+        return "No contributor list was recorded for this alert."
+
+    formatted = []
+    for name, value in contributors[:limit]:
+        if value == "" or value is None:
+            formatted.append(name)
+        else:
+            try:
+                formatted.append(f"{name}={float(value):.6f}")
+            except (TypeError, ValueError):
+                formatted.append(f"{name}={value}")
+
+    return ", ".join(formatted)
+
+
+def build_simple_explanation(alert: Dict[str, Any]) -> str:
+    alert = _prepare_layered_explanation_alert(alert)
+
+    label = _normalize_display_label(alert.get("final_label", alert.get("display_label", "review")))
+    traffic_class = _safe_lower(alert.get("traffic_class", "unknown"))
+    repeat_level = _repeat_level(alert)
+
+    activity_text = _human_traffic_class(traffic_class)
+    context_text = _context_change_simple_text(alert)
+
+    parts: List[str] = []
+
+    if label == "ok":
+        parts.append(
+            "This network activity looks normal. The system did not find behavior that needs attention."
+        )
+    elif label == "benign":
+        parts.append(
+            "This network activity looked unusual at first, but it matches a type of activity that is usually normal."
+        )
+    elif label == "review":
+        parts.append(
+            "This network activity is unusual and should be checked. It is not proof of an attack, but it should not be ignored."
+        )
+    else:
+        parts.append(
+            "This network activity is highly unusual and should be checked as soon as possible. It may indicate risky behavior, but the alert alone is not proof of malware."
+        )
+
+    parts.append(f"It looks related to {activity_text}.")
+
+    if repeat_level == "repeated":
+        parts.append("Similar activity was seen again recently.")
+    elif repeat_level == "persistent":
+        parts.append("Similar activity kept appearing in a short period of time.")
+
+    if context_text:
+        parts.append(context_text)
+
+    return " ".join(p.strip() for p in parts if p and p.strip())
+
+
+def build_analyst_explanation(alert: Dict[str, Any]) -> str:
+    alert = _prepare_layered_explanation_alert(alert)
+
+    label = _normalize_display_label(alert.get("final_label", alert.get("display_label", "review")))
+    score = _to_float(alert.get("ae_score", alert.get("anomaly_score", alert.get("score"))), 0.0)
+    proto = _safe_lower(alert.get("proto", alert.get("protocol")), "unknown")
+    app_proto = _safe_lower(alert.get("app_proto"), "unknown")
+    traffic_class = _safe_lower(alert.get("traffic_class", "unknown"))
+
+    proto_text = proto.upper() if proto not in {"", "unknown"} else "unknown protocol"
+    app_text = app_proto.upper() if app_proto not in {"", "unknown", "failed"} else ""
+    protocol_context = f"{proto_text} / {app_text}" if app_text and app_text != proto_text else proto_text
+
+    parts: List[str] = [
+        f"Final decision: {_display_label_text(label)}.",
+        f"Flow: {_flow_text(alert, include_ports=True)}.",
+        f"Protocol: {protocol_context}. Traffic class: {traffic_class}.",
+        f"Anomaly score: {_format_score(score)}.",
+        _format_repetition_for_analyst(alert),
+        _context_change_analyst_text(alert),
+    ]
+
+    possible = _possible_explanation_text(alert)
+    what_to_check = _what_to_check_text(alert)
+
+    if possible:
+        parts.append(f"Possible explanation: {possible}")
+    if what_to_check:
+        parts.append(f"What to check: {what_to_check}")
+
+    return " ".join(p.strip() for p in parts if p and p.strip())
+
+
+def build_technical_explanation(alert: Dict[str, Any]) -> str:
+    alert = _prepare_layered_explanation_alert(alert)
+
+    label = _normalize_display_label(alert.get("final_label", alert.get("display_label", "review")))
+    raw_severity = _normalize_severity(alert.get("raw_severity", alert.get("severity")))
+    final_severity = _normalize_severity(alert.get("final_severity", raw_severity))
+    score = _to_float(alert.get("ae_score", alert.get("anomaly_score", alert.get("score"))), 0.0)
+    traffic_class = _safe_lower(alert.get("traffic_class", "unknown"))
+    likely_benign = bool(alert.get("likely_benign", False))
+    raw_flag = bool(alert.get("raw_model_flag", alert.get("is_anom", False)))
+
+    parts: List[str] = [
+        f"Final decision: {_display_label_text(label)}. Adjusted technical severity: {_severity_display(final_severity)}.",
+        (
+            f"The autoencoder reconstruction error is used as the anomaly score. "
+            f"For this flow, anomaly score={_format_score(score)}, raw_model_flag={raw_flag}, "
+            f"and raw model severity={_severity_display(raw_severity)}."
+        ),
+        f"Flow: {_flow_text(alert, include_ports=True)}.",
+        f"Traffic class: {traffic_class}. likely_benign={likely_benign}.",
+        _context_change_technical_text(alert),
+        f"Repeat logic: {build_repeat_explanation(alert)}",
+        f"Top anomaly contributors: {_format_contributors(alert, limit=5)}.",
+        f"Dashboard label reason: {_display_reason_text(alert)}",
+    ]
+
+    return " ".join(p.strip() for p in parts if p and p.strip())
+
+def build_recommended_action(alert: Dict[str, Any]) -> str:
+    """
+    Return a deterministic manual check for the operator.
+
+    This helper only explains what the operator may verify next.
+    It does not modify the anomaly score, raw severity, contextual filtering,
+    repeat logic, or final decision.
+
+    Technical terms include short plain-language explanations so that the
+    recommendation remains understandable to both non-technical users and
+    experienced analysts.
+    """
+    if not isinstance(alert, dict):
+        alert = {}
+
+    explicit_final_decision = (
+        alert.get("final_label")
+        or alert.get("display_label")
+        or alert.get("final_decision")
+    )
+
+    final_technical_severity_value = alert.get(
+        "final_severity",
+        alert.get("severity"),
+    )
+
+    # Prefer the final operational decision shown in the interface.
+    if explicit_final_decision not in (None, ""):
+        final_decision = _normalize_display_label(
+            explicit_final_decision
+        )
+
+    # Older or incomplete alerts may contain only the final technical
+    # severity. Convert that value to its dashboard decision.
+    elif final_technical_severity_value not in (None, ""):
+        final_decision = {
+            "ok": "ok",
+            "warn": "benign",
+            "med": "review",
+            "crit": "critical",
+        }[
+            _normalize_severity(
+                final_technical_severity_value
+            )
+        ]
+
+    # REVIEW is a cautious fallback when the final result is missing.
+    else:
+        final_decision = "review"
+
+    recommendation_by_decision = {
+        "ok": (
+            "No immediate action required."
+        ),
+        "benign": (
+            "Check only if this traffic was unexpected or does not match "
+            "the usual activity on the home or office network."
+        ),
+        "review": (
+            "Verify the source IP, meaning the device that sent the traffic; "
+            "the destination port, meaning the contacted service; and whether "
+            "similar events repeat."
+        ),
+        "critical": (
+            "Inspect the source host, meaning the device that sent the traffic, "
+            "and review repeated connections that follow the same pattern."
+        ),
+    }
+
+    recommended_check = recommendation_by_decision[
+        final_decision
+    ]
+
+    raw_severity_value = (
+        alert.get("raw_severity")
+        or alert.get("raw_model_severity")
+    )
+
+    # Context adjustment must be detected by comparing the raw technical
+    # severity with the final technical severity. The dashboard label uses a
+    # different vocabulary and should not be used for this comparison.
+    if (
+        raw_severity_value not in (None, "")
+        and final_technical_severity_value not in (None, "")
+    ):
+        raw_severity = _normalize_severity(
+            raw_severity_value
+        )
+
+        final_technical_severity = _normalize_severity(
+            final_technical_severity_value
+        )
+
+        if raw_severity != final_technical_severity:
+            raw_text = _severity_display(
+                raw_severity
+            )
+
+            final_technical_text = _severity_display(
+                final_technical_severity
+            )
+
+            final_decision_text = _display_label_text(
+                final_decision
+            )
+
+            recommended_check += (
+                " Context changed the final result: the model first assigned "
+                f"raw severity {raw_text}, the context-adjusted technical "
+                f"severity became {final_technical_text}, and the final "
+                f"decision shown to the operator is {final_decision_text}."
+            )
+
+    return recommended_check
 
 def build_explanation_bundle(alert: Dict[str, Any]) -> Dict[str, str]:
     if "final_severity" not in alert:
@@ -874,22 +1297,40 @@ def build_explanation_bundle(alert: Dict[str, Any]) -> Dict[str, str]:
         traffic_class=traffic_class,
         repeat_level=repeat_level,
     )
-    explanation = _build_modal_explanation(alert)
+
+    simple_explanation = build_simple_explanation(alert)
+    analyst_explanation = build_analyst_explanation(alert)
+    technical_explanation = build_technical_explanation(alert)
+
+    legacy_explanation = _build_modal_explanation(alert)
+
     adjustment_reason = _adjustment_reason_text(alert)
     possible_explanation = _possible_explanation_text(alert)
     what_to_check = _what_to_check_text(alert)
-
+    recommended_action = build_recommended_action(alert)
     return {
         "summary": summary,
         "interpretation": interpretation,
-        "explanation": explanation,
+
+        
+        "explanation": simple_explanation,
+        "short_summary": summary,
+        "full_explanation": technical_explanation,
+
+        
+        "simple_explanation": simple_explanation,
+        "analyst_explanation": analyst_explanation,
+        "technical_explanation": technical_explanation,
+
+        
         "adjustment_reason": adjustment_reason,
         "possible_explanation": possible_explanation,
         "what_to_check": what_to_check,
-        "short_summary": summary,
-        "full_explanation": explanation,
-    }
+        "recommended_action": recommended_action,
 
+        
+        "legacy_explanation": legacy_explanation,
+    }
 
 def build_explanation(alert: Dict[str, Any]) -> str:
     return build_explanation_bundle(alert)["explanation"]

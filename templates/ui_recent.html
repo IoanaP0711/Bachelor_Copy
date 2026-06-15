@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>RT-IDS Recent Traffic</title>
   <link rel="stylesheet" href="/static/dashboard.css">
 </head>
@@ -20,7 +21,12 @@
       <a href="/" data-nav="dashboard">Dashboard</a>
       <a href="/ui/system" data-nav="system">System</a>
       <a href="/ui/alerts" data-nav="alerts">Alerts</a>
-      <a href="/ui/recent" class="active" data-nav="recent">Recent Traffic</a>
+      <a href="/ui/recent" class= "active" data-nav="recent">Recent Traffic</a>
+      <a href="/ui/metrics" data-nav="metrics">Metrics</a>
+      <a href="/ui/patterns" data-nav="patterns">Patterns</a>
+      <a href="/ui/network" data-nav="network">Network Map</a>
+      <a href="/ui/help" data-nav="help">Help</a>
+      <a href="/logout" class="logout-nav-link">Logout</a>
     </nav>
   </header>
 
@@ -35,7 +41,7 @@
     This page presents recent processed traffic in a user-facing table.
   </div>
 
-  <div class="table-wrap">
+  <div class="table-wrap desktop-table-view">
     <table>
       <thead>
         <tr>
@@ -58,6 +64,14 @@
         </tr>
       </tbody>
     </table>
+  </div>
+
+  <div
+  id="mobileRecentList"
+  class="mobile-card-list recent-mobile-list"
+  aria-live="polite"
+  >
+    <div class="mobile-empty-state">Loading…</div>
   </div>
 
   <footer class="ui-footer">

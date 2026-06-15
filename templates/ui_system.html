@@ -13,6 +13,13 @@
       <div class="brand-subtitle">
         User-friendly overview of the IDS backend, model status, resource usage, and live buffers.
         <span class="pill" id="statusPill">…</span>
+        <span
+          id="runtimeModeBadge"
+          class="runtime-mode-badge runtime-mode-loading"
+          title="Current IDS operating mode"
+        >
+          MODE LOADING
+        </span>
       </div>
     </div>
 
@@ -21,6 +28,11 @@
       <a href="/ui/system" class="active" data-nav="system">System</a>
       <a href="/ui/alerts" data-nav="alerts">Alerts</a>
       <a href="/ui/recent" data-nav="recent">Recent Traffic</a>
+      <a href="/ui/metrics" data-nav="metrics">Metrics</a>
+      <a href="/ui/patterns" data-nav="patterns">Patterns</a>
+      <a href="/ui/network" data-nav="network">Network Map</a>
+      <a href="/ui/help" data-nav="help">Help</a>
+      <a href="/logout" class="logout-nav-link">Logout</a>
     </nav>
   </header>
 
@@ -79,14 +91,145 @@
       <div class="label muted">Active repeated-behavior keys</div>
     </div>
 
-    <div class="card">
-      <div class="label">Threshold bands</div>
-      <div class="value" id="bands">—</div>
-      <div class="label muted">Raw model OK / WARN / CRIT bands</div>
-    </div>
   </div>
 
-  <div class="card">
+
+  <section
+    class="runtime-mode-panel"
+    aria-labelledby="runtimeModeTitle"
+  >
+    <div class="runtime-mode-panel-header">
+      <div>
+        <p class="runtime-mode-kicker">Operating mode</p>
+        <h2 id="runtimeModeTitle">IDS execution mode</h2>
+        <p id="runtimeModeDescription" class="runtime-mode-description">
+          Loading operating mode information…
+        </p>
+      </div>
+
+      <div
+        id="runtimeModePanelBadge"
+        class="runtime-mode-badge runtime-mode-loading"
+      >
+        MODE LOADING
+      </div>
+    </div>
+
+    <div
+      id="replayControls"
+      class="replay-controls hidden"
+    >
+      <button
+        id="startReplayButton"
+        type="button"
+      >
+        Start replay
+      </button>
+
+      <button
+        id="stopReplayButton"
+        type="button"
+      >
+        Stop replay
+      </button>
+    </div>
+
+    <div
+      id="replayStatusDetails"
+      class="replay-status-details hidden"
+    >
+      <div class="replay-status-grid">
+        <div class="replay-status-item">
+          <span>Status</span>
+          <strong id="replayRunningState">—</strong>
+        </div>
+
+        <div class="replay-status-item">
+          <span>Source file</span>
+          <strong id="replaySourceFile">—</strong>
+        </div>
+
+        <div class="replay-status-item">
+          <span>Loaded events</span>
+          <strong id="replayLoadedEvents">0</strong>
+        </div>
+
+        <div class="replay-status-item">
+          <span>Emitted events</span>
+          <strong id="replayEmittedEvents">0</strong>
+        </div>
+
+        <div class="replay-status-item">
+          <span>Replay interval</span>
+          <strong id="replayInterval">—</strong>
+        </div>
+
+        <div class="replay-status-item">
+          <span>Loop enabled</span>
+          <strong id="replayLoopState">—</strong>
+        </div>
+      </div>
+
+      <p
+        id="replayError"
+        class="replay-error hidden"
+      ></p>
+    </div>
+  </section>
+
+  <section class="system-config-section" aria-labelledby="runtimeConfigTitle">
+    <div class="system-config-header">
+      <div>
+        <h2 id="runtimeConfigTitle">Loaded runtime configuration</h2>
+        <p>
+          Active model thresholds, repeat-analysis rules, and notification settings.
+        </p>
+      </div>
+      <span class="config-source-badge" id="configSource">—</span>
+    </div>
+
+    <div class="runtime-config-grid">
+      <div class="config-card">
+        <div class="config-card-label">OK threshold</div>
+        <div class="config-card-value" id="configOkThreshold">—</div>
+        <div class="config-card-help">Scores below this value are raw OK.</div>
+      </div>
+
+      <div class="config-card">
+        <div class="config-card-label">WARN threshold</div>
+        <div class="config-card-value" id="configWarnThreshold">—</div>
+        <div class="config-card-help">Start of the raw WARN interval.</div>
+      </div>
+
+      <div class="config-card">
+        <div class="config-card-label">CRIT threshold</div>
+        <div class="config-card-value" id="configCritThreshold">—</div>
+        <div class="config-card-help">Scores at or above this value are raw CRIT.</div>
+      </div>
+
+      <div class="config-card">
+        <div class="config-card-label">Repeat window</div>
+        <div class="config-card-value" id="configRepeatWindow">—</div>
+        <div class="config-card-help">Time used to group matching anomalous flows.</div>
+      </div>
+
+      <div class="config-card">
+        <div class="config-card-label">Repeat threshold</div>
+        <div class="config-card-value" id="configRepeatThreshold">—</div>
+        <div class="config-card-help">Matching event count that becomes persistent.</div>
+      </div>
+
+      <div class="config-card">
+        <div class="config-card-label">Notification cooldown</div>
+        <div class="config-card-value" id="configNotificationCooldown">—</div>
+        <div class="config-card-help" id="configNotificationState">Notification state: —</div>
+      </div>
+    </div>
+
+    <p class="config-warning hidden" id="configWarning"></p>
+  </section>
+
+  <div class="card system-labels-card">
     <div class="label">Available display labels</div>
     <div class="value" id="displayLabels">—</div>
   </div>

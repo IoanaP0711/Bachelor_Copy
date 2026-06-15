@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>RT-IDS Alerts</title>
   <link rel="stylesheet" href="/static/dashboard.css">
 </head>
@@ -11,63 +12,269 @@
     <div class="brand">
       <div class="brand-title">Alerts</div>
       <div class="brand-subtitle">
-        User-friendly view of stored anomaly alerts.
-        <span class="pill review">REVIEW</span>
+        Scan stored alerts and open deeper technical details only when needed.
       </div>
     </div>
 
     <nav class="main-nav" aria-label="Dashboard navigation">
       <a href="/" data-nav="dashboard">Dashboard</a>
       <a href="/ui/system" data-nav="system">System</a>
-      <a href="/ui/alerts" class="active" data-nav="alerts">Alerts</a>
+      <a href="/ui/alerts"  class="active" data-nav="alerts">Alerts</a>
       <a href="/ui/recent" data-nav="recent">Recent Traffic</a>
+      <a href="/ui/metrics" data-nav="metrics">Metrics</a>
+      <a href="/ui/patterns" data-nav="patterns">Patterns</a>
+      <a href="/ui/network" data-nav="network">Network Map</a>
+      <a href="/ui/help" data-nav="help">Help</a>
+      <a href="/logout" class="logout-nav-link">Logout</a>
     </nav>
   </header>
 
-  <div class="controls">
-    <span class="label">Limit:</span>
-    <input id="limit" type="number" min="1" max="200" value="50"/>
-    <button onclick="loadAlerts()">Refresh</button>
-    <button onclick="clearAlertsUi()">Clear alerts</button>
-    <span class="label muted" id="lastUpdate">—</span>
-  </div>
+  <section class="alerts-toolbar" aria-label="Alert table controls">
+    <div class="alerts-toolbar-group">
+      <label class="label" for="limit">Limit</label>
+
+      <input
+        id="limit"
+        type="number"
+        min="1"
+        max="200"
+        value="50"
+      />
+
+      <button type="button" onclick="loadAlerts()">
+        Refresh
+      </button>
+
+      <button type="button" onclick="clearAlertsUi()">
+        Clear alerts
+      </button>
+    </div>
+
+    <div class="alerts-search-group">
+      <label class="label" for="alertSearch">Search</label>
+
+      <input
+        id="alertSearch"
+        class="alerts-search-input"
+        type="search"
+        placeholder="IP, protocol, class, or reason"
+        autocomplete="off"
+      />
+
+      <button
+        type="button"
+        class="search-clear-btn"
+        onclick="clearAlertSearch()"
+      >
+        Clear search
+      </button>
+    </div>
+
+    <span
+      class="label muted alerts-last-update"
+      id="lastUpdate"
+    >
+      —
+    </span>
+  </section>
 
   <div class="filter-bar" aria-label="Alert severity filters">
-    <span class="label">Show:</span>
-    <button class="filter-btn active" data-filter="ALL" onclick="setAlertFilter('ALL')">All</button>
-    <button class="filter-btn" data-filter="OK" onclick="setAlertFilter('OK')">OK</button>
-    <button class="filter-btn" data-filter="BENIGN" onclick="setAlertFilter('BENIGN')">BENIGN</button>
-    <button class="filter-btn" data-filter="REVIEW" onclick="setAlertFilter('REVIEW')">REVIEW</button>
-    <button class="filter-btn" data-filter="CRITICAL" onclick="setAlertFilter('CRITICAL')">CRITICAL</button>
+    <span class="label">Show</span>
+
+    <button
+      type="button"
+      class="filter-btn active"
+      data-filter="ALL"
+      onclick="setAlertFilter('ALL')"
+    >
+      All
+    </button>
+
+    <button
+      type="button"
+      class="filter-btn"
+      data-filter="OK"
+      onclick="setAlertFilter('OK')"
+    >
+      OK
+    </button>
+
+    <button
+      type="button"
+      class="filter-btn"
+      data-filter="BENIGN"
+      onclick="setAlertFilter('BENIGN')"
+    >
+      BENIGN
+    </button>
+
+    <button
+      type="button"
+      class="filter-btn"
+      data-filter="REVIEW"
+      onclick="setAlertFilter('REVIEW')"
+    >
+      REVIEW
+    </button>
+
+    <button
+      type="button"
+      class="filter-btn"
+      data-filter="CRITICAL"
+      onclick="setAlertFilter('CRITICAL')"
+    >
+      CRITICAL
+    </button>
   </div>
 
-  <div class="table-hint">
-    This page presents alert records in a user-facing table.
+  <div class="alerts-table-meta">
+    <span id="resultsSummary">
+      Showing 0 of 0 alerts
+    </span>
+
+    <span>
+      Status is the human review state, not model severity.
+      Full technical information remains in Quick view and Details.
+    </span>
   </div>
 
-  <div class="table-wrap">
-    <table>
+  <div class="table-wrap alerts-table-wrap desktop-table-view">
+    <table class="alerts-table">
       <thead>
         <tr>
-          <th style="width: 150px;">Time</th>
-          <th style="width: 220px;">Source</th>
-          <th style="width: 220px;">Destination</th>
-          <th style="width: 90px;">Proto</th>
-          <th style="width: 120px;">Traffic class</th>
-          <th style="width: 100px;">Repeat</th>
-          <th style="width: 130px;">Final label</th>
-          <th style="width: 120px;">Raw severity</th>
-          <th style="width: 120px;">Score</th>
-          <th style="width: 360px;">Summary</th>
+          <th class="col-time">Time</th>
+          <th class="col-severity">Severity</th>
+          <th class="col-status">Human status</th>
+          <th class="col-flow">Source → Destination</th>
+          <th class="col-protocol">Protocol / Class</th>
+          <th class="col-raw-final">Raw → Final</th>
+          <th class="col-score">Score</th>
+          <th class="col-reason">Reason</th>
+          <th class="col-action action-sticky">Action</th>
         </tr>
       </thead>
 
       <tbody id="rows">
         <tr>
-          <td colspan="10" class="muted">Loading…</td>
+          <td colspan="9" class="alerts-empty-state">
+            Loading…
+          </td>
         </tr>
       </tbody>
     </table>
+  </div>
+
+<div
+  id="mobileAlertsList"
+  class="mobile-card-list alerts-mobile-list"
+  aria-live="polite"
+>
+  <div class="mobile-empty-state">Loading…</div>
+</div>
+
+  <div
+    id="alertPreviewModal"
+    class="modal-backdrop hidden"
+    role="presentation"
+  >
+    <div
+      class="alert-preview-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="previewModalTitle"
+    >
+      <div class="modal-header">
+        <div>
+          <h2 id="previewModalTitle">Alert quick preview</h2>
+
+          <p class="modal-subtitle">
+            Compact explanation for fast operator review.
+          </p>
+        </div>
+
+        <button
+          class="modal-close-btn"
+          onclick="closeAlertPreviewModal()"
+          aria-label="Close modal"
+        >
+          ×
+        </button>
+      </div>
+
+      <div class="preview-badge-row">
+        <div
+          id="previewRawFinalComparison"
+          class="raw-final-preview"
+        >
+          <span class="raw-final-field">
+            <span class="raw-final-values">
+              <span class="badge badge-muted">-</span>
+
+              <span
+                class="raw-final-arrow"
+                aria-hidden="true"
+              >
+                →
+              </span>
+
+              <span class="badge badge-muted">-</span>
+            </span>
+          </span>
+        </div>
+
+        <span
+          id="previewFinalDecision"
+          class="badge badge-muted"
+        >
+          Final decision: -
+        </span>
+
+        <span
+          id="previewRawSeverity"
+          class="badge badge-muted"
+        >
+          Raw model: -
+        </span>
+      </div>
+
+      <div class="preview-grid">
+        <div class="preview-card">
+          <span class="preview-label">Anomaly score</span>
+          <strong id="previewAnomalyScore">-</strong>
+        </div>
+
+        <div class="preview-card">
+          <span class="preview-label">Short reason</span>
+          <p id="previewShortReason">-</p>
+        </div>
+      </div>
+
+      <div class="preview-section">
+        <h3>Simple explanation</h3>
+        <p id="previewSimpleExplanation">-</p>
+      </div>
+
+      <div class="preview-section">
+        <h3>Top 3 anomaly contributors</h3>
+
+        <ul
+          id="previewContributors"
+          class="contributors-list"
+        >
+          <li>-</li>
+        </ul>
+      </div>
+
+      <div class="modal-footer">
+        <a
+          id="openFullDetailsBtn"
+          class="details-btn"
+          href="#"
+        >
+          Open full details
+        </a>
+      </div>
+    </div>
   </div>
 
   <footer class="ui-footer">

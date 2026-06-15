@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <title>RT-IDS Blocklist</title>
+
+    <link
+        rel="stylesheet"
+        href="/static/dashboard.css"
+    >
+</head>
+
+<body>
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-title">
+                Operator Blocklist
+            </div>
+
+            <div class="brand-subtitle">
+                Manually store IP addresses selected by an operator.
+                Firewall enforcement remains separate.
+            </div>
+        </div>
+
+        <nav
+            class="main-nav"
+            aria-label="Dashboard navigation"
+        >
+            <a href="/" data-nav="dashboard">Dashboard</a>
+            <a href="/ui/system" data-nav="system">System</a>
+            <a href="/ui/alerts" data-nav="alerts">Alerts</a>
+            <a href="/ui/recent" data-nav="recent">Recent Traffic</a>
+            <a href="/ui/metrics" data-nav="metrics">Metrics</a>
+            <a href="/ui/patterns" data-nav="patterns">Patterns</a>
+            <a href="/ui/network" data-nav="network">Network Map</a>
+            <a
+                href="/ui/blocklist"
+                class="active"
+                data-nav="blocklist"
+            >
+                Blocklist
+            </a>
+            <a href="/ui/help" data-nav="help">Help</a>
+            <a href="/logout" class="logout-nav-link">Logout</a>
+        </nav>
+    </header>
+
+    <main class="blocklist-page">
+        <section class="blocklist-heading">
+            <div>
+                <p class="page-kicker">Operator-controlled action</p>
+                <h1>Manual IP blocklist</h1>
+
+                <p class="page-subtitle">
+                    Adding an address records an operator decision. It does
+                    not change model output, final decisions, human status,
+                    false-positive feedback, or anomaly history.
+                </p>
+            </div>
+
+            <button
+                id="refreshBlocklistBtn"
+                type="button"
+                class="blocklist-secondary-btn"
+            >
+                Refresh
+            </button>
+        </section>
+
+        <section
+            class="blocklist-enforcement-banner"
+            aria-label="Firewall enforcement state"
+        >
+            <div>
+                <span class="blocklist-banner-label">
+                    Blocklist state
+                </span>
+
+                <strong id="blocklistStorageState">
+                    Loading stored records…
+                </strong>
+            </div>
+
+            <div>
+                <span class="blocklist-banner-label">
+                    Firewall enforcement state
+                </span>
+
+                <strong
+                    id="blocklistEnforcementState"
+                    class="blocklist-not-enforced"
+                >
+                    Not enforced
+                </strong>
+            </div>
+
+            <p id="blocklistEnforcementMessage">
+                Stored in the operator blocklist. Firewall enforcement is not enabled.
+            </p>
+        </section>
+
+        <section class="blocklist-summary-grid">
+            <article class="blocklist-summary-card">
+                <span>Total blocked addresses</span>
+                <strong id="blocklistTotal">0</strong>
+            </article>
+
+            <article class="blocklist-summary-card">
+                <span>Visible after filters</span>
+                <strong id="blocklistVisibleTotal">0</strong>
+            </article>
+
+            <article class="blocklist-summary-card">
+                <span>Enforcement adapter</span>
+                <strong id="blocklistAdapterState">Disabled</strong>
+            </article>
+        </section>
+
+        <section class="blocklist-panel blocklist-add-panel">
+            <div class="blocklist-panel-heading">
+                <div>
+                    <h2>Add an address</h2>
+                    <p>
+                        Every addition requires an explicit operator action.
+                        Detection output is not proof that an attack occurred.
+                    </p>
+                </div>
+
+                <a
+                    class="blocklist-help-link"
+                    href="/ui/help#blocklist"
+                >
+                    Blocklist help
+                </a>
+            </div>
+
+            <form id="blocklistAddForm" class="blocklist-add-form">
+                <div class="blocklist-form-field">
+                    <label for="blocklistIpAddress">IP address</label>
+                    <input
+                        id="blocklistIpAddress"
+                        name="ip_address"
+                        type="text"
+                        placeholder="192.168.1.50 or 2001:db8::50"
+                        autocomplete="off"
+                        required
+                    >
+                </div>
+
+                <div class="blocklist-form-field blocklist-reason-field">
+                    <label for="blocklistReason">Reason</label>
+                    <input
+                        id="blocklistReason"
+                        name="reason"
+                        type="text"
+                        maxlength="500"
+                        placeholder="Why should the operator track this address?"
+                        required
+                    >
+                </div>
+
+                <div class="blocklist-form-field">
+                    <label for="blocklistSourceAlertId">
+                        Associated alert ID
+                        <span class="blocklist-optional-label">optional</span>
+                    </label>
+
+                    <input
+                        id="blocklistSourceAlertId"
+                        name="source_alert_id"
+                        type="text"
+                        placeholder="Existing alert ID"
+                        autocomplete="off"
+                    >
+                </div>
+
+                <button
+                    id="blocklistAddBtn"
+                    class="blocklist-primary-btn"
+                    type="submit"
+                >
+                    Add to blocklist
+                </button>
+            </form>
+
+            <p
+                id="blocklistFormMessage"
+                class="blocklist-message"
+                role="status"
+                aria-live="polite"
+            ></p>
+        </section>
+
+        <section class="blocklist-panel">
+            <div class="blocklist-panel-heading blocklist-list-heading">
+                <div>
+                    <h2>Stored addresses</h2>
+                    <p>
+                        Search and filter the operator-managed records.
+                    </p>
+                </div>
+
+                <div class="blocklist-filter-grid">
+                    <label>
+                        <span>Search</span>
+                        <input
+                            id="blocklistSearch"
+                            type="search"
+                            placeholder="IP, reason, alert, or decision"
+                            autocomplete="off"
+                        >
+                    </label>
+
+                    <label>
+                        <span>Address type</span>
+                        <select id="blocklistAddressTypeFilter">
+                            <option value="ALL">All types</option>
+                            <option value="IPv4">IPv4</option>
+                            <option value="IPv6">IPv6</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        <span>Enforcement state</span>
+                        <select id="blocklistEnforcementFilter">
+                            <option value="ALL">All states</option>
+                            <option value="not_enforced">Not enforced</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+
+            <div
+                id="blocklistErrorState"
+                class="blocklist-state blocklist-error-state hidden"
+                role="alert"
+            ></div>
+
+            <div
+                id="blocklistEmptyState"
+                class="blocklist-state hidden"
+            >
+                No addresses are currently stored in the operator blocklist.
+            </div>
+
+            <div
+                id="blocklistNoMatchState"
+                class="blocklist-state hidden"
+            >
+                No blocklist records match the current filters.
+            </div>
+
+            <div
+                id="blocklistTableWrap"
+                class="table-wrap blocklist-table-wrap desktop-table-view"
+            >
+                <table class="blocklist-table">
+                    <thead>
+                        <tr>
+                            <th>IP address</th>
+                            <th>Address type</th>
+                            <th>Reason</th>
+                            <th>Added at</th>
+                            <th>Associated alert</th>
+                            <th>Source decision</th>
+                            <th>Enforcement state</th>
+                            <th class="action-sticky">Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="blocklistRows">
+                        <tr>
+                            <td colspan="8" class="alerts-empty-state">
+                                Loading…
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div
+                id="blocklistMobileCards"
+                class="mobile-card-list blocklist-mobile-list"
+                aria-live="polite"
+            >
+                <div class="mobile-empty-state">Loading…</div>
+            </div>
+        </section>
+    </main>
+
+    <dialog id="blocklistConfirmDialog" class="blocklist-dialog">
+        <form method="dialog" class="blocklist-dialog-card">
+            <div class="blocklist-dialog-header">
+                <div>
+                    <p class="page-kicker">Confirm operator action</p>
+                    <h2 id="blocklistConfirmTitle">Add IP to blocklist</h2>
+                </div>
+
+                <button
+                    type="button"
+                    class="blocklist-dialog-close"
+                    data-dialog-cancel
+                    aria-label="Close confirmation"
+                >
+                    ×
+                </button>
+            </div>
+
+            <div id="blocklistConfirmBody" class="blocklist-dialog-body"></div>
+
+            <div class="blocklist-dialog-actions">
+                <button
+                    type="button"
+                    class="blocklist-secondary-btn"
+                    data-dialog-cancel
+                >
+                    Cancel
+                </button>
+
+                <button
+                    id="blocklistConfirmActionBtn"
+                    type="button"
+                    class="blocklist-danger-btn"
+                >
+                    Confirm
+                </button>
+            </div>
+        </form>
+    </dialog>
+
+    <footer class="ui-footer">
+        Operator blocklist records are stored locally. Firewall enforcement is disabled.
+    </footer>
+
+    <script src="/static/ui_common.js"></script>
+    <script src="/static/ui_blocklist.js"></script>
+</body>
+</html>

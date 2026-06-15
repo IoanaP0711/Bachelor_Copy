@@ -1,10 +1,65 @@
 let running = true;
 let timer = null;
-let latestRows = [];
+let latestImportantAlerts = [];
+
+const DASHBOARD_REFRESH_MS = 2000;
+const DASHBOARD_RECENT_LIMIT = 300;
+const DASHBOARD_ALERT_LIMIT = 200;
+const IMPORTANT_ALERT_LIMIT = 5;
+const DASHBOARD_DETAIL_PAGE_EXISTS = true;
+
+function dashboardEscapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function setText(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = value;
+}
+
+function normaliseFinalDecision(value) {
+  const v = String(value || "").trim().toUpperCase();
+
+  if (v === "CRITICAL" || v === "CRIT") return "CRITICAL";
+  if (v === "REVIEW" || v === "WARN" || v === "MED") return "REVIEW";
+  if (v === "BENIGN") return "BENIGN";
+  if (v === "OK") return "OK";
+
+  return "OK";
+}
+
+function getDashboardFinalDecision(alertObj) {
+  if (typeof getPreviewFinalDecision === "function") {
+    return normaliseFinalDecision(getPreviewFinalDecision(alertObj));
+  }
+
+  return normaliseFinalDecision(
+    alertObj?.final_label ||
+    alertObj?.display_label ||
+    alertObj?.final_severity ||
+    alertObj?.severity ||
+    "OK"
+  );
+}
+
+function getDashboardRawSeverity(alertObj) {
+  if (typeof getPreviewRawSeverity === "function") {
+    return String(getPreviewRawSeverity(alertObj) || "UNKNOWN").toUpperCase();
+  }
+
+  return String(alertObj?.raw_severity || alertObj?.severity || "UNKNOWN").toUpperCase();
+}
 
 function setStatusPillLabel(label) {
   const pill = document.getElementById("statusPill");
-  const l = String(label || "").toUpperCase();
+  if (!pill) return;
+
+  const l = normaliseFinalDecision(label);
 
   if (l === "OK") {
     pill.className = "pill ok";
@@ -24,407 +79,390 @@ function setStatusPillLabel(label) {
   }
 }
 
-function rowClassFromLabel(label) {
-  const l = String(label || "").toUpperCase();
-  if (l === "OK") return "row-ok";
-  if (l === "BENIGN") return "row-benign";
-  if (l === "REVIEW") return "row-review";
-  if (l === "CRITICAL") return "row-critical";
-  return "";
+function dashboardBadge(value) {
+  const v = String(value || "UNKNOWN").trim().toUpperCase();
+
+  if (typeof renderSeverityBadge === "function") {
+    return renderSeverityBadge(v);
+  }
+
+  const css = v === "CRIT" ? "critical" : v.toLowerCase();
+  const safeCss = ["ok", "benign", "review", "critical", "warn", "med"].includes(css)
+    ? css
+    : "muted";
+
+  return `<span class="badge badge-${safeCss}">${dashboardEscapeHtml(v)}</span>`;
 }
 
-function escapeHtml(value) {
-  return String(value ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
+function dashboardRawFinalBadge(raw, finalDecision) {
+  if (typeof renderRawFinalBadge === "function") {
+    return renderRawFinalBadge(raw, finalDecision);
+  }
+
+  const changed = String(raw || "").toUpperCase() !== String(finalDecision || "").toUpperCase();
+
+  return `
+    <span class="raw-final-field">
+      <span class="raw-final-values">
+        ${dashboardBadge(raw)}
+        <span class="raw-final-arrow" aria-hidden="true">→</span>
+        ${dashboardBadge(finalDecision)}
+      </span>
+      ${changed ? `<span class="context-adjusted-badge">Changed by context</span>` : ""}
+    </span>
+  `;
 }
 
-function safeText(value, fallback = "-") {
-  if (value === null || value === undefined || value === "") return fallback;
-  return escapeHtml(value);
+function dashboardRowClass(label) {
+  if (typeof rowClassFromLabel === "function") {
+    return rowClassFromLabel(label);
+  }
+
+  const l = normaliseFinalDecision(label).toLowerCase();
+  return `row-${l}`;
 }
 
-function safeNum(value, digits = 0, fallback = "-") {
-  if (value === null || value === undefined || value === "") return fallback;
+function dashboardProtoBadge(proto) {
+  const p = String(proto || "-").toUpperCase();
+
+  if (typeof protoBadge === "function") {
+    return protoBadge(p);
+  }
+
+  return `<span class="badge badge-gray">${dashboardEscapeHtml(p)}</span>`;
+}
+
+function dashboardShortReason(alertObj) {
+  if (typeof shortTableReason === "function") {
+    return shortTableReason(alertObj);
+  }
+
+  return (
+    alertObj?.short_summary ||
+    alertObj?.summary ||
+    alertObj?.display_label_reason ||
+    alertObj?.adjustment_reason ||
+    alertObj?.simple_explanation ||
+    alertObj?.explanation ||
+    "-"
+  );
+}
+
+function getDashboardTimestampMs(value) {
+  const raw =
+    value && typeof value === "object"
+      ? value.ts_unix ?? value.timestamp ?? value.ts ?? value.time ?? null
+      : value;
+
+  if (raw === null || raw === undefined || raw === "") return 0;
+
+  const numeric = Number(raw);
+
+  if (Number.isFinite(numeric)) {
+    if (numeric <= 0) return 0;
+
+    // Backend usually sends seconds. If it is already milliseconds, keep it.
+    return numeric > 1000000000000 ? numeric : numeric * 1000;
+  }
+
+  const parsed = Date.parse(String(raw));
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function formatDashboardTime(value) {
+  const ms = getDashboardTimestampMs(value);
+  if (!ms) return "-";
+
+  return new Date(ms).toLocaleString();
+}
+
+function formatNumber(value, digits = 1) {
   const n = Number(value);
-  if (Number.isNaN(n)) return escapeHtml(value);
+  if (!Number.isFinite(n)) return "—";
   return n.toFixed(digits);
 }
 
-function badge(text, cls = "") {
-  return `<span class="badge ${cls}">${safeText(text)}</span>`;
-}
+async function fetchJson(url) {
+  const response = await fetch(url);
 
-function protoBadge(proto) {
-  const p = String(proto ?? "").toUpperCase();
-  if (!p) return badge("-", "badge-gray");
-  if (p === "TCP") return badge(p, "badge-blue");
-  if (p === "UDP") return badge(p, "badge-cyan");
-  if (p === "ICMP" || p === "ICMPV6" || p === "IPV6-ICMP") return badge(p, "badge-purple");
-  return badge(p, "badge-gray");
-}
-
-function displayLabelBadge(label) {
-  const l = String(label ?? "").toUpperCase();
-
-  if (l === "OK") return badge("OK", "badge-ok");
-  if (l === "BENIGN") return badge("BENIGN", "badge-benign");
-  if (l === "REVIEW") return badge("REVIEW", "badge-review");
-  if (l === "CRITICAL") return badge("CRITICAL", "badge-critical");
-
-  return badge(l || "-", "badge-gray");
-}
-
-function shortTableReason(alertObj) {
-  const label = String(
-    alertObj.final_label ||
-    alertObj.display_label ||
-    alertObj.severity ||
-    ""
-  ).toUpperCase();
-
-  const trafficClass = String(alertObj.traffic_class || "").toLowerCase();
-  const repeatLevel = String(alertObj.repeat_level || "").toLowerCase();
-  const repeatCount = Number(alertObj.repeat_count || 0);
-  const likelyBenign = Boolean(alertObj.likely_benign);
-
-  const isRepeated =
-    repeatCount > 0 ||
-    repeatLevel === "repeated" ||
-    repeatLevel === "persistent";
-
-  const reasonText = String(
-    alertObj.display_label_reason ||
-    alertObj.adjustment_reason ||
-    alertObj.summary ||
-    alertObj.interpretation ||
-    alertObj.explanation ||
-    ""
-  ).toLowerCase();
-
-  if (trafficClass === "dns" && likelyBenign) {
-    return "Internal DNS traffic";
+  if (!response.ok) {
+    throw new Error(`${url} returned HTTP ${response.status}`);
   }
 
-  if (trafficClass === "local_discovery") {
-    return "Local discovery traffic";
+  return await response.json();
+}
+
+function computeDecisionCounts(recentRows) {
+  const counts = {
+    OK: 0,
+    BENIGN: 0,
+    REVIEW: 0,
+    CRITICAL: 0,
+  };
+
+  for (const row of recentRows) {
+    const label = getDashboardFinalDecision(row);
+    counts[label] = (counts[label] || 0) + 1;
+  }
+
+  return counts;
+}
+
+function computeCurrentSecurityState(counts, recentRows) {
+  if (!recentRows.length) {
+    return {
+      label: "OK",
+      detail: "No traffic events received yet.",
+    };
+  }
+
+  if (counts.CRITICAL > 0) {
+    return {
+      label: "CRITICAL",
+      detail: `${counts.CRITICAL} critical final decision(s) in the recent buffer.`,
+    };
+  }
+
+  if (counts.REVIEW > 0) {
+    return {
+      label: "REVIEW",
+      detail: `${counts.REVIEW} review final decision(s) in the recent buffer.`,
+    };
+  }
+
+  if (counts.BENIGN > 0 && counts.OK === 0) {
+    return {
+      label: "BENIGN",
+      detail: "Recent traffic is context-adjusted as benign.",
+    };
+  }
+
+  return {
+    label: "OK",
+    detail: "No REVIEW or CRITICAL final decisions in the recent buffer.",
+  };
+}
+
+function updateDecisionCounts(counts) {
+  setText("countOk", String(counts.OK));
+  setText("countBenign", String(counts.BENIGN));
+  setText("countReview", String(counts.REVIEW));
+  setText("countCritical", String(counts.CRITICAL));
+}
+
+function updateSystemSummary(stats) {
+  setText("systemStatus", "ONLINE");
+
+  const bands = stats?.bands;
+  const systemDetail = bands
+    ? `Raw bands loaded: OK < ${formatNumber(bands.ok, 6)}, WARN < ${formatNumber(bands.warn, 6)}, CRIT ≥ ${formatNumber(bands.crit, 6)}`
+    : "Raw model bands not available.";
+
+  setText("systemStatusDetail", systemDetail);
+  setText("bufferedAlerts", String(stats?.alerts_buffered ?? 0));
+  setText("throughput", `${formatNumber(stats?.throughput_fps, 2)} req/s`);
+  setText("cpu", `${formatNumber(stats?.cpu_proc_pct, 1)}%`);
+  setText("memory", `${formatNumber(stats?.rss_mb, 1)} MB`);
+}
+
+function updateCurrentState(state) {
+  setText("currentSecurityState", state.label);
+  setText("currentSecurityDetail", state.detail);
+  setStatusPillLabel(state.label);
+
+  const badge = document.getElementById("currentSecurityBadge");
+  if (badge) {
+    badge.className = `overview-state-badge state-${state.label.toLowerCase()}`;
+    badge.textContent = state.label;
+  }
+}
+
+function dashboardEndpoint(ip, port) {
+  const safeIp =
+    ip === null || ip === undefined || ip === ""
+      ? "-"
+      : String(ip);
+
+  if (port === null || port === undefined || port === "") {
+    return safeIp;
+  }
+
+  return `${safeIp}:${port}`;
+}
+
+function dashboardDetailsHref(alertObj) {
+  let stableId = "";
+
+  if (typeof getAlertStableId === "function") {
+    stableId = getAlertStableId(alertObj);
+  } else {
+    stableId =
+      alertObj?.alert_id ||
+      alertObj?.id ||
+      alertObj?.flow_id ||
+      alertObj?.uid ||
+      alertObj?.event_id ||
+      alertObj?.ts_unix ||
+      alertObj?.timestamp ||
+      "";
   }
 
   if (
-    repeatLevel === "persistent" ||
-    reasonText.includes("persistent") ||
-    reasonText.includes("forced escalation due to repeated anomalous behavior")
+    !DASHBOARD_DETAIL_PAGE_EXISTS ||
+    !stableId ||
+    stableId === "-"
   ) {
-    return "Persistent anomaly";
+    return "";
   }
 
-  if (label === "OK" && isRepeated) {
-    return "Repeated normal traffic";
-  }
-
-  if (label === "OK") {
-    return "Normal traffic";
-  }
-
-  if (label === "BENIGN") {
-    return "Likely benign";
-  }
-
-  if (label === "REVIEW") {
-    return "Needs review";
-  }
-
-  if (label === "CRITICAL" || label === "CRIT") {
-    return "Critical anomaly";
-  }
-
-  return "Needs review";
+  return `/ui/alerts/${encodeURIComponent(String(stableId))}`;
 }
 
-function renderTopFeatures(features) {
-  const helperText = `
-    <div class="helper-text">
-      Reconstruction error measures how different the original feature was from the value reconstructed by the autoencoder.
-      Higher values contributed more to the anomaly score.
-    </div>
-    <div class="feature-title">Top anomaly contributors:</div>
-  `;
+function renderImportantAlerts(alertRows) {
+  const container = document.getElementById("importantAlertsList");
+  if (!container) return;
 
-  if (!Array.isArray(features) || !features.length) {
-    return `
-      ${helperText}
-      <div class="muted">No feature contribution data available.</div>
+  latestImportantAlerts = alertRows
+    .filter((alertObj) => {
+      const label = getDashboardFinalDecision(alertObj);
+      return label === "REVIEW" || label === "CRITICAL";
+    })
+    .sort((a, b) => getDashboardTimestampMs(b) - getDashboardTimestampMs(a))
+    .slice(0, IMPORTANT_ALERT_LIMIT);
+
+  setText("importantAlertCount", String(latestImportantAlerts.length));
+
+  if (!latestImportantAlerts.length) {
+    container.innerHTML = `
+      <div class="important-empty-state">
+        No important alerts currently detected.
+      </div>
     `;
+    return;
   }
 
-  const items = features.map(f => {
-    const name = safeText(f.name, "?");
-    const err = safeNum(f.err, 4, "-");
+  container.innerHTML = latestImportantAlerts.map((alertObj, index) => {
+    const finalDecision = getDashboardFinalDecision(alertObj);
+    const time = formatDashboardTime(alertObj);
+    const source = dashboardEndpoint(alertObj.src_ip, alertObj.src_port);
+    const destination = dashboardEndpoint(alertObj.dest_ip, alertObj.dest_port);
+    const reason = dashboardShortReason(alertObj);
+    const detailsHref = dashboardDetailsHref(alertObj);
+
+    const detailsButton = detailsHref
+      ? `
+        <a
+          class="important-details-btn"
+          href="${dashboardEscapeHtml(detailsHref)}"
+          onclick="event.stopPropagation()"
+        >
+          Full details
+        </a>
+      `
+      : "";
 
     return `
-      <li>
-        <span class="mono">${name}</span>
-        — reconstruction error:
-        <span class="mono">${err}</span>
-      </li>
+      <article
+        class="important-alert-card ${dashboardRowClass(finalDecision)}"
+        onclick="openDashboardImportantAlert(${index})"
+        title="Open compact alert preview"
+      >
+        <div class="important-alert-main">
+          <div class="important-alert-topline">
+            ${dashboardBadge(finalDecision)}
+            <span class="mono important-alert-time">${dashboardEscapeHtml(time)}</span>
+          </div>
+
+          <div class="important-alert-flow mono">
+            ${dashboardEscapeHtml(source)} → ${dashboardEscapeHtml(destination)}
+          </div>
+
+          <p class="important-alert-reason">
+            ${dashboardEscapeHtml(reason)}
+          </p>
+        </div>
+
+        <div class="important-alert-actions">
+          <button
+            class="overview-small-btn"
+            type="button"
+            onclick="event.stopPropagation(); openDashboardImportantAlert(${index})"
+          >
+            Quick preview
+          </button>
+
+          ${detailsButton}
+        </div>
+      </article>
     `;
   }).join("");
+}
 
-  return `
-    ${helperText}
-    <ul class="feature-list">${items}</ul>
-  `;
+function openDashboardImportantAlert(index) {
+  const alertObj = latestImportantAlerts[index];
+
+  if (!alertObj) return;
+
+  if (typeof openAlertPreviewModal === "function") {
+    openAlertPreviewModal(alertObj);
+  } else {
+    console.error("openAlertPreviewModal is not available. Check ui_common.js loading.");
+  }
 }
 
 function openExplanationModal(alertObj) {
-  const repKey = alertObj.repetition_key
-    ? JSON.stringify(alertObj.repetition_key)
-    : "-";
-
-  const finalLabel =
-    alertObj.final_label ?? alertObj.display_label ?? alertObj.severity ?? "-";
-
-  const finalLabelUpper = String(finalLabel || "").toUpperCase();
-  const showHints = finalLabelUpper === "REVIEW" || finalLabelUpper === "CRITICAL";
-
-  document.getElementById("modalFlowId").textContent = alertObj.flow_id ?? "-";
-
-  document.getElementById("modalDisplayLabel").textContent = finalLabel;
-  document.getElementById("modalShortReason").textContent = shortTableReason(alertObj);
-  document.getElementById("modalDisplayLabelReason").textContent =
-    alertObj.display_label_reason ?? "-";
-
-  document.getElementById("modalInterpretation").textContent =
-    alertObj.interpretation ?? "-";
-
-  document.getElementById("modalSummary").textContent =
-    alertObj.summary ?? "-";
-
-  document.getElementById("modalModelFlag").textContent =
-    alertObj.raw_model_flag ? "YES" : "NO";
-
-  document.getElementById("modalScore").textContent =
-    safeNum(alertObj.ae_score, 6, "-");
-
-  document.getElementById("modalRawSeverity").textContent =
-    alertObj.raw_severity ?? "-";
-
-  document.getElementById("modalFinalSeverity").textContent =
-    alertObj.final_severity ?? alertObj.severity ?? "-";
-
-  document.getElementById("modalAdjustmentReason").textContent =
-    alertObj.adjustment_reason ?? "-";
-
-  document.getElementById("modalPossibleExplanation").textContent =
-    showHints ? (alertObj.possible_explanation ?? "-") : "-";
-
-  document.getElementById("modalWhatToCheck").textContent =
-    showHints ? (alertObj.what_to_check ?? "-") : "-";
-
-  document.getElementById("modalSource").textContent =
-    `${alertObj.src_ip ?? "-"} : ${alertObj.src_port ?? "-"}`;
-
-  document.getElementById("modalDestination").textContent =
-    `${alertObj.dest_ip ?? "-"} : ${alertObj.dest_port ?? "-"}`;
-
-  document.getElementById("modalProto").textContent =
-    `${alertObj.proto ?? "-"} / ${alertObj.app_proto ?? "-"}`;
-
-  document.getElementById("modalClass").textContent =
-    alertObj.traffic_class ?? "-";
-
-  document.getElementById("modalContextTags").textContent =
-    Array.isArray(alertObj.context_tags) && alertObj.context_tags.length
-      ? alertObj.context_tags.join(", ")
-      : "-";
-
-  document.getElementById("modalRepeatLevel").textContent =
-    alertObj.repeat_level ?? "-";
-
-  document.getElementById("modalRepeatCount").textContent =
-    String(alertObj.repeat_count ?? "-");
-
-  document.getElementById("modalRepeatWindow").textContent =
-    `${alertObj.repeat_window_s ?? "-"} s`;
-
-  document.getElementById("modalTrafficNote").textContent =
-    alertObj.traffic_note ?? "-";
-
-  document.getElementById("modalLikelyBenign").textContent =
-    alertObj.likely_benign ? "YES" : "NO";
-
-  document.getElementById("modalBenignReason").textContent =
-    alertObj.benign_reason ?? "-";
-
-  document.getElementById("modalRepeatKey").textContent = repKey;
-
-  document.getElementById("modalTopFeatures").innerHTML =
-    renderTopFeatures(alertObj.top_features);
-
-  document.getElementById("modalInferMs").textContent =
-    `${safeNum(alertObj.timing?.infer_ms, 3, "-")} ms`;
-
-  document.getElementById("modalTotalMs").textContent =
-    `${safeNum(alertObj.timing?.total_ms, 3, "-")} ms`;
-
-  document.getElementById("modalThroughput").textContent =
-    `${safeNum(alertObj.timing?.throughput_fps, 2, "-")} fps`;
-
-  document.getElementById("modalSystem").textContent =
-    `CPU=${safeNum(alertObj.system?.cpu_proc_pct, 1, "-")}% | RSS=${safeNum(alertObj.system?.rss_mb, 1, "-")} MB`;
-
-  document.getElementById("modalExplanation").textContent =
-    alertObj.explanation ?? "-";
-
-  document.getElementById("modalBackdrop").classList.add("show");
-  document.getElementById("explanationModal").classList.add("show");
+  if (typeof openAlertPreviewModal === "function") {
+    openAlertPreviewModal(alertObj);
+  } else {
+    console.error("openAlertPreviewModal is not available. Check ui_common.js loading.");
+  }
 }
 
 function closeExplanationModal() {
-  document.getElementById("modalBackdrop").classList.remove("show");
-  document.getElementById("explanationModal").classList.remove("show");
-}
-
-document.addEventListener("keydown", function (e) {
-  if (e.key === "Escape") {
-    closeExplanationModal();
+  if (typeof closeAlertPreviewModal === "function") {
+    closeAlertPreviewModal();
   }
-});
-
-async function fetchText(url) {
-  const r = await fetch(url);
-  return await r.text();
-}
-
-function parsePrometheus(text) {
-  const out = {};
-  const lines = text.split("\n");
-
-  for (const line of lines) {
-    if (!line || line.startsWith("#")) continue;
-
-    const parts = line.split(" ");
-    if (parts.length < 2) continue;
-
-    const name = parts[0];
-    const value = parseFloat(parts[1]);
-
-    if (!isNaN(value)) {
-      out[name] = value;
-    }
-  }
-
-  return out;
 }
 
 async function refresh() {
-  const limit = parseInt(document.getElementById("limit").value || "50", 10);
+  try {
+    const [statsData, recentData, alertsData] = await Promise.all([
+      fetchJson("/stats"),
+      fetchJson(`/recent?limit=${DASHBOARD_RECENT_LIMIT}`),
+      fetchJson(`/alerts?limit=${DASHBOARD_ALERT_LIMIT}`),
+    ]);
 
-  const [recentRes, alertsRes] = await Promise.all([
-    fetch(`/recent?limit=${limit}`),
-    fetch(`/alerts?limit=${limit}`)
-  ]);
+    const recentRows = Array.isArray(recentData?.recent) ? recentData.recent : [];
+    const alertRows = Array.isArray(alertsData?.alerts) ? alertsData.alerts : [];
+    const counts = computeDecisionCounts(recentRows);
+    const state = computeCurrentSecurityState(counts, recentRows);
 
-  const recentData = await recentRes.json();
-  const alertsData = await alertsRes.json();
+    updateSystemSummary(statsData);
+    updateDecisionCounts(counts);
+    updateCurrentState(state);
+    renderImportantAlerts(alertRows);
 
-  const b = recentData.bands;
-  document.getElementById("thr").textContent =
-    b ? `ok=${b.ok.toFixed(6)} warn=${b.warn.toFixed(6)} crit=${b.crit.toFixed(6)}` : "not set";
+    setText("lastUpdated", new Date().toLocaleTimeString());
+    setText("dashboardError", "");
+  } catch (error) {
+    console.error("Dashboard refresh failed:", error);
 
-  document.getElementById("buf").textContent = (alertsData.alerts || []).length;
-
-  const rows = recentData.recent || [];
-  latestRows = rows;
-
-  if (!rows.length) {
+    setText("systemStatus", "OFFLINE");
+    setText("systemStatusDetail", "Dashboard data could not be loaded.");
+    setText("dashboardError", "Dashboard refresh failed. Check that the backend is running and that you are still logged in.");
     setStatusPillLabel("OK");
-  } else {
-    const topLabel = rows[0].final_label || rows[0].display_label || "OK";
-    setStatusPillLabel(topLabel);
   }
-
-  const mText = await fetchText("/metrics");
-  const m = parsePrometheus(mText);
-
-  if (m["rtids_cpu_process_pct"] !== undefined) {
-    document.getElementById("cpu").textContent =
-      m["rtids_cpu_process_pct"].toFixed(1) + "%";
-  }
-
-  if (m["rtids_rss_mb"] !== undefined) {
-    document.getElementById("rss").textContent =
-      m["rtids_rss_mb"].toFixed(1) + " MB";
-  }
-
-  if (m["rtids_throughput_fps"] !== undefined) {
-    document.getElementById("fps").textContent =
-      m["rtids_throughput_fps"].toFixed(2);
-  }
-
-  const tbody = document.getElementById("rows");
-  tbody.innerHTML = "";
-
-  if (!rows.length) {
-    tbody.innerHTML = `<tr><td colspan="8" class="muted">No traffic yet.</td></tr>`;
-  } else {
-    for (let idx = 0; idx < rows.length; idx++) {
-      const a = rows[idx];
-
-      const t = new Date((a.ts_unix ?? 0) * 1000)
-        .toISOString()
-        .replace("T", " ")
-        .replace("Z", "Z")
-        .split(".")[0] + "Z";
-
-      const source = `${a.src_ip ?? "-"}:${a.src_port ?? "-"}`;
-      const destination = `${a.dest_ip ?? "-"}:${a.dest_port ?? "-"}`;
-      const proto = a.proto || "-";
-      const finalLabel = a.final_label || a.display_label || "-";
-      const summary = shortTableReason(a);
-      const repeatCount = a.repeat_count ?? 0;
-
-      tbody.innerHTML += `
-        <tr
-          class="${rowClassFromLabel(finalLabel)} clickable-row"
-          onclick="openExplanationModal(latestRows[${idx}])"
-          title="Open alert explanation"
-        >
-          <td class="mono compact">${escapeHtml(t)}</td>
-          <td class="mono compact">${escapeHtml(source)}</td>
-          <td class="mono compact">${escapeHtml(destination)}</td>
-          <td class="center">${protoBadge(proto)}</td>
-          <td class="center"><span class="mono">${escapeHtml(String(repeatCount))}</span></td>
-          <td class="center">${displayLabelBadge(finalLabel)}</td>
-          <td class="summary-cell">${safeText(summary)}</td>
-          <td class="center details-sticky">
-            <button
-              class="info-btn"
-              onclick="event.stopPropagation(); openExplanationModal(latestRows[${idx}])"
-              title="Show details"
-            >i</button>
-          </td>
-        </tr>
-      `;
-    }
-  }
-
-  document.getElementById("lastUpdate").textContent =
-    "Updated: " + new Date().toLocaleTimeString();
 }
 
 function toggle() {
   running = !running;
 
   const btn = document.getElementById("toggleBtn");
-  btn.textContent = running ? "Pause" : "Resume";
+  if (btn) btn.textContent = running ? "Pause" : "Resume";
 
   if (running) {
     refresh();
-    timer = setInterval(refresh, 2000);
+    timer = setInterval(refresh, DASHBOARD_REFRESH_MS);
   } else {
     clearInterval(timer);
     timer = null;
@@ -436,5 +474,11 @@ async function clearAlerts() {
   refresh();
 }
 
-timer = setInterval(refresh, 2000);
+window.openDashboardImportantAlert = openDashboardImportantAlert;
+window.openExplanationModal = openExplanationModal;
+window.closeExplanationModal = closeExplanationModal;
+window.toggle = toggle;
+window.clearAlerts = clearAlerts;
+
+timer = setInterval(refresh, DASHBOARD_REFRESH_MS);
 refresh();

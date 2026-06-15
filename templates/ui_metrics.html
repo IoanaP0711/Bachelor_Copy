@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>IDS Metrics Analytics</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', path='dashboard.css') }}"
+    >
+
+    <script
+        src="https://cdn.plot.ly/plotly-2.35.2.min.js"
+        defer
+    ></script>
+
+    <script
+    src="{{ url_for('static', path='ui_common.js') }}"
+    defer
+    ></script>
+    
+    <script
+        src="{{ url_for('static', path='ui_metrics.js') }}"
+        defer
+    ></script>
+</head>
+
+<body>
+    
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-title">Real-Time IDS Dashboard</div>
+
+      <div class="brand-subtitle">
+        Autoencoder anomaly detection with contextual interpretation layer
+      </div>
+    </div>
+
+    <nav class="main-nav" aria-label="Dashboard navigation">
+      <a href="/" data-nav="dashboard">Dashboard</a>
+      <a href="/ui/system" data-nav="system">System</a>
+      <a href="/ui/alerts" data-nav="alerts">Alerts</a>
+      <a href="/ui/recent" data-nav="recent">Recent Traffic</a>
+      <a href="/ui/metrics" class="active" data-nav="metrics">Metrics</a>
+      <a href="/ui/patterns" 
+      class="logout-nav-link">Patterns</a>
+      <a href="/ui/network" data-nav="network">Network Map</a>
+      <a href="/ui/help" data-nav="help">Help</a>s
+      <a href="/logout" class="logout-nav-link">Logout</a>
+
+    </nav>
+  </header>
+
+  <main class="overview-page metrics-page">
+    <section class="overview-hero">
+      <div>
+        <p class="page-kicker">Monitoring analytics</p>
+
+        <h1>Metrics analytics</h1>
+
+        <p class="overview-subtitle">
+          Current traffic, anomaly, protocol, severity, and destination-port
+          statistics calculated from the active traffic buffer.
+        </p>
+      </div>
+
+   
+    </section>
+
+    <main class="metrics-page">
+        <section
+            class="metrics-summary-grid"
+            aria-label="Metrics summary"
+        >
+            <article class="metrics-summary-card">
+                <span class="metrics-summary-label">
+                    Flows analysed
+                </span>
+
+                <strong
+                    id="metricsTotalFlows"
+                    class="metrics-summary-value"
+                >
+                    0
+                </strong>
+            </article>
+
+            <article class="metrics-summary-card">
+                <span class="metrics-summary-label">
+                    Data source
+                </span>
+
+                <strong
+                    id="metricsDataSource"
+                    class="metrics-summary-value metrics-summary-value-small"
+                >
+                    Loading
+                </strong>
+            </article>
+
+            <article class="metrics-summary-card">
+                <span class="metrics-summary-label">
+                    Last refresh
+                </span>
+
+                <strong
+                    id="metricsLastRefresh"
+                    class="metrics-summary-value metrics-summary-value-small"
+                >
+                    -
+                </strong>
+            </article>
+        </section>
+
+        <div class="metrics-toolbar">
+            <p
+                id="metricsRefreshStatus"
+                class="metrics-refresh-status"
+                role="status"
+                aria-live="polite"
+            >
+                Loading metrics...
+            </p>
+
+            <button
+                id="metricsRefreshButton"
+                class="secondary-button"
+                type="button"
+            >
+                Refresh now
+            </button>
+        </div>
+
+        <section class="metrics-chart-grid">
+            <article class="metrics-chart-card">
+                <div class="metrics-chart-heading">
+                    <h2>Severity distribution</h2>
+
+                    <p>
+                        Final user-facing decisions for the analysed flows.
+                    </p>
+                </div>
+
+                <div
+                    id="metricsSeverityChart"
+                    class="metrics-chart"
+                    aria-label="Severity distribution chart"
+                ></div>
+
+                <div
+                    id="metricsSeverityEmpty"
+                    class="metrics-empty-state"
+                    hidden
+                >
+                    No severity data is currently available.
+                </div>
+            </article>
+
+            <article class="metrics-chart-card">
+                <div class="metrics-chart-heading">
+                    <h2>Traffic class distribution</h2>
+
+                    <p>
+                        Most common contextual traffic classes.
+                    </p>
+                </div>
+
+                <div
+                    id="metricsTrafficClassChart"
+                    class="metrics-chart"
+                    aria-label="Traffic class distribution chart"
+                ></div>
+
+                <div
+                    id="metricsTrafficClassEmpty"
+                    class="metrics-empty-state"
+                    hidden
+                >
+                    No traffic-class data is currently available.
+                </div>
+            </article>
+
+            <article class="metrics-chart-card metrics-chart-card-wide">
+                <div class="metrics-chart-heading">
+                    <h2>Average anomaly score over time</h2>
+
+                    <p>
+                        Average autoencoder reconstruction error grouped into
+                        one-minute intervals.
+                    </p>
+                </div>
+
+                <div
+                    id="metricsScoreChart"
+                    class="metrics-chart metrics-chart-wide"
+                    aria-label="Average anomaly score over time chart"
+                ></div>
+
+                <div
+                    id="metricsScoreEmpty"
+                    class="metrics-empty-state"
+                    hidden
+                >
+                    No anomaly-score history is currently available.
+                </div>
+            </article>
+
+            <article class="metrics-chart-card">
+                <div class="metrics-chart-heading">
+                    <h2>Top protocols</h2>
+
+                    <p>
+                        Most frequently observed network protocols.
+                    </p>
+                </div>
+
+                <div
+                    id="metricsProtocolsChart"
+                    class="metrics-chart"
+                    aria-label="Top protocols chart"
+                ></div>
+
+                <div
+                    id="metricsProtocolsEmpty"
+                    class="metrics-empty-state"
+                    hidden
+                >
+                    No protocol data is currently available.
+                </div>
+            </article>
+
+            <article class="metrics-chart-card">
+                <div class="metrics-chart-heading">
+                    <h2>Top destination ports</h2>
+
+                    <p>
+                        Most frequently observed destination ports.
+                    </p>
+                </div>
+
+                <div
+                    id="metricsPortsChart"
+                    class="metrics-chart"
+                    aria-label="Top destination ports chart"
+                ></div>
+
+                <div
+                    id="metricsPortsEmpty"
+                    class="metrics-empty-state"
+                    hidden
+                >
+                    No destination-port data is currently available.
+                </div>
+            </article>
+        </section>
+    </main>
+</body>
+</html>

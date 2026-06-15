@@ -17,6 +17,10 @@ load_dotenv()
 API_BASE_URL = os.getenv("API_BASE_URL", "http://127.0.0.1:8000").rstrip("/")
 PREDICT_URL = f"{API_BASE_URL}/predict"
 IDS_API_KEY = os.getenv("IDS_API_KEY", "")
+IDS_MODE = os.getenv(
+    "IDS_MODE",
+    "live",
+).strip().lower()
 
 
 def _to_unix_seconds(ts: Any) -> Optional[float]:
@@ -198,6 +202,16 @@ def build_features_from_suricata(obj: Dict[str, Any]) -> Optional[Dict[str, Any]
 
 
 def main() -> int:
+    # Replay mode is handled by the FastAPI server using saved
+    # events. The live Suricata bridge must not submit traffic
+    # concurrently during a controlled demo or validation run.
+    if IDS_MODE == "replay":
+        print(
+            "[runner] IDS_MODE=replay; live Suricata input is disabled.",
+            file=sys.stderr,
+        )
+        return 0
+
     for line in sys.stdin:
         line = line.strip()
         if not line:
@@ -214,11 +228,13 @@ def main() -> int:
 
         try:
             r = requests.post(
-    PREDICT_URL,
-    json=payload,
-    headers={"X-API-Key": IDS_API_KEY},
-    timeout=2.0,
-)
+                PREDICT_URL,
+                json=payload,
+                headers={
+                    "X-API-Key": IDS_API_KEY,
+                },
+                timeout=2.0,
+            )
             if r.status_code != 200:
                 print("[WARN] /predict failed:", r.status_code, r.text[:200], file=sys.stderr)
         except Exception as e:

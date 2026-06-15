@@ -1,0 +1,15 @@
+{
+  "thresholds": {
+    "ok": 1.5,
+    "warn": 3.0,
+    "crit": 8.0
+  },
+  "repeat_logic": {
+    "window_seconds": 45,
+    "critical_repeat_count": 3
+  },
+  "notifications": {
+    "enabled": true,
+    "cooldown_seconds": 300
+  }
+}

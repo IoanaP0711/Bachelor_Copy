@@ -1,0 +1,959 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Help &amp; Glossary - RT-IDS Dashboard</title>
+  <link rel="stylesheet" href="/static/dashboard.css">
+</head>
+
+<body>
+  <div id="top" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-title">Real-Time IDS Dashboard</div>
+      <div class="brand-subtitle">
+        Autoencoder anomaly detection with contextual interpretation layer
+        <span class="pill" id="statusPill">…</span>
+        <span
+          id="runtimeModeBadge"
+          class="runtime-mode-badge runtime-mode-loading"
+          title="Current IDS operating mode"
+        >
+          MODE LOADING
+        </span>
+      </div>
+    </div>
+
+    <nav class="main-nav" aria-label="Dashboard navigation">
+      <a href="/" data-nav="dashboard">Dashboard</a>
+      <a href="/ui/system" data-nav="system">System</a>
+      <a href="/ui/alerts" data-nav="alerts">Alerts</a>
+      <a href="/ui/recent" data-nav="recent">Recent Traffic</a>
+      <a href="/ui/metrics" data-nav="metrics">Metrics</a>
+      <a href="/ui/patterns" data-nav="patterns">Patterns</a>
+      <a href="/ui/network" data-nav="network">Network Map</a>
+      <a href="/ui/help" class="active" data-nav="help" aria-current="page">Help</a>
+      <a href="/logout" class="logout-nav-link">Logout</a>
+    </nav>
+  </header>
+
+  <main class="help-page" aria-labelledby="helpPageTitle">
+    <header class="help-hero">
+      <p class="page-kicker">Interface guide</p>
+      <h1 id="helpPageTitle">Help &amp; Glossary</h1>
+      <p class="help-introduction">
+        This guide explains the terms, indicators, charts, and actions used by the intrusion detection system. It is intended for both technical users and people with limited networking experience.
+      </p>
+      <p class="help-important-note">
+        An unusual connection is not automatically an attack. The system combines the model result with contextual information, repetition, and analyst review.
+      </p>
+    </header>
+
+    <section class="help-search-card" aria-labelledby="helpSearchHeading">
+      <div class="help-search-heading">
+        <div>
+          <h2 id="helpSearchHeading">Search this guide</h2>
+          <p>Search by a full term, abbreviation, port number, status, action, or explanation.</p>
+        </div>
+        <span id="helpSearchStatus" class="help-search-status" aria-live="polite"></span>
+      </div>
+
+      <div class="help-search">
+        <label for="helpSearchInput">Search help topics</label>
+        <div class="help-search-controls">
+          <input
+            id="helpSearchInput"
+            type="search"
+            placeholder="Search terms, abbreviations, ports, or explanations"
+            autocomplete="off"
+            spellcheck="false"
+          >
+          <button id="clearHelpSearch" type="button" class="help-clear-button">Clear search</button>
+        </div>
+      </div>
+    </section>
+
+    <nav class="help-toc" aria-label="Help sections">
+      <h2>Contents</h2>
+      <div class="help-toc-links">
+        <a href="#system-overview">1. System overview</a>
+        <a href="#final-decisions">2. Final decisions</a>
+        <a href="#raw-versus-final">3. Raw versus final</a>
+        <a href="#anomaly-score">4. Anomaly score</a>
+        <a href="#contextual-filtering">5. Contextual filtering</a>
+        <a href="#repeat-analysis">6. Repeat analysis</a>
+        <a href="#temporal-context">7. Temporal context</a>
+        <a href="#patterns">8. Repeated Pattern View</a>
+        <a href="#networking-terms">9. Networking terms</a>
+        <a href="#protocols">10. Protocols</a>
+        <a href="#ports">11. Common ports</a>
+        <a href="#feature-contributors">12. Feature contributors</a>
+        <a href="#alert-explanations">13. Alert explanations</a>
+        <a href="#human-status">14. Human status</a>
+        <a href="#false-positive">15. False-positive marking</a>
+        <a href="#json-export">16. JSON export</a>
+        <a href="#replay-demo">17. Replay / Demo Mode</a>
+        <a href="#metrics-state">18. Metrics and system state</a>
+        <a href="#suricata">19. Suricata</a>
+        <a href="#dashboard-pages">20. Dashboard pages</a>
+        <a href="#interface-actions">21. Interface actions</a>
+        <a href="#colors-badges">22. Colors and badges</a>
+      </div>
+    </nav>
+
+    <div id="helpEmptyState" class="help-empty-state" role="status" aria-live="polite" hidden>
+      No matching help topic was found.
+    </div>
+
+    <div id="helpSections" class="help-layout">
+      <section
+        id="system-overview"
+        class="help-section"
+        data-help-keywords="system overview pipeline flow network traffic features autoencoder anomaly score raw severity contextual filtering repeat final decision explanation analyst review"
+      >
+        <div class="help-section-heading">
+          <div>
+            <p class="help-section-number">Section 1</p>
+            <h2>System overview</h2>
+          </div>
+          <a class="help-back-top" href="#top">Back to top</a>
+        </div>
+
+        <article class="help-topic help-topic-wide" data-help-item data-help-keywords="complete pipeline processing chain detection flow">
+          <h3 class="help-term">Complete processing flow</h3>
+          <div class="help-flow" aria-label="Intrusion detection processing flow">
+            <span>Network traffic</span><span aria-hidden="true">→</span>
+            <span>Traffic features</span><span aria-hidden="true">→</span>
+            <span>Autoencoder</span><span aria-hidden="true">→</span>
+            <span>Anomaly score</span><span aria-hidden="true">→</span>
+            <span>Raw severity</span><span aria-hidden="true">→</span>
+            <span>Contextual filtering</span><span aria-hidden="true">→</span>
+            <span>Repeat-based analysis</span><span aria-hidden="true">→</span>
+            <span>Final decision</span><span aria-hidden="true">→</span>
+            <span>Explanation</span><span aria-hidden="true">→</span>
+            <span>Analyst review</span>
+          </div>
+          <ol class="help-steps">
+            <li>The application observes network communication records.</li>
+            <li>Relevant numeric characteristics are extracted from each communication.</li>
+            <li>The autoencoder compares those characteristics with behavior learned as normal during training.</li>
+            <li>The reconstruction difference becomes the anomaly score.</li>
+            <li>Configured thresholds convert that score into an initial raw severity.</li>
+            <li>Contextual rules and recent repetition are considered without deleting the original raw result.</li>
+            <li>The system produces a final decision and an explanation for the operator.</li>
+            <li>A human analyst may update the investigation status or record feedback.</li>
+          </ol>
+        </article>
+
+        <article class="help-topic" data-help-item data-help-keywords="human judgment operator decision support limitations">
+          <h3 class="help-term">Decision support, not automatic proof</h3>
+          <p class="help-definition">
+            The interface helps a person prioritize and understand unusual traffic. It does not replace human judgment, confirm an attack by itself, or explain every possible cause of a network event.
+          </p>
+        </article>
+      </section>
+
+      <section
+        id="final-decisions"
+        class="help-section"
+        data-help-keywords="final decisions OK BENIGN REVIEW CRITICAL assessment label status attack"
+      >
+        <div class="help-section-heading">
+          <div>
+            <p class="help-section-number">Section 2</p>
+            <h2>Final decisions</h2>
+          </div>
+          <a class="help-back-top" href="#top">Back to top</a>
+        </div>
+
+        <div class="help-card-grid help-card-grid-four">
+          <article class="help-topic" data-help-item data-help-keywords="OK normal no attention green final decision">
+            <h3 class="help-term"><span class="badge badge-ok">OK</span></h3>
+            <p class="help-definition">The system did not identify behavior that currently requires attention.</p>
+          </article>
+
+          <article class="help-topic" data-help-item data-help-keywords="BENIGN legitimate contextual unusual cyan teal final decision">
+            <h3 class="help-term"><span class="badge badge-benign">BENIGN</span></h3>
+            <p class="help-definition">The traffic may look unusual to the model, but the available context suggests that it is probably legitimate.</p>
+          </article>
+
+          <article class="help-topic" data-help-item data-help-keywords="REVIEW investigate check person amber orange final decision not confirmed attack">
+            <h3 class="help-term"><span class="badge badge-review">REVIEW</span></h3>
+            <p class="help-definition">The behavior should be checked by a person. It may be harmless, but the available information is not sufficient to dismiss it automatically.</p>
+          </article>
+
+          <article class="help-topic" data-help-item data-help-keywords="CRITICAL urgent suspicious red final decision not proof attack">
+            <h3 class="help-term"><span class="badge badge-critical">CRITICAL</span></h3>
+            <p class="help-definition">The behavior appears strongly suspicious or repeatedly abnormal and should be investigated promptly.</p>
+          </article>
+        </div>
+
+        <div class="help-warning" data-help-item data-help-keywords="review critical confirmed attack warning assessment">
+          <strong>Important:</strong> <code>REVIEW</code> does not mean a confirmed attack. <code>CRITICAL</code> also does not prove an attack by itself. These labels are assessments produced by the detection system.
+        </div>
+      </section>
+
+      <section
+        id="raw-versus-final"
+        class="help-section"
+        data-help-keywords="raw severity final decision raw model Changed by context CRIT REVIEW WARN BENIGN MED OK escalation reduction"
+      >
+        <div class="help-section-heading">
+          <div>
+            <p class="help-section-number">Section 3</p>
+            <h2>Raw severity versus final decision</h2>
+          </div>
+          <a class="help-back-top" href="#top">Back to top</a>
+        </div>
+
+        <article class="help-topic help-topic-wide" data-help-item data-help-keywords="raw model initial classification final contextual repetition changed by context">
+          <h3 class="help-term">Why two labels are shown</h3>
+          <p class="help-definition">
+            <strong>Raw severity</strong> is the autoencoder pipeline's initial classification based on the anomaly score and thresholds. <strong>Final decision</strong> is the operator-facing assessment after contextual filtering and repeat-based analysis. The values may stay the same, decrease, or increase.
+          </p>
+          <p class="help-definition">
+            The <span class="context-adjusted-badge">Changed by context</span> badge means the final displayed assessment differs from the raw model label. It does not mean the original result was erased.
+          </p>
+        </article>
+
+        <div class="help-card-grid">
+          <article class="help-topic" data-help-item data-help-keywords="raw OK below threshold normal">
+            <h3 class="help-term">Raw <code>OK</code></h3>
+            <p class="help-definition">The anomaly score is below the configured OK boundary.</p>
+          </article>
+
+          <article class="help-topic" data-help-item data-help-keywords="raw WARN warning threshold">
+            <h3 class="help-term">Raw <code>WARN</code></h3>
+            <p class="help-definition">The score is above the OK boundary but below the configured warning boundary.</p>
+          </article>
+
+          <article class="help-topic" data-help-item data-help-keywords="raw MED medium threshold">
+            <h3 class="help-term">Raw <code>MED</code></h3>
+            <p class="help-definition">The score is above the warning boundary but below the critical boundary.</p>
+          </article>
+
+          <article class="help-topic" data-help-item data-help-keywords="raw CRIT critical threshold">
+            <h3 class="help-term">Raw <code>CRIT</code></h3>
+            <p class="help-definition">The score is at or above the configured critical boundary.</p>
+          </article>
+        </div>
+
+        <div class="help-card-grid">
+          <article class="help-topic help-example" data-help-item data-help-keywords="CRIT to REVIEW example context reduced">
+            <h3 class="help-term"><code>CRIT → REVIEW</code></h3>
+            <p class="help-definition">The model found a large deviation, but the available context reduced the operator-facing result to something requiring review rather than immediate critical treatment.</p>
+          </article>
+
+          <article class="help-topic help-example" data-help-item data-help-keywords="WARN to BENIGN example legitimate context">
+            <h3 class="help-term"><code>WARN → BENIGN</code></h3>
+            <p class="help-definition">The model marked the record as unusual, while contextual information identified a likely legitimate communication type.</p>
+          </article>
+
+          <article class="help-topic help-example" data-help-item data-help-keywords="MED to OK example context">
+            <h3 class="help-term"><code>MED → OK</code></h3>
+            <p class="help-definition">The raw model score crossed an anomaly band, but the current contextual rules determined that no attention was needed.</p>
+          </article>
+        </div>
+
+        <p class="help-note" data-help-item data-help-keywords="escalate preserve reduce severity">
+          Context does not always lower severity. Repeated unknown or uncommon traffic can preserve or escalate the result under the current repeat logic.
+        </p>
+      </section>
+
+      <section
+        id="anomaly-score"
+        class="help-section"
+        data-help-keywords="anomaly score reconstruction error autoencoder threshold MSE deviation probability percentage current configuration"
+      >
+        <div class="help-section-heading">
+          <div>
+            <p class="help-section-number">Section 4</p>
+            <h2>Anomaly score</h2>
+          </div>
+          <a class="help-back-top" href="#top">Back to top</a>
+        </div>
+
+        <article class="help-topic help-topic-wide" data-help-item data-help-keywords="autoencoder reconstruct features reconstruction error score unusual">
+          <h3 class="help-term">What the score means</h3>
+          <p class="help-definition">
+            The autoencoder attempts to reconstruct the traffic features it receives. The reconstruction error measures the difference between the original feature values and the reconstructed values. That error is used as the anomaly score.
+          </p>
+          <p class="help-definition">
+            A larger score usually means the record differs more from the behavior learned by this model. It is not automatic proof of malicious activity and it is not a universal percentage or attack probability.
+          </p>
+        </article>
+
+        <article class="help-topic help-runtime-card" data-help-item data-help-keywords="current thresholds OK WARN MED CRIT runtime config configuration source">
+          <h3 class="help-term">Current configuration</h3>
+          <p id="helpConfigStatus" class="help-definition">Loading safe runtime values…</p>
+          <dl class="help-runtime-grid">
+            <div><dt><code>OK</code></dt><dd id="helpThresholdOk">—</dd></div>
+            <div><dt><code>WARN</code></dt><dd id="helpThresholdWarn">—</dd></div>
+            <div><dt><code>MED</code></dt><dd id="helpThresholdMed">—</dd></div>
+            <div><dt><code>CRIT</code></dt><dd id="helpThresholdCrit">—</dd></div>
+            <div><dt>Configuration source</dt><dd id="helpConfigSource">—</dd></div>
+          </dl>
+          <p class="help-note">Threshold values are meaningful only for the currently loaded model and preprocessing configuration.</p>
+        </article>
+      </section>
+
+      <section
+        id="contextual-filtering"
+        class="help-section"
+        data-help-keywords="contextual filtering local external traffic class protocol port repeated Suricata history raw result"
+      >
+        <div class="help-section-heading">
+          <div>
+            <p class="help-section-number">Section 5</p>
+            <h2>Contextual filtering</h2>
+          </div>
+          <a class="help-back-top" href="#top">Back to top</a>
+        </div>
+
+        <article class="help-topic help-topic-wide" data-help-item data-help-keywords="additional communication information interpretation initial model result">
+          <h3 class="help-term">Definition</h3>
+          <p class="help-definition">Contextual filtering uses additional information about the communication to interpret the initial model result.</p>
+          <p class="help-definition">Context can include local or external communication, known traffic classes, protocol and port information, repeated behavior, Suricata information when available, and previously observed activity.</p>
+        </article>
+
+        <div class="help-warning" data-help-item data-help-keywords="raw severity preserved visible not erased">
+          Contextual filtering does not erase the raw result. Raw severity remains visible separately from the final decision.
+        </div>
+      </section>
+
+      <section
+        id="repeat-analysis"
+        class="help-section"
+        data-help-keywords="repeat repeated persistent single source IP destination IP destination port protocol traffic class window threshold exact pattern"
+      >
+        <div class="help-section-heading">
+          <div>
+            <p class="help-section-number">Section 6</p>
+            <h2>Repeat-based analysis</h2>
+          </div>
+          <a class="help-back-top" href="#top">Back to top</a>
+        </div>
+
+        <article class="help-topic" data-help-item data-help-keywords="single event accidental repeated evidence not proof">
+          <h3 class="help-term">Why repetition matters</h3>
+          <p class="help-definition">One unusual event may be accidental. Repeated similar events may deserve more attention. Repetition is additional evidence, not proof of an attack.</p>
+        </article>
+
+        <article class="help-topic" data-help-item data-help-keywords="exact pattern normalized values match source destination port protocol class">
+          <h3 class="help-term">Exact repeat pattern</h3>
+          <p class="help-definition">The repeat key uses normalized values for source IP, destination IP, protocol, traffic class, and destination port. Two records belong to the same exact pattern only when these normalized values match.</p>
+          <ul class="help-list">
+            <li>Source IP</li>
+            <li>Destination IP</li>
+            <li>Destination port</li>
+            <li>Protocol</li>
+            <li>Traffic class</li>
+          </ul>
+          <p class="help-note">For current DNS and local-discovery traffic, the backend normalizes destination port to <code>0</code> for repeat matching.</p>
+        </article>
+
+        <article class="help-topic help-runtime-card" data-help-item data-help-keywords="repeat window critical count current configuration threshold">
+          <h3 class="help-term">Current repeat configuration</h3>
+          <dl class="help-runtime-grid">
+            <div><dt>Repeat window</dt><dd id="helpRepeatWindow">—</dd></div>
+            <div><dt>Persistent/critical count</dt><dd id="helpRepeatThreshold">—</dd></div>
+          </dl>
+          <p class="help-note">These values are loaded from the safe runtime-configuration endpoint when available.</p>
+        </article>
+      </section>
+
+      <section
+        id="temporal-context"
+        class="help-section"
+        data-help-keywords="temporal context first seen last seen same source flows exact pattern occurrences repeat count last 24 hours current buffer history"
+      >
+        <div class="help-section-heading">
+          <div>
+            <p class="help-section-number">Section 7</p>
+            <h2>Temporal context</h2>
+          </div>
+          <a class="help-back-top" href="#top">Back to top</a>
+        </div>
+
+        <div class="help-card-grid">
+          <article class="help-topic" data-help-item data-help-keywords="First seen earliest available pattern time">
+            <h3 class="help-term">First seen</h3>
+            <p class="help-definition">The earliest available time when the matching communication appeared in the history used for the calculation.</p>
+          </article>
+
+          <article class="help-topic" data-help-item data-help-keywords="Last seen latest recent pattern time">
+            <h3 class="help-term">Last seen</h3>
+            <p class="help-definition">The most recent available time when the matching communication appeared.</p>
+          </article>
+
+          <article class="help-topic" data-help-item data-help-keywords="Flows from same source IP count all destinations">
+            <h3 class="help-term">Flows from the same source</h3>
+            <p class="help-definition">Counts all available records from the same source IP, even when the destination, port, protocol, or traffic class differs.</p>
+          </article>
+
+          <article class="help-topic" data-help-item data-help-keywords="Exact-pattern occurrences same source destination port protocol">
+            <h3 class="help-term">Exact-pattern occurrences</h3>
+            <p class="help-definition">Counts records matching the same source IP, destination IP, destination port, and protocol in the temporal-context calculation.</p>
+          </article>
+
+          <article class="help-topic" data-help-item data-help-keywords="Repeat count short window runtime repeat memory">
+            <h3 class="help-term">Repeat count</h3>
+            <p class="help-definition">The count attached by the short-window repeat logic when that value is available. It may differ from a broader historical count.</p>
+          </article>
+
+          <article class="help-topic" data-help-item data-help-keywords="Last 24 hours time window latest available timestamp">
+            <h3 class="help-term">Last 24 hours</h3>
+            <p class="help-definition">When timestamped history exists, the temporal calculation uses the most recent available 24-hour period.</p>
+          </article>
+
+          <article class="help-topic" data-help-item data-help-keywords="Current buffer incomplete network history memory">
+            <h3 class="help-term">Current buffer</h3>
+            <p class="help-definition">Only records currently held by the running application were used. This does not necessarily represent the complete network history.</p>
+          </article>
+        </div>
+      </section>
+
+      <section
+        id="patterns"
+        class="help-section"
+        data-help-keywords="Repeated Pattern View patterns count first seen last seen highest raw severity highest final decision short reason average anomaly score maximum decision counts"
+      >
+        <div class="help-section-heading">
+          <div>
+            <p class="help-section-number">Section 8</p>
+            <h2>Repeated Pattern View</h2>
+          </div>
+          <a class="help-back-top" href="#top">Back to top</a>
+        </div>
+
+        <article class="help-topic help-topic-wide" data-help-item data-help-keywords="group source destination port protocol traffic class">
+          <h3 class="help-term">How records are grouped</h3>
+          <p class="help-definition">The Patterns page groups anomaly-related communications sharing the same source IP, destination IP, destination port, protocol, and traffic class.</p>
+        </article>
+
+        <div class="help-card-grid">
+          <article class="help-topic" data-help-item data-help-keywords="Count event count repeated records">
+            <h3 class="help-term">Count</h3>
+            <p class="help-definition">The number of records in the grouped pattern.</p>
+          </article>
+          <article class="help-topic" data-help-item data-help-keywords="First seen pattern earliest">
+            <h3 class="help-term">First seen</h3>
+            <p class="help-definition">The earliest timestamp available for that grouped pattern.</p>
+          </article>
+          <article class="help-topic" data-help-item data-help-keywords="Last seen pattern latest">
+            <h3 class="help-term">Last seen</h3>
+            <p class="help-definition">The latest timestamp available for that grouped pattern.</p>
+          </article>
+          <article class="help-topic" data-help-item data-help-keywords="highest raw severity latest decision highest final decision short reason">
+            <h3 class="help-term">Current pattern fields</h3>
+            <p class="help-definition">The uploaded backend currently exposes highest raw severity, highest final decision, and a short reason for each repeated pattern.</p>
+          </article>
+        </div>
+
+        <div class="help-warning" data-help-item data-help-keywords="high repeat count legitimate common services not malicious">
+          A high repeat count does not automatically indicate malicious activity. Common legitimate services may also communicate frequently.
+        </div>
+
+        <p class="help-note" data-help-item data-help-keywords="average anomaly score maximum anomaly score decision counts unavailable current API">
+          Average anomaly score, maximum anomaly score, and per-decision counts are not fields in the current uploaded <code>/patterns</code> response. They should only be documented as visible fields after the backend actually exposes them.
+        </p>
+      </section>
+
+      <section
+        id="networking-terms"
+        class="help-section"
+        data-help-keywords="networking IP address source IP destination IP source port destination port packet flow protocol local address external address traffic class throughput"
+      >
+        <div class="help-section-heading">
+          <div>
+            <p class="help-section-number">Section 9</p>
+            <h2>Basic networking terms</h2>
+          </div>
+          <a class="help-back-top" href="#top">Back to top</a>
+        </div>
+
+        <div class="help-card-grid">
+          <article class="help-topic" data-help-item data-help-keywords="IP Internet Protocol address device endpoint">
+            <h3 class="help-term"><abbr title="Internet Protocol">IP</abbr> address</h3>
+            <p class="help-definition">An address that identifies a device or network endpoint for communication.</p>
+          </article>
+          <article class="help-topic" data-help-item data-help-keywords="source IP origin sender address">
+            <h3 class="help-term">Source IP</h3>
+            <p class="help-definition">The address from which the observed communication originated.</p>
+          </article>
+          <article class="help-topic" data-help-item data-help-keywords="destination IP receiver target address">
+            <h3 class="help-term">Destination IP</h3>
+            <p class="help-definition">The address receiving the observed communication.</p>
+          </article>
+          <article class="help-topic" data-help-item data-help-keywords="source port temporary application endpoint client ephemeral">
+            <h3 class="help-term">Source port</h3>
+            <p class="help-definition">Usually the temporary application-side communication endpoint used by the source.</p>
+          </article>
+          <article class="help-topic" data-help-item data-help-keywords="destination port service door target">
+            <h3 class="help-term">Destination port</h3>
+            <p class="help-definition">Often indicates the service the source is trying to reach.</p>
+          </article>
+          <article class="help-topic help-example" data-help-item data-help-keywords="building address numbered door analogy IP port">
+            <h3 class="help-term">Address and door analogy</h3>
+            <p class="help-definition">An IP address is similar to a building address, while a port is similar to a numbered door used by a particular service. This is only an analogy; real network behavior is more flexible.</p>
+          </article>
+          <article class="help-topic" data-help-item data-help-keywords="packet small unit network data">
+            <h3 class="help-term">Packet</h3>
+            <p class="help-definition">A small unit of data transmitted through a network.</p>
+          </article>
+          <article class="help-topic" data-help-item data-help-keywords="flow related packets summarized communication endpoints">
+            <h3 class="help-term">Flow</h3>
+            <p class="help-definition">A set of related packets or a summarized communication between endpoints.</p>
+          </article>
+          <article class="help-topic" data-help-item data-help-keywords="protocol communication rules TCP UDP ICMP">
+            <h3 class="help-term">Protocol</h3>
+            <p class="help-definition">A set of rules that determines how systems communicate.</p>
+          </article>
+          <article class="help-topic" data-help-item data-help-keywords="local address private internal network RFC1918">
+            <h3 class="help-term">Local address</h3>
+            <p class="help-definition">An address treated as part of the monitored internal or private network.</p>
+          </article>
+          <article class="help-topic" data-help-item data-help-keywords="external address outside local public Internet">
+            <h3 class="help-term">External address</h3>
+            <p class="help-definition">An address outside the local monitored network. External does not automatically mean hostile.</p>
+          </article>
+          <article class="help-topic" data-help-item data-help-keywords="traffic class readable category DNS local discovery unknown">
+            <h3 class="help-term">Traffic class</h3>
+            <p class="help-definition">A readable category assigned to a type of communication, such as DNS or local discovery.</p>
+          </article>
+          <article class="help-topic" data-help-item data-help-keywords="throughput requests per second traffic processing rate fps req/s">
+            <h3 class="help-term">Throughput</h3>
+            <p class="help-definition">The amount or rate of traffic records processed over time. The dashboard currently shows rolling backend requests per second.</p>
+          </article>
+        </div>
+      </section>
+
+      <section
+        id="protocols"
+        class="help-section"
+        data-help-keywords="protocols TCP Transmission Control Protocol UDP User Datagram Protocol ICMP Internet Control Message Protocol HTTP HTTPS DNS"
+      >
+        <div class="help-section-heading">
+          <div>
+            <p class="help-section-number">Section 10</p>
+            <h2>Protocols</h2>
+          </div>
+          <a class="help-back-top" href="#top">Back to top</a>
+        </div>
+
+        <div class="help-card-grid">
+          <article class="help-topic" data-help-item data-help-keywords="TCP Transmission Control Protocol reliable ordered connection">
+            <h3 class="help-term"><abbr title="Transmission Control Protocol">TCP</abbr> — Transmission Control Protocol</h3>
+            <p class="help-definition">Establishes a connection and coordinates ordered, confirmed delivery of data.</p>
+          </article>
+          <article class="help-topic" data-help-item data-help-keywords="UDP User Datagram Protocol speed datagram no delivery coordination">
+            <h3 class="help-term"><abbr title="User Datagram Protocol">UDP</abbr> — User Datagram Protocol</h3>
+            <p class="help-definition">Sends data with less delivery coordination and is commonly used when speed or low overhead matters.</p>
+          </article>
+          <article class="help-topic" data-help-item data-help-keywords="ICMP Internet Control Message Protocol ping diagnostics control">
+            <h3 class="help-term"><abbr title="Internet Control Message Protocol">ICMP</abbr> — Internet Control Message Protocol</h3>
+            <p class="help-definition">Carries network control and diagnostic messages, including communication associated with ping.</p>
+          </article>
+          <article class="help-topic" data-help-item data-help-keywords="HTTP Hypertext Transfer Protocol unencrypted web port 80">
+            <h3 class="help-term"><abbr title="Hypertext Transfer Protocol">HTTP</abbr> — Hypertext Transfer Protocol</h3>
+            <p class="help-definition">A protocol commonly used for unencrypted web communication.</p>
+          </article>
+          <article class="help-topic" data-help-item data-help-keywords="HTTPS Hypertext Transfer Protocol Secure encrypted web TLS port 443">
+            <h3 class="help-term"><abbr title="Hypertext Transfer Protocol Secure">HTTPS</abbr> — Hypertext Transfer Protocol Secure</h3>
+            <p class="help-definition">Web communication protected with encryption, normally using TLS.</p>
+          </article>
+          <article class="help-topic" data-help-item data-help-keywords="DNS Domain Name System names websites IP addresses port 53">
+            <h3 class="help-term"><abbr title="Domain Name System">DNS</abbr> — Domain Name System</h3>
+            <p class="help-definition">Converts human-readable names, such as website names, into IP addresses and provides related naming information.</p>
+          </article>
+        </div>
+
+        <p class="help-note" data-help-item data-help-keywords="protocol safe malicious neutral">
+          A protocol is not automatically safe or malicious. Its meaning depends on who communicated, where, how often, and what surrounding behavior occurred.
+        </p>
+      </section>
+
+      <section
+        id="ports"
+        class="help-section"
+        data-help-keywords="common ports port numbers FTP SSH SMTP DNS DHCP HTTP POP3 NTP IMAP HTTPS SMB MySQL RDP PostgreSQL 8080 service"
+      >
+        <div class="help-section-heading">
+          <div>
+            <p class="help-section-number">Section 11</p>
+            <h2>Common ports</h2>
+          </div>
+          <a class="help-back-top" href="#top">Back to top</a>
+        </div>
+
+        <div class="help-warning help-warning-prominent" data-help-item data-help-keywords="port not malicious context source destination frequency protocol service non-standard">
+          Using a particular port does not automatically indicate malicious activity. The meaning depends on the source, destination, frequency, protocol, service configuration, and surrounding behavior. Applications can also use non-standard ports.
+        </div>
+
+        <div class="help-port-table-wrap" tabindex="0" role="region" aria-label="Common network ports table">
+          <table class="help-port-table">
+            <thead>
+              <tr>
+                <th scope="col">Port</th>
+                <th scope="col">Common service</th>
+                <th scope="col">Beginner explanation</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-help-item data-help-keywords="20 21 FTP File Transfer Protocol traditional file transfer"><td><code>20/21</code></td><td><abbr title="File Transfer Protocol">FTP</abbr></td><td>Traditional file transfer</td></tr>
+              <tr data-help-item data-help-keywords="22 SSH Secure Shell remote administration"><td><code>22</code></td><td><abbr title="Secure Shell">SSH</abbr></td><td>Secure remote system administration</td></tr>
+              <tr data-help-item data-help-keywords="25 SMTP Simple Mail Transfer Protocol email transmission"><td><code>25</code></td><td><abbr title="Simple Mail Transfer Protocol">SMTP</abbr></td><td>Email transmission</td></tr>
+              <tr data-help-item data-help-keywords="53 DNS Domain Name System resolution"><td><code>53</code></td><td><abbr title="Domain Name System">DNS</abbr></td><td>Domain-name resolution</td></tr>
+              <tr data-help-item data-help-keywords="67 68 DHCP Dynamic Host Configuration Protocol automatic address configuration"><td><code>67/68</code></td><td><abbr title="Dynamic Host Configuration Protocol">DHCP</abbr></td><td>Automatic network-address configuration</td></tr>
+              <tr data-help-item data-help-keywords="80 HTTP Hypertext Transfer Protocol unencrypted web"><td><code>80</code></td><td><abbr title="Hypertext Transfer Protocol">HTTP</abbr></td><td>Unencrypted web traffic</td></tr>
+              <tr data-help-item data-help-keywords="110 POP3 Post Office Protocol email retrieval"><td><code>110</code></td><td><abbr title="Post Office Protocol version 3">POP3</abbr></td><td>Email retrieval</td></tr>
+              <tr data-help-item data-help-keywords="123 NTP Network Time Protocol synchronization"><td><code>123</code></td><td><abbr title="Network Time Protocol">NTP</abbr></td><td>Time synchronization</td></tr>
+              <tr data-help-item data-help-keywords="143 IMAP Internet Message Access Protocol email retrieval synchronization"><td><code>143</code></td><td><abbr title="Internet Message Access Protocol">IMAP</abbr></td><td>Email retrieval and synchronization</td></tr>
+              <tr data-help-item data-help-keywords="443 HTTPS Hypertext Transfer Protocol Secure encrypted web TLS"><td><code>443</code></td><td><abbr title="Hypertext Transfer Protocol Secure">HTTPS</abbr></td><td>Encrypted web traffic</td></tr>
+              <tr data-help-item data-help-keywords="445 SMB Server Message Block Windows file resource sharing"><td><code>445</code></td><td><abbr title="Server Message Block">SMB</abbr></td><td>Windows file and resource sharing</td></tr>
+              <tr data-help-item data-help-keywords="3306 MySQL database"><td><code>3306</code></td><td>MySQL</td><td>MySQL database communication</td></tr>
+              <tr data-help-item data-help-keywords="3389 RDP Remote Desktop Protocol Windows remote desktop"><td><code>3389</code></td><td><abbr title="Remote Desktop Protocol">RDP</abbr></td><td>Windows remote desktop</td></tr>
+              <tr data-help-item data-help-keywords="5432 PostgreSQL database"><td><code>5432</code></td><td>PostgreSQL</td><td>PostgreSQL database communication</td></tr>
+              <tr data-help-item data-help-keywords="8080 alternative HTTP web application local service"><td><code>8080</code></td><td>Alternative HTTP</td><td>Frequently used by web applications or local services</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section
+        id="feature-contributors"
+        class="help-section"
+        data-help-keywords="feature contributor chart bars reconstruction difference error values attack causality top features anomaly contributors"
+      >
+        <div class="help-section-heading">
+          <div>
+            <p class="help-section-number">Section 12</p>
+            <h2>Feature contributor chart</h2>
+          </div>
+          <a class="help-back-top" href="#top">Back to top</a>
+        </div>
+
+        <article class="help-topic help-topic-wide" data-help-item data-help-keywords="bar length feature name contributor value percentage">
+          <h3 class="help-term">How to read the chart</h3>
+          <ul class="help-list">
+            <li>Each bar represents one input feature used by the model.</li>
+            <li>Longer bars represent larger stored reconstruction differences or contributor values.</li>
+            <li>Feature names identify the measured traffic characteristics.</li>
+            <li>The values are not necessarily percentages.</li>
+            <li>Contributors explain model deviation, not attack causality.</li>
+          </ul>
+        </article>
+
+        <div class="help-warning" data-help-item data-help-keywords="contributors warning influence anomaly score not proof malicious cause">
+          Feature contributors show which values influenced the anomaly score most strongly. They do not independently prove why the traffic occurred or whether it was malicious.
+        </div>
+      </section>
+
+      <section
+        id="alert-explanations"
+        class="help-section"
+        data-help-keywords="simple explanation analyst explanation technical explanation recommended action audience model scores thresholds guidance"
+      >
+        <div class="help-section-heading">
+          <div>
+            <p class="help-section-number">Section 13</p>
+            <h2>Alert explanations</h2>
+          </div>
+          <a class="help-back-top" href="#top">Back to top</a>
+        </div>
+
+        <div class="help-card-grid">
+          <article class="help-topic" data-help-item data-help-keywords="simple explanation beginner nontechnical">
+            <h3 class="help-term">Simple explanation</h3>
+            <p class="help-definition">Intended for users without technical networking knowledge.</p>
+          </article>
+          <article class="help-topic" data-help-item data-help-keywords="analyst explanation investigation communication details">
+            <h3 class="help-term">Analyst explanation</h3>
+            <p class="help-definition">Contains communication details useful during investigation.</p>
+          </article>
+          <article class="help-topic" data-help-item data-help-keywords="technical explanation model scores thresholds processing">
+            <h3 class="help-term">Technical explanation</h3>
+            <p class="help-definition">Contains model scores, thresholds, and technical processing details.</p>
+          </article>
+          <article class="help-topic" data-help-item data-help-keywords="recommended action next check guidance automatic decision">
+            <h3 class="help-term">Recommended action</h3>
+            <p class="help-definition">Suggests what the operator should check next. It is guidance, not an automatic decision.</p>
+          </article>
+        </div>
+      </section>
+
+      <section
+        id="human-status"
+        class="help-section"
+        data-help-keywords="human alert status New Seen Under review Resolved False positive analyst progress final decision separate"
+      >
+        <div class="help-section-heading">
+          <div>
+            <p class="help-section-number">Section 14</p>
+            <h2>Human alert status</h2>
+          </div>
+          <a class="help-back-top" href="#top">Back to top</a>
+        </div>
+
+        <p class="help-note" data-help-item data-help-keywords="human status separate system final decision">
+          Human status describes investigation progress. It is separate from the model's raw severity and the system's final decision.
+        </p>
+
+        <div class="help-card-grid">
+          <article class="help-topic" data-help-item data-help-keywords="New human status not reviewed blue"><h3 class="help-term"><span class="human-status-badge human-status-new">New</span></h3><p class="help-definition">No analyst progress has been recorded yet.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="Seen human status viewed gray"><h3 class="help-term"><span class="human-status-badge human-status-seen">Seen</span></h3><p class="help-definition">An analyst has acknowledged or viewed the alert.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="Under review human status investigation amber"><h3 class="help-term"><span class="human-status-badge human-status-under-review">Under review</span></h3><p class="help-definition">The alert is currently being investigated.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="Resolved human status completed green"><h3 class="help-term"><span class="human-status-badge human-status-resolved">Resolved</span></h3><p class="help-definition">The analyst considers the investigation complete.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="False positive human status purple incorrect alert"><h3 class="help-term"><span class="human-status-badge human-status-false-positive">False positive</span></h3><p class="help-definition">The analyst recorded that the alert did not represent a relevant threat.</p></article>
+        </div>
+
+        <div class="help-example help-topic" data-help-item data-help-keywords="CRITICAL Under review example system assessment analyst progress">
+          <h3 class="help-term">Example</h3>
+          <p class="help-definition">A <code>CRITICAL</code> alert may have the human status <code>Under review</code>. <code>CRITICAL</code> is the system assessment, while <code>Under review</code> describes the analyst's progress.</p>
+        </div>
+
+        <p class="help-note" data-help-item data-help-keywords="False positive status historical model result unchanged">
+          Setting <code>False positive</code> does not modify the historical raw severity or final decision.
+        </p>
+      </section>
+
+      <section
+        id="false-positive"
+        class="help-section"
+        data-help-keywords="false positive marking analyst feedback retrain threshold whitelist original final decision auditability history"
+      >
+        <div class="help-section-heading">
+          <div>
+            <p class="help-section-number">Section 15</p>
+            <h2>False-positive marking</h2>
+          </div>
+          <a class="help-back-top" href="#top">Back to top</a>
+        </div>
+
+        <article class="help-topic help-topic-wide" data-help-item data-help-keywords="record analyst feedback no retraining no whitelist no threshold change">
+          <h3 class="help-term">What the action does</h3>
+          <ul class="help-list">
+            <li>Records analyst feedback for the selected alert.</li>
+            <li>Does not automatically retrain the model.</li>
+            <li>Does not automatically change thresholds.</li>
+            <li>Does not automatically whitelist the communication.</li>
+            <li>Does not remove or overwrite the original final decision.</li>
+          </ul>
+          <p class="help-definition">The original result is preserved so later reviewers can see what the system produced at detection time and what the analyst concluded afterward. This supports auditability.</p>
+        </article>
+      </section>
+
+      <section
+        id="json-export"
+        class="help-section"
+        data-help-keywords="JSON JavaScript Object Notation report export machine readable alert report network information raw severity final decision anomaly score contributors explanations recommended action"
+      >
+        <div class="help-section-heading">
+          <div>
+            <p class="help-section-number">Section 16</p>
+            <h2>JSON report export</h2>
+          </div>
+          <a class="help-back-top" href="#top">Back to top</a>
+        </div>
+
+        <article class="help-topic" data-help-item data-help-keywords="JSON meaning machine readable not formatted human report">
+          <h3 class="help-term"><abbr title="JavaScript Object Notation">JSON</abbr> — JavaScript Object Notation</h3>
+          <p class="help-definition">A structured, machine-readable text format. It may not look like a formatted human report, but software tools can parse it reliably.</p>
+        </article>
+
+        <article class="help-topic" data-help-item data-help-keywords="current report fields timestamp source destination ports protocol traffic class repeat window">
+          <h3 class="help-term">Current exported fields</h3>
+          <p class="help-definition">The current uploaded backend exports the alert timestamp and identifier, network endpoints and ports, protocol, traffic class, raw severity, final decision, anomaly score, contextual reason, repeat count and window, top contributors, explanation levels, and recommended action.</p>
+        </article>
+
+        <p class="help-note" data-help-item data-help-keywords="human status false positive temporal context demo metadata not exported">
+          Human status, false-positive feedback, the complete temporal-context object, and replay metadata are not currently added to the uploaded JSON-report builder. Do not promise those fields unless the report implementation is extended.
+        </p>
+      </section>
+
+      <section
+        id="replay-demo"
+        class="help-section"
+        data-help-keywords="Replay Demo Mode controlled examples validation saved processed records DEMO badge live traffic model rerun start replay stop clear demo records"
+      >
+        <div class="help-section-heading">
+          <div>
+            <p class="help-section-number">Section 17</p>
+            <h2>Replay / Demo Mode</h2>
+          </div>
+          <a class="help-back-top" href="#top">Back to top</a>
+        </div>
+
+        <article class="help-topic help-topic-wide" data-help-item data-help-keywords="saved processed examples inserted interface model not executed again">
+          <h3 class="help-term">How replay works in the current backend</h3>
+          <p class="help-definition">Replay uses previously saved event records for controlled demonstration and validation. The stored processed examples are inserted into the interface again. This does not mean that live traffic was captured or that the model was executed again.</p>
+          <p class="help-definition">Saved final decisions are preserved. Replay does not rerun model inference, contextual filtering, or repeat-based decision logic for those stored records.</p>
+        </article>
+
+        <article class="help-topic help-runtime-card" data-help-item data-help-keywords="current operating mode live replay demo enabled state">
+          <h3 class="help-term">Current operating mode</h3>
+          <p id="helpRuntimeMode">Loading current mode…</p>
+        </article>
+
+        <div class="help-warning" data-help-item data-help-keywords="clear demo records unavailable clear alerts deletes live alert recent repeat memory">
+          The current uploaded backend does not provide a separate <strong>Clear demo records</strong> endpoint. Its existing <strong>Clear alerts</strong> action clears the alert buffer, recent-traffic buffer, and repeat memory. It must not be described as demo-only unless a separate implementation is added.
+        </div>
+
+        <p class="help-note" data-help-item data-help-keywords="DEMO badge replay mode badge amber yellow">
+          The shared CSS currently defines an amber <strong>REPLAY MODE</strong> badge. A separate record-level <code>DEMO</code> badge style was not present in the uploaded shared stylesheet.
+        </p>
+      </section>
+
+      <section
+        id="metrics-state"
+        class="help-section"
+        data-help-keywords="metrics system state CPU memory RSS throughput buffered alerts request count health last updated configuration source attack"
+      >
+        <div class="help-section-heading">
+          <div>
+            <p class="help-section-number">Section 18</p>
+            <h2>Metrics and system state</h2>
+          </div>
+          <a class="help-back-top" href="#top">Back to top</a>
+        </div>
+
+        <div class="help-card-grid">
+          <article class="help-topic" data-help-item data-help-keywords="CPU central processing unit process usage"><h3 class="help-term"><abbr title="Central Processing Unit">CPU</abbr> usage</h3><p class="help-definition">The percentage of processor capacity used by the monitoring process when measured.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="memory RSS resident set size megabytes"><h3 class="help-term">Memory usage</h3><p class="help-definition"><abbr title="Resident Set Size">RSS</abbr> memory is the amount of physical memory currently used by the process, usually shown in megabytes.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="throughput requests per second rolling window"><h3 class="help-term">Throughput</h3><p class="help-definition">The rolling processing rate, currently represented as backend requests per second.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="buffered alerts memory deque stored current"><h3 class="help-term">Buffered alerts</h3><p class="help-definition">Anomaly-related alert records currently held in the application's in-memory buffer.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="request count Prometheus metric shown if available"><h3 class="help-term">Request count</h3><p class="help-definition">The total number of prediction requests recorded by the metrics system, when that measurement is shown.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="system health status ok backend reachable"><h3 class="help-term">System health</h3><p class="help-definition">A summary of whether the application and its monitored components are responding as expected.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="last updated refresh timestamp"><h3 class="help-term">Last updated</h3><p class="help-definition">The most recent time the displayed interface data was refreshed.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="configuration source file defaults runtime config"><h3 class="help-term">Configuration source</h3><p class="help-definition">Indicates whether validated runtime values came from the configuration file or from safe defaults.</p></article>
+        </div>
+
+        <div class="help-warning" data-help-item data-help-keywords="high CPU memory not cyberattack application load">
+          High CPU or memory values describe the monitoring application's resource state. They do not directly indicate a cyberattack.
+        </div>
+      </section>
+
+      <section
+        id="suricata"
+        class="help-section"
+        data-help-keywords="Suricata network threat detection engine signature alerts metadata enrichment autoencoder different not every flow signature"
+      >
+        <div class="help-section-heading">
+          <div>
+            <p class="help-section-number">Section 19</p>
+            <h2>Suricata</h2>
+          </div>
+          <a class="help-back-top" href="#top">Back to top</a>
+        </div>
+
+        <article class="help-topic help-topic-wide" data-help-item data-help-keywords="signature based metadata AI anomaly model separate">
+          <h3 class="help-term">Role in the system</h3>
+          <p class="help-definition">Suricata is a network threat-detection engine. It can produce signature-based alerts and network metadata that may enrich the AI-based system.</p>
+          <p class="help-definition">A Suricata alert and an autoencoder anomaly result are not the same thing. Not every observed flow has a matching Suricata signature alert.</p>
+        </article>
+      </section>
+
+      <section
+        id="dashboard-pages"
+        class="help-section"
+        data-help-keywords="Dashboard Alerts Alert detail Recent Traffic Metrics Patterns System Help pages Demo replay controls"
+      >
+        <div class="help-section-heading">
+          <div>
+            <p class="help-section-number">Section 20</p>
+            <h2>Dashboard pages</h2>
+          </div>
+          <a class="help-back-top" href="#top">Back to top</a>
+        </div>
+
+        <div class="help-card-grid">
+          <article class="help-topic" data-help-item data-help-keywords="Dashboard overview recent important alerts"><h3 class="help-term">Dashboard</h3><p class="help-definition">High-level system overview, resource indicators, decision counts, and recent important alerts.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="Alerts full list filters search quick view details"><h3 class="help-term">Alerts</h3><p class="help-definition">Full alert list with filters, search, quick view, human status, and access to details.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="Alert detail complete explanation contributors temporal context status feedback export"><h3 class="help-term">Alert detail</h3><p class="help-definition">Complete explanations, contributors, network context, temporal context, human status, feedback, and JSON export for one alert.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="Recent Traffic communications normal noncritical"><h3 class="help-term">Recent Traffic</h3><p class="help-definition">Recently observed communications, including records that are not important alerts.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="Metrics charts measurements distributions"><h3 class="help-term">Metrics</h3><p class="help-definition">Application and processing measurements, distributions, and score-related charts.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="Patterns repeated communications grouping"><h3 class="help-term">Patterns</h3><p class="help-definition">Grouped repeated anomaly-related communication patterns.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="System state runtime configuration replay controls"><h3 class="help-term">System</h3><p class="help-definition">System state, safely exposed runtime configuration, and live/replay operating controls.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="Help glossary definitions guidance"><h3 class="help-term">Help</h3><p class="help-definition">Definitions and interface guidance for technical and non-technical users.</p></article>
+        </div>
+
+        <p class="help-note" data-help-item data-help-keywords="Demo page route does not exist replay controls System">
+          The uploaded backend has no separate <code>/ui/demo</code> page. Replay controls are part of the System page and the runtime-mode endpoints.
+        </p>
+      </section>
+
+      <section
+        id="interface-actions"
+        class="help-section"
+        data-help-keywords="interface actions Quick view Details View matching alerts Open latest alert Change status Mark as false positive Export JSON report Start replay Stop replay Clear alerts Filter Search Logout"
+      >
+        <div class="help-section-heading">
+          <div>
+            <p class="help-section-number">Section 21</p>
+            <h2>Interface actions</h2>
+          </div>
+          <a class="help-back-top" href="#top">Back to top</a>
+        </div>
+
+        <div class="help-card-grid">
+          <article class="help-topic" data-help-item data-help-keywords="Quick view popup compact"><h3 class="help-term">Quick view</h3><p class="help-definition">Opens a compact alert preview without leaving the current page.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="Details full alert page"><h3 class="help-term">Details</h3><p class="help-definition">Opens the full alert-detail page.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="View matching alerts pattern filter"><h3 class="help-term">View matching alerts</h3><p class="help-definition">Shows alerts associated with a selected communication pattern when the Patterns interface provides that action.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="Open latest alert pattern newest"><h3 class="help-term">Open latest alert</h3><p class="help-definition">Opens the most recent alert associated with the selected item when available.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="Change status human workflow save"><h3 class="help-term">Change status</h3><p class="help-definition">Updates the human investigation status without changing the system's historical model result.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="Mark as false positive feedback"><h3 class="help-term">Mark as false positive</h3><p class="help-definition">Records analyst feedback while preserving the original alert.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="Export JSON report download"><h3 class="help-term">Export JSON report</h3><p class="help-definition">Downloads the current machine-readable report for an alert.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="Start replay demo saved events"><h3 class="help-term">Start replay</h3><p class="help-definition">Starts inserting saved processed events into the normal interface buffers when the application is configured in replay mode.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="Stop replay demo"><h3 class="help-term">Stop replay</h3><p class="help-definition">Stops future replay insertions. It does not automatically remove records already inserted.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="Clear alerts all buffers recent repeat memory not demo only"><h3 class="help-term">Clear alerts</h3><p class="help-definition">The current backend clears alerts, recent traffic, and repeat memory. It is not a demo-only clear action.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="Filter labels display subset no data change"><h3 class="help-term">Filter</h3><p class="help-definition">Changes which records are displayed. It does not modify stored alerts.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="Search text IP protocol class no data change"><h3 class="help-term">Search</h3><p class="help-definition">Finds matching displayed records or help topics without changing stored data.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="Logout session authentication"><h3 class="help-term">Logout</h3><p class="help-definition">Ends the current dashboard session and returns to the login page.</p></article>
+        </div>
+      </section>
+
+      <section
+        id="colors-badges"
+        class="help-section"
+        data-help-keywords="colors badges green cyan teal amber orange red gray blue purple demo replay Changed by context accessibility text labels"
+      >
+        <div class="help-section-heading">
+          <div>
+            <p class="help-section-number">Section 22</p>
+            <h2>Colors and badges</h2>
+          </div>
+          <a class="help-back-top" href="#top">Back to top</a>
+        </div>
+
+        <p class="help-note" data-help-item data-help-keywords="color not alone text accessibility">
+          Color is only a visual aid. Every badge also contains text so the meaning does not depend on color alone.
+        </p>
+
+        <div class="help-card-grid">
+          <article class="help-topic" data-help-item data-help-keywords="OK green"><h3 class="help-term"><span class="badge badge-ok">OK</span></h3><p class="help-definition">Light green with dark green text: no current attention required.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="BENIGN cyan teal"><h3 class="help-term"><span class="badge badge-benign">BENIGN</span></h3><p class="help-definition">Light cyan with dark teal text: unusual-looking traffic considered probably legitimate.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="REVIEW amber orange"><h3 class="help-term"><span class="badge badge-review">REVIEW</span></h3><p class="help-definition">Pale amber with dark orange text: human review recommended.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="CRITICAL red"><h3 class="help-term"><span class="badge badge-critical">CRITICAL</span></h3><p class="help-definition">Pale red with dark red text: prompt investigation recommended.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="raw severity OK WARN MED CRIT colors"><h3 class="help-term">Raw severity badges</h3><p class="help-definition"><code>OK</code> uses green, <code>WARN</code> and <code>MED</code> use the review/amber style in the shared helper, and <code>CRIT</code> uses red.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="Changed by context gray slate"><h3 class="help-term"><span class="context-adjusted-badge">Changed by context</span></h3><p class="help-definition">Light gray/slate: the final displayed label differs from the raw label.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="New blue human status"><h3 class="help-term"><span class="human-status-badge human-status-new">New</span></h3><p class="help-definition">Light blue: no analyst progress recorded.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="Seen gray human status"><h3 class="help-term"><span class="human-status-badge human-status-seen">Seen</span></h3><p class="help-definition">Light gray: acknowledged or viewed.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="Under review amber human status"><h3 class="help-term"><span class="human-status-badge human-status-under-review">Under review</span></h3><p class="help-definition">Amber: analyst investigation is in progress.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="Resolved green human status"><h3 class="help-term"><span class="human-status-badge human-status-resolved">Resolved</span></h3><p class="help-definition">Green: analyst workflow is complete.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="False positive purple human status"><h3 class="help-term"><span class="human-status-badge human-status-false-positive">False positive</span></h3><p class="help-definition">Light purple: analyst recorded a false positive.</p></article>
+          <article class="help-topic" data-help-item data-help-keywords="REPLAY MODE DEMO amber yellow badge"><h3 class="help-term"><span class="runtime-mode-badge runtime-mode-replay help-inline-badge">REPLAY MODE</span></h3><p class="help-definition">Amber/yellow: controlled replay is active. This is not live capture.</p></article>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="ui-footer">
+    Help content describes the current dashboard behavior and safely exposed configuration.
+  </footer>
+
+  <script src="/static/ui_common.js"></script>
+  <script src="/static/ui_help.js"></script>
+</body>
+</html>

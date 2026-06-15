@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Network Map</title>
+
+  <link rel="stylesheet" href="/static/dashboard.css">
+
+  <script
+    defer
+    src="https://cdn.jsdelivr.net/npm/cytoscape@3.33.1/dist/cytoscape.min.js"
+  ></script>
+  <script defer src="/static/ui_common.js"></script>
+  <script defer src="/static/ui_network.js"></script>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-title">Network Map</div>
+      <div class="brand-subtitle">
+        Observed communication map based on processed traffic records.
+        <span
+          id="runtimeModeBadge"
+          class="runtime-mode-badge runtime-mode-loading"
+          title="Current IDS operating mode"
+        >
+          MODE LOADING
+        </span>
+      </div>
+    </div>
+
+    <nav class="main-nav" aria-label="Dashboard navigation">
+      <a href="/" data-nav="dashboard">Dashboard</a>
+      <a href="/ui/system" data-nav="system">System</a>
+      <a href="/ui/alerts" data-nav="alerts">Alerts</a>
+      <a href="/ui/recent" data-nav="recent">Recent Traffic</a>
+      <a href="/ui/metrics" data-nav="metrics">Metrics</a>
+      <a href="/ui/patterns" data-nav="patterns">Patterns</a>
+      <a href="/ui/network" class="active" data-nav="network">Network Map</a>
+      <a href="/ui/help" data-nav="help">Help</a>
+      <a href="/logout" class="logout-nav-link">Logout</a>
+    </nav>
+  </header>
+
+  <main class="network-page">
+    <section class="network-hero">
+      <div>
+        <p class="network-eyebrow">Observed communication map</p>
+        <h1>Network Map</h1>
+        <p class="network-introduction">
+          This map shows communication relationships observed by the monitoring system. It is based on available traffic records and does not represent a complete physical map of the network.
+        </p>
+        <p class="network-help-links">
+          Related explanations:
+          <a href="/ui/help#basic-networking-terms">basic networking terms</a>,
+          <a href="/ui/help#final-decisions">final decisions</a>, and
+          <a href="/ui/help#repeat-based-analysis">repeat-based analysis</a>.
+        </p>
+      </div>
+
+      <div class="network-hero-actions">
+        <button id="refreshNetworkButton" type="button">
+          Refresh map
+        </button>
+        <button id="resetNetworkFiltersButton" type="button">
+          Reset filters
+        </button>
+      </div>
+    </section>
+
+    <section class="network-filter-panel" aria-labelledby="networkFiltersTitle">
+      <div class="network-section-heading">
+        <div>
+          <h2 id="networkFiltersTitle">Filters and display limits</h2>
+          <p>
+            Filters are applied by the backend before graph limits are applied.
+          </p>
+        </div>
+      </div>
+
+      <div class="network-filter-grid">
+        <label class="network-filter-field network-filter-field-wide">
+          <span>Search by IP address</span>
+          <input
+            id="networkSearchInput"
+            type="search"
+            maxlength="200"
+            autocomplete="off"
+            placeholder="Example: 192.168.1.20"
+          >
+        </label>
+
+        <label class="network-filter-field">
+          <span>Highest final decision</span>
+          <select id="networkDecisionFilter">
+            <option value="ALL">All decisions</option>
+            <option value="CRITICAL">CRITICAL</option>
+            <option value="REVIEW">REVIEW</option>
+            <option value="BENIGN">BENIGN</option>
+            <option value="OK">OK</option>
+            <option value="UNKNOWN">UNKNOWN</option>
+          </select>
+        </label>
+
+        <label class="network-filter-field">
+          <span>Address type</span>
+          <select id="networkAddressFilter">
+            <option value="ALL">All address types</option>
+            <option value="LOCAL">Private / local</option>
+            <option value="EXTERNAL">Public / external</option>
+            <option value="LOOPBACK">Loopback</option>
+            <option value="UNKNOWN">Unknown</option>
+          </select>
+        </label>
+
+        <label class="network-filter-field">
+          <span>Minimum observed records</span>
+          <input
+            id="networkMinimumCountInput"
+            type="number"
+            min="1"
+            max="100000"
+            value="1"
+          >
+        </label>
+
+        <label class="network-filter-field">
+          <span>Maximum nodes</span>
+          <input
+            id="networkMaximumNodesInput"
+            type="number"
+            min="2"
+            max="500"
+            value="120"
+          >
+        </label>
+
+        <label class="network-filter-field">
+          <span>Maximum relationships</span>
+          <input
+            id="networkMaximumEdgesInput"
+            type="number"
+            min="1"
+            max="1000"
+            value="200"
+          >
+        </label>
+
+        <label class="network-demo-toggle">
+          <input
+            id="networkIncludeDemoCheckbox"
+            type="checkbox"
+            checked
+          >
+          <span>
+            Include replay/demo records
+            <small>
+              Demo-only relationships are marked and are not presented as newly captured live traffic.
+            </small>
+          </span>
+        </label>
+      </div>
+    </section>
+
+    <section class="network-summary-grid" aria-label="Network map summary">
+      <article class="network-summary-card">
+        <span>Nodes shown</span>
+        <strong id="networkNodeCount">0</strong>
+      </article>
+
+      <article class="network-summary-card">
+        <span>Relationships shown</span>
+        <strong id="networkEdgeCount">0</strong>
+      </article>
+
+      <article class="network-summary-card">
+        <span>Records used</span>
+        <strong id="networkRecordCount">0</strong>
+      </article>
+
+      <article class="network-summary-card network-summary-card-wide">
+        <span>Data source</span>
+        <strong id="networkSourceLabel">Not loaded</strong>
+        <small id="networkScopeLabel">Current buffer</small>
+      </article>
+
+      <article class="network-summary-card">
+        <span>Last generated</span>
+        <strong id="networkGeneratedAt">Not loaded</strong>
+      </article>
+    </section>
+
+    <div
+      id="networkTruncationNotice"
+      class="network-notice"
+      role="status"
+      hidden
+    ></div>
+
+    <div
+      id="networkRequestError"
+      class="network-state network-request-error"
+      role="alert"
+      hidden
+    ></div>
+
+    <section class="network-workspace">
+      <article class="network-map-panel">
+        <div class="network-section-heading network-map-heading">
+          <div>
+            <h2>Observed communication relationships</h2>
+            <p>
+              Arrow direction is source IP → destination IP. Node size and line thickness represent observed record counts.
+            </p>
+          </div>
+
+          <button id="resetNetworkViewButton" type="button">
+            Fit / reset view
+          </button>
+        </div>
+
+        <div class="network-legend" aria-label="Network map legend">
+          <span><i class="network-legend-shape legend-ok"></i> OK</span>
+          <span><i class="network-legend-shape legend-benign"></i> BENIGN</span>
+          <span><i class="network-legend-shape legend-review"></i> REVIEW</span>
+          <span><i class="network-legend-shape legend-critical"></i> CRITICAL</span>
+          <span><i class="network-legend-line"></i> Directed communication</span>
+          <span><i class="network-legend-line legend-demo-line"></i> Demo-only</span>
+        </div>
+
+        <div class="network-graph-shell">
+          <div
+            id="networkGraph"
+            class="network-graph"
+            aria-label="Interactive observed network communication map"
+          >
+            <div class="network-state">Loading communication relationships...</div>
+          </div>
+
+          <div
+            id="networkLibraryError"
+            class="network-state network-library-error"
+            role="alert"
+            hidden
+          >
+            The interactive map library could not be loaded. The textual relationship list below remains available.
+          </div>
+
+          <div
+            id="networkEmptyState"
+            class="network-state"
+            hidden
+          >
+            No communication relationships are available for the selected filters.
+          </div>
+        </div>
+      </article>
+
+      <aside class="network-detail-panel" aria-labelledby="networkDetailTitle">
+        <div class="network-section-heading">
+          <div>
+            <h2 id="networkDetailTitle">Selection details</h2>
+            <p>Click a node or directed relationship.</p>
+          </div>
+        </div>
+
+        <div id="networkDetailContent" class="network-detail-content">
+          <div class="network-detail-placeholder">
+            Select an IP address or communication relationship to view beginner-friendly details.
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="network-fallback-panel" aria-labelledby="networkFallbackTitle">
+      <div class="network-section-heading">
+        <div>
+          <h2 id="networkFallbackTitle">Text relationship list</h2>
+          <p>
+            This list remains usable when the interactive graph is unavailable.
+          </p>
+        </div>
+      </div>
+
+      <div id="networkEdgeList" class="network-edge-list">
+        <div class="network-state">Loading communication relationships...</div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="ui-footer">
+    This is an observed communication map, not a complete physical network topology.
+  </footer>
+</body>
+</html>

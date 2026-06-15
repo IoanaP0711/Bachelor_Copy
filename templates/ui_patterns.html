@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Repeated Pattern View</title>
+
+    <link
+        rel="stylesheet"
+        href="/static/dashboard.css"
+    >
+
+    <script
+        defer
+        src="/static/ui_common.js"
+    ></script>
+
+    <script
+        defer
+        src="/static/ui_patterns.js"
+    ></script>
+</head>
+
+<body>
+    <header class="topbar">
+    <div class="brand">
+        <div class="brand-title">
+            Repeated Pattern View
+        </div>
+
+        <div class="brand-subtitle">
+            Repeated anomalous flows grouped by source,
+            destination, destination port, protocol, and
+            traffic class.
+        </div>
+    </div>
+
+    <nav
+        class="main-nav"
+        aria-label="Dashboard navigation"
+    >
+        <a href="/" data-nav="dashboard">
+            Dashboard
+        </a>
+
+        <a href="/ui/system" data-nav="system">
+            System
+        </a>
+
+        <a href="/ui/alerts" data-nav="alerts">
+            Alerts
+        </a>
+
+        <a href="/ui/recent" data-nav="recent">
+            Recent Traffic
+        </a>
+
+        <a href="/ui/metrics" data-nav="metrics">
+            Metrics
+        </a>
+
+        <a
+            href="/ui/patterns"
+            class="active"
+            data-nav="patterns"
+        >
+            Patterns
+        </a>
+        <a href="/ui/network" data-nav="network">
+            Network Map
+        </a>
+        <a href="/ui/help" data-nav="help">
+            Help
+        </a>
+
+        <a
+            href="/logout"
+            class="logout-nav-link"
+        >
+            Logout
+        </a>
+    </nav>
+</header>
+
+    <main class="patterns-page">
+        <section class="patterns-page-heading">
+            <div>
+                <p class="patterns-eyebrow">
+                    Behavior overview
+                </p>
+
+                <h1>Repeated Pattern View</h1>
+
+                <p>
+                    Repeated anomalous flows grouped by
+                    source, destination, destination port,
+                    protocol, and traffic class.
+                </p>
+            </div>
+
+            <button
+                id="refreshPatternsButton"
+                type="button"
+            >
+                Refresh
+            </button>
+        </section>
+
+        <section
+            class="patterns-summary"
+            aria-label="Pattern data summary"
+        >
+            <div>
+                <span>Patterns</span>
+                <strong id="patternsCount">0</strong>
+            </div>
+
+            <div>
+                <span>Records checked</span>
+
+                <strong id="patternsRecordsCount">
+                    0
+                </strong>
+            </div>
+
+            <div>
+                <span>Data source</span>
+
+                <strong id="patternsSource">
+                    Not loaded
+                </strong>
+            </div>
+
+            <div>
+                <span>Last updated</span>
+
+                <strong id="patternsUpdated">
+                    Not loaded
+                </strong>
+            </div>
+        </section>
+
+        <section class="patterns-panel">
+            <div class="patterns-panel-heading">
+                <h2>Detected repeated patterns</h2>
+
+                <p>
+                    Only groups containing at least two
+                    matching events are shown.
+                </p>
+            </div>
+
+            <div
+                id="patternsLoading"
+                class="patterns-state"
+                role="status"
+            >
+                Loading repeated patterns...
+            </div>
+
+            <div
+                id="patternsError"
+                class="patterns-state patterns-error"
+                role="alert"
+                hidden
+            ></div>
+
+            <div
+                id="patternsEmpty"
+                class="patterns-state"
+                hidden
+            >
+                No repeated patterns currently detected.
+            </div>
+
+            <div
+                id="patternsTableWrapper"
+                class="patterns-table-wrapper"
+                hidden
+            >
+                <table class="patterns-table">
+                    <thead>
+                        <tr>
+                            <th>Pattern key / ID</th>
+                            <th>Source</th>
+                            <th>Destination</th>
+                            <th>Destination port</th>
+                            <th>Protocol</th>
+                            <th>Traffic class</th>
+                            <th>Event count</th>
+                            <th>Highest raw severity</th>
+                            <th>Highest final decision</th>
+                            <th>First seen</th>
+                            <th>Last seen</th>
+                            <th>Short reason</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="patternsTableBody"></tbody>
+                </table>
+            </div>
+            <div
+                id="patternsCards"
+                class="patterns-cards"
+                hidden
+            ></div>
+        </section>
+    </main>
+</body>
+</html>
