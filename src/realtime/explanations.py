@@ -452,7 +452,15 @@ def make_display_label_with_reason(alert: Dict[str, Any]) -> tuple[str, str]:
     alert["final_severity"] = final_sev
     alert["severity"] = final_sev
 
-    if final_sev == "ok":
+    context_reduced_to_ok = (
+    final_sev == "ok"
+    and raw_sev != "ok"
+    and bool(reasons)
+)
+
+    if context_reduced_to_ok:
+        label = "BENIGN"
+    elif final_sev == "ok":
         label = "OK"
     elif final_sev == "warn":
         label = "BENIGN"
@@ -466,11 +474,15 @@ def make_display_label_with_reason(alert: Dict[str, Any]) -> tuple[str, str]:
     alert["adjustment_reasons"] = reasons
 
     if label == "OK":
-        reason = "The raw model score did not cross the anomaly threshold."
+        reason = (
+            "The raw model score did not cross the anomaly threshold."
+        )
+
     elif label == "BENIGN":
         reason = (
-            f"Model flagged the flow ({raw_sev.upper()}), but context suggests likely benign "
-            f"{alert.get('traffic_class', 'traffic')}."
+            f"Model flagged the flow ({raw_sev.upper()}), "
+            f"but contextual checks reduced it to a likely benign "
+            f"{alert.get('traffic_class', 'traffic')} pattern."
         )
     elif label == "REVIEW":
         reason = (

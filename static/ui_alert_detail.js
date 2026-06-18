@@ -65,6 +65,134 @@
             safeValue(value);
     }
 
+    function formatProcessAttribution(value) {
+        const normalised =
+            String(value || "")
+                .trim()
+                .toLowerCase();
+
+        const labels = {
+            exact_source_socket_match:
+                "Exact local source socket match",
+
+            exact_destination_socket_match:
+                "Exact local destination socket match",
+
+            not_found:
+                "No matching local socket found",
+        };
+
+        return (
+            labels[normalised] ||
+            (
+                normalised
+                    ? normalised
+                        .replaceAll("_", " ")
+                    : "Not available"
+            )
+        );
+    }
+
+
+    function renderProcessAttribution(alert) {
+        const processName =
+            alert.process_name ||
+            "Unknown";
+
+        const processPid =
+            alert.process_pid ??
+            "-";
+
+        const processExecutable =
+            alert.process_exe ||
+            "-";
+
+        const processAttribution =
+            formatProcessAttribution(
+                alert.process_attribution
+            );
+
+        const confidence =
+            String(
+                alert
+                    .process_attribution_confidence ||
+                "none"
+            )
+                .trim()
+                .toLowerCase();
+
+        setText(
+            "processName",
+            processName
+        );
+
+        setText(
+            "processPid",
+            processPid
+        );
+
+        setText(
+            "processExecutable",
+            processExecutable
+        );
+
+        setText(
+            "processAttribution",
+            processAttribution
+        );
+
+        const confidenceBadge =
+            document.getElementById(
+                "processConfidenceBadge"
+            );
+
+        if (confidenceBadge) {
+            confidenceBadge.className =
+                "process-confidence-badge " +
+                (
+                    confidence === "high"
+                        ? "process-confidence-high"
+                        : confidence === "medium"
+                            ? "process-confidence-medium"
+                            : "process-confidence-none"
+                );
+
+            confidenceBadge.textContent =
+                confidence === "high"
+                    ? "High confidence"
+                    : confidence === "medium"
+                        ? "Medium confidence"
+                        : "No match";
+        }
+
+        const note =
+            document.getElementById(
+                "processAttributionNote"
+            );
+
+        if (note) {
+            if (
+                alert.process_name &&
+                confidence === "high"
+            ) {
+                note.textContent =
+                    `The flow was matched to the local ` +
+                    `application ${processName} using its ` +
+                    `active or recently cached network socket. ` +
+                    `This identifies the origin of the flow, ` +
+                    `but it does not independently prove that ` +
+                    `the communication is safe.`;
+            } else {
+                note.textContent =
+                    "No exact local process association was " +
+                    "available for this flow. This is common " +
+                    "for broadcast, multicast, short UDP " +
+                    "traffic, connections from other devices, " +
+                    "or sockets that closed before observation.";
+            }
+        }
+    }
+
     function setInnerHtml(id, html) {
         const element =
             document.getElementById(id);
@@ -1868,6 +1996,7 @@
             alert.repeat_count
         );
 
+        renderProcessAttribution(alert);
         renderTemporalContext(alert);
 
         renderHumanStatus(

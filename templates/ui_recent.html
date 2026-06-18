@@ -4,7 +4,10 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>RT-IDS Recent Traffic</title>
-  <link rel="stylesheet" href="/static/dashboard.css">
+  <link
+  rel="stylesheet"
+  href="/static/dashboard.css?v=remove-score-1"
+  >
 </head>
 
 <body>
@@ -53,14 +56,13 @@
           <th style="width: 100px;">Repeat</th>
           <th style="width: 130px;">Final label</th>
           <th style="width: 120px;">Raw severity</th>
-          <th style="width: 120px;">Score</th>
           <th style="width: 360px;">Summary</th>
         </tr>
       </thead>
 
       <tbody id="rows">
         <tr>
-          <td colspan="10" class="muted">Loading…</td>
+          <td colspan="9" class="muted">Loading…</td>
         </tr>
       </tbody>
     </table>
@@ -79,6 +81,7 @@
   </footer>
 
   <script src="/static/ui_common.js"></script>
-  <script src="/static/ui_recent.js"></script>
+  <script src="/static/ui_recent.js?v=remove-score-1"></script>
+
 </body>
 </html>

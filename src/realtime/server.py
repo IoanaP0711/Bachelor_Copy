@@ -541,7 +541,7 @@ def apply_repeat_review_logic(event: Dict[str, Any]) -> Dict[str, Any]:
     if not is_anom or repeat_level == "single":
         return event
 
-    
+
     if repeat_level in {"repeated", "persistent"} and is_strong_local_discovery:
         event["final_severity"] = current_final
 
@@ -606,7 +606,7 @@ def apply_repeat_review_logic(event: Dict[str, Any]) -> Dict[str, Any]:
     if extra_reason:
         event["final_severity_reason"] = f"{prev_reason}; {extra_reason}".strip("; ").strip()
 
-    
+
     if repeat_level in {"repeated", "persistent"} and not is_strong_local_discovery:
         current_final = str(event.get("final_severity", "")).upper()
 
@@ -677,6 +677,13 @@ def build_raw_event(
         "proto": (req.proto or "").upper(),
         "app_proto": req.app_proto or "",
         "direction": req.direction or "",
+        "process_name": req.process_name,
+        "process_pid": req.process_pid,
+        "process_exe": req.process_exe,
+        "process_attribution": req.process_attribution,
+        "process_attribution_confidence": (
+            req.process_attribution_confidence
+        ),
     }
 
 
@@ -902,35 +909,45 @@ def assemble_final_event(event: Dict[str, Any]) -> Dict[str, Any]:
         "app_proto": event.get("app_proto", ""),
         "direction": event.get("direction", ""),
 
-        
+        "process_name": event.get("process_name"),
+        "process_pid": event.get("process_pid"),
+        "process_exe": event.get("process_exe"),
+        "process_attribution": event.get(
+            "process_attribution"
+        ),
+        "process_attribution_confidence": event.get(
+            "process_attribution_confidence"
+        ),
+
+
         "ae_score": float(event.get("ae_score", 0.0)),
         "raw_severity": str(event.get("raw_severity", "UNKNOWN")).upper(),
         "raw_model_flag": bool(event.get("is_anom", False)),
 
-        
+
         "traffic_class": event.get("traffic_class", "unknown"),
         "likely_benign": bool(event.get("likely_benign", False)),
         "benign_reason": event.get("benign_reason", ""),
         "traffic_note": event.get("traffic_note", ""),
         "context_tags": event.get("context_tags", []),
 
-        
+
         "repeat_count": int(repeat_info.get("current_count", 0)),
         "repeat_previous_count": int(repeat_info.get("previous_count", 0)),
         "repeat_level": repeat_info.get("repeat_level", "single"),
         "repeat_window_s": int(repeat_info.get("repeat_window_s", REPEAT_WINDOW_S)),
         "repetition_key": repeat_info.get("repeat_key"),
 
-        
+
         "final_label": final_label,
         "final_severity": final_severity,
                 "summary": event.get("summary", ""),
         "interpretation": event.get("interpretation", ""),
 
-        
+
         "explanation": event.get("simple_explanation", event.get("explanation", "")),
 
-        
+
         "simple_explanation": event.get(
             "simple_explanation",
             event.get("explanation", ""),
@@ -944,7 +961,7 @@ def assemble_final_event(event: Dict[str, Any]) -> Dict[str, Any]:
             event.get("full_explanation", event.get("explanation", "")),
         ),
 
-        
+
         "short_summary": event.get("short_summary", event.get("summary", "")),
         "full_explanation": event.get(
             "full_explanation",
@@ -970,12 +987,12 @@ def assemble_final_event(event: Dict[str, Any]) -> Dict[str, Any]:
             or build_recommended_action(event)
         ),
 
-        
+
         "display_label": final_label,
         "display_label_reason": event.get("display_label_reason", ""),
         "severity": final_severity,
 
-        
+
         "top_features": event.get(
             "top_features",
             [],
@@ -2591,6 +2608,11 @@ class PredictRequest(BaseModel):
     app_proto: Optional[str] = None
     direction: Optional[str] = None
     ts_unix: Optional[float] = None
+    process_name: Optional[str] = None
+    process_pid: Optional[int] = None
+    process_exe: Optional[str] = None
+    process_attribution: Optional[str] = None
+    process_attribution_confidence: Optional[str] = None
 
 
 @app.get("/login", response_class=HTMLResponse)
@@ -4239,7 +4261,7 @@ def get_patterns(
                 ]
             ),
         }
-    ) 
+    )
 
 
 
@@ -5626,7 +5648,7 @@ def _normalise_alert_detail(
         or alert.get("explanation")
         or simple_explanation
     )
-    
+
     recommended_action = (
     alert.get("recommended_action")
     or build_recommended_action(alert)
@@ -5661,7 +5683,7 @@ def _normalise_alert_detail(
                 },
             )
         )
-    
+
     return {
         "flow_id": _safe_detail_value(alert.get("flow_id")),
         "final_decision": final_severity,
@@ -5679,6 +5701,21 @@ def _normalise_alert_detail(
         "destination_port": _safe_detail_value(alert.get("dest_port")),
         "protocol": _safe_detail_value(alert.get("proto")),
         "traffic_class": _safe_detail_value(alert.get("traffic_class")),
+        "process_name": _safe_detail_value(
+            alert.get("process_name")
+        ),
+        "process_pid": _safe_detail_value(
+            alert.get("process_pid")
+        ),
+        "process_exe": _safe_detail_value(
+            alert.get("process_exe")
+        ),
+        "process_attribution": _safe_detail_value(
+            alert.get("process_attribution")
+        ),
+        "process_attribution_confidence": _safe_detail_value(
+            alert.get("process_attribution_confidence")
+        ),
         "repeat_count": _safe_detail_value(
             alert.get("repeat_count")
         ),
@@ -6069,6 +6106,28 @@ def _build_alert_json_report(
             "traffic_class",
             "-",
         ),
+        "local_process": {
+            "name": detail.get(
+                "process_name",
+                "-",
+            ),
+            "pid": detail.get(
+                "process_pid",
+                "-",
+            ),
+            "executable": detail.get(
+                "process_exe",
+                "-",
+            ),
+            "attribution": detail.get(
+                "process_attribution",
+                "-",
+            ),
+            "confidence": detail.get(
+                "process_attribution_confidence",
+                "-",
+            ),
+        },
         "raw_model_severity": detail.get(
             "raw_model_severity",
             "-",
@@ -6090,7 +6149,7 @@ def _build_alert_json_report(
             "-",
         ),
 
-        # Number of seconds, or null when unavailable.
+
         "repeat_window": _report_repeat_window(
             alert
         ),
@@ -6254,7 +6313,7 @@ def predict(
 
         cpu, rss = proc_stats()
 
-        
+
         event = build_raw_event(
             req=req,
             flow_id=flow_id,
@@ -6266,13 +6325,13 @@ def predict(
             now_ts=ts,
         )
 
-        
+
         event = enrich_event_context(event)
 
-        
+
         event = attach_repeat_context(event)
 
-        
+
         event = apply_final_decision_logic(event)
 
         event["display_label"], event["display_label_reason"] = make_display_label_with_reason(event)

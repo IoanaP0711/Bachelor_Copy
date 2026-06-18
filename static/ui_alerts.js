@@ -150,6 +150,85 @@ function formatEndpoint(ipValue, portValue) {
   return `${ip}:${port}`;
 }
 
+function getAlertProcessName(alertObj) {
+  return String(
+    alertObj?.process_name ||
+    "Unknown"
+  );
+}
+
+
+function getAlertProcessConfidence(alertObj) {
+  return String(
+    alertObj
+      ?.process_attribution_confidence ||
+    "none"
+  )
+    .trim()
+    .toLowerCase();
+}
+
+
+function renderProcessCell(alertObj) {
+  const processName =
+    getAlertProcessName(alertObj);
+
+  const confidence =
+    getAlertProcessConfidence(alertObj);
+
+  const processPid =
+    alertObj?.process_pid;
+
+  const attribution =
+    String(
+      alertObj?.process_attribution ||
+      "not_found"
+    );
+
+  const subtitle =
+    processName === "Unknown"
+      ? "No socket match"
+      : (
+          processPid !== null &&
+          processPid !== undefined
+            ? `PID ${processPid}`
+            : attribution.replaceAll(
+                "_",
+                " "
+              )
+        );
+
+  const confidenceLabel =
+    confidence === "high"
+      ? "High"
+      : confidence === "medium"
+        ? "Medium"
+        : "None";
+
+  return `
+    <div class="process-cell-content">
+      <strong
+        class="process-name-text"
+        title="${escapeHtml(processName)}"
+      >
+        ${escapeHtml(processName)}
+      </strong>
+
+      <span class="process-cell-subtitle">
+        ${escapeHtml(subtitle)}
+      </span>
+
+      <span
+        class="process-confidence-inline process-confidence-${escapeHtml(
+          confidence
+        )}"
+      >
+        ${escapeHtml(confidenceLabel)}
+      </span>
+    </div>
+  `;
+}
+
 function getAlertReason(alertObj) {
   return String(
     alertObj.short_reason ||
@@ -169,6 +248,10 @@ function getAlertSearchText(alertObj) {
     alertObj.proto,
     alertObj.protocol,
     alertObj.traffic_class,
+    alertObj.process_name,
+    alertObj.process_pid,
+    alertObj.process_exe,
+    alertObj.process_attribution,
     getHumanStatus(alertObj),
     getAlertReason(alertObj),
   ]
@@ -411,12 +494,6 @@ function renderAlertMobileCard(
   const rawSeverity =
     getPreviewRawSeverity(alertObj);
 
-  const score = safeNum(
-    getPreviewAnomalyScore(alertObj),
-    6,
-    "-"
-  );
-
   const reason =
     getAlertReason(alertObj);
 
@@ -541,6 +618,38 @@ function renderAlertMobileCard(
         </div>
 
         <div>
+          <dt>Local application</dt>
+
+          <dd>
+            <strong>
+              ${escapeHtml(
+                getAlertProcessName(alertObj)
+              )}
+            </strong>
+
+            ${
+              getAlertProcessConfidence(
+                alertObj
+              ) === "high"
+                ? `
+                  <span
+                    class="process-confidence-inline process-confidence-high"
+                  >
+                    Exact socket match
+                  </span>
+                `
+                : `
+                  <span
+                    class="process-confidence-inline process-confidence-none"
+                  >
+                    No match
+                  </span>
+                `
+            }
+          </dd>
+        </div>
+
+        <div>
           <dt>Raw → Final</dt>
 
           <dd>
@@ -558,14 +667,6 @@ function renderAlertMobileCard(
             ${renderHumanStatusBadge(
               getHumanStatus(alertObj)
             )}
-          </dd>
-        </div>
-
-        <div>
-          <dt>Score</dt>
-
-          <dd class="mono">
-            ${safeText(score)}
           </dd>
         </div>
 
@@ -667,12 +768,6 @@ function renderAlertsTable() {
       const rawSeverity =
         getPreviewRawSeverity(alertObj);
 
-      const score = safeNum(
-        getPreviewAnomalyScore(alertObj),
-        6,
-        "-"
-      );
-
       const reason =
         getAlertReason(alertObj);
 
@@ -714,44 +809,44 @@ function renderAlertsTable() {
           </td>
 
           <td class="protocol-cell">
-            ${renderProtocolClassCell(
-              alertObj
-            )}
-          </td>
+          ${renderProtocolClassCell(
+            alertObj
+          )}
+        </td>
 
-          <td class="raw-final-cell">
-            ${renderRawFinalBadge(
-              rawSeverity,
-              finalLabel
-            )}
-          </td>
+        <td class="process-cell">
+          ${renderProcessCell(
+            alertObj
+          )}
+        </td>
 
-          <td
-            class="score-cell mono"
-            title="${safeText(score)}"
-          >
-            ${safeText(score)}
-          </td>
+        <td class="raw-final-cell">
+          ${renderRawFinalBadge(
+            rawSeverity,
+            finalLabel
+          )}
+        </td>
 
-          <td
-            class="reason-cell"
-            title="${escapeHtml(reason)}"
-          >
+
+        <td
+          class="reason-cell"
+          title="${escapeHtml(reason)}"
+        >
+          <div class="reason-cell-text">
             ${escapeHtml(reason)}
-          </td>
+          </div>
+        </td>
 
-          <td
-            class="action-cell action-sticky"
-          >
-            ${renderActionCell(
-              alertObj,
-              originalIndex
-            )}
-          </td>
-        </tr>
-      `;
-    })
-    .join("");
+        <td class="action-cell">
+          ${renderActionCell(
+            alertObj,
+            originalIndex
+          )}
+        </td>
+                </tr>
+              `;
+            })
+            .join("");
 
   mobileList.innerHTML = rows
     .map((alertObj) => {

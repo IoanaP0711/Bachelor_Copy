@@ -72,3 +72,15 @@ __pycache__/
 venv/
 venv_api/
 venv_tf/
+
+printf '\n# Large local traffic captures and temporary generation files\ndata/spotify_api_predict.jsonl\nvalidation_results/teacher_demo/backups/\nvalidation_results/teacher_demo/api_predict_full_generation.jsonl\nvalidation_results/teacher_demo/eve_full_generation.json\n\n# Temporary live score inspection files\nreports/live_score_check.csv\nreports/live_score_check_unique.csv\nreports/live_score_unique_signatures.csv\n' >> .gitignore
+# Large local traffic captures and temporary generation files
+data/spotify_api_predict.jsonl
+validation_results/teacher_demo/backups/
+validation_results/teacher_demo/api_predict_full_generation.jsonl
+validation_results/teacher_demo/eve_full_generation.json
+
+# Temporary live score inspection files
+reports/live_score_check.csv
+reports/live_score_check_unique.csv
+reports/live_score_unique_signatures.csv

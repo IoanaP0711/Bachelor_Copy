@@ -1,0 +1,57 @@
+{
+  "number_of_flows": 9,
+  "binary_mapping": {
+    "negative": [
+      "OK",
+      "BENIGN"
+    ],
+    "positive": [
+      "REVIEW",
+      "CRITICAL"
+    ]
+  },
+  "final_system": {
+    "confusion_matrix": [
+      [
+        8,
+        0
+      ],
+      [
+        0,
+        1
+      ]
+    ],
+    "true_negatives": 8,
+    "false_positives": 0,
+    "false_negatives": 0,
+    "true_positives": 1,
+    "accuracy": 1.0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "false_positive_rate": 0.0,
+    "specificity": 1.0
+  },
+  "raw_model": {
+    "confusion_matrix": [
+      [
+        1,
+        7
+      ],
+      [
+        0,
+        1
+      ]
+    ],
+    "true_negatives": 1,
+    "false_positives": 7,
+    "false_negatives": 0,
+    "true_positives": 1,
+    "accuracy": 0.2222222222222222,
+    "precision": 0.125,
+    "recall": 1.0,
+    "f1_score": 0.2222222222222222,
+    "false_positive_rate": 0.875,
+    "specificity": 0.125
+  }
+}

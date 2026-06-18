@@ -15,6 +15,7 @@ Example:
 import argparse
 import logging
 from pathlib import Path
+import json
 
 import numpy as np
 import pandas as pd
@@ -298,6 +299,17 @@ def main():
         random_state=args.random_state,
     )
 
+    features_path = Path("data/models/ae_features.json")
+    features_path.parent.mkdir(parents=True, exist_ok=True)
+
+    with features_path.open("w", encoding="utf-8") as file:
+        json.dump(feature_cols, file, indent=2)
+
+    logging.info(
+        f"Saved model feature order to {features_path}: "
+        f"{feature_cols}"
+    )
+
     X_train_scaled, X_val_scaled = scale_data(
         X_train, X_val, scaler_path=args.scaler_path
     )
@@ -317,7 +329,7 @@ def main():
 
     else:
         raise ValueError("Invalid model size")
-    
+
     model.compile(
     optimizer=tf.keras.optimizers.Adam(learning_rate=0.001),
     loss="mse"

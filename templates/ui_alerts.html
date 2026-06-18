@@ -4,7 +4,10 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>RT-IDS Alerts</title>
-  <link rel="stylesheet" href="/static/dashboard.css">
+  <link
+    rel="stylesheet"
+    href="/static/dashboard.css?v=remove-score-1"
+  >
 </head>
 
 <body>
@@ -57,7 +60,7 @@
         id="alertSearch"
         class="alerts-search-input"
         type="search"
-        placeholder="IP, protocol, class, or reason"
+        placeholder="IP, protocol, class, application or reason"
         autocomplete="off"
       />
 
@@ -147,10 +150,10 @@
           <th class="col-status">Human status</th>
           <th class="col-flow">Source → Destination</th>
           <th class="col-protocol">Protocol / Class</th>
+          <th class="col-process">Application</th>
           <th class="col-raw-final">Raw → Final</th>
-          <th class="col-score">Score</th>
           <th class="col-reason">Reason</th>
-          <th class="col-action action-sticky">Action</th>
+          <th class="col-action">Action</th>
         </tr>
       </thead>
 
@@ -237,12 +240,7 @@
         </span>
       </div>
 
-      <div class="preview-grid">
-        <div class="preview-card">
-          <span class="preview-label">Anomaly score</span>
-          <strong id="previewAnomalyScore">-</strong>
-        </div>
-
+      <div class="preview-grid preview-grid-simple">
         <div class="preview-card">
           <span class="preview-label">Short reason</span>
           <p id="previewShortReason">-</p>
@@ -282,6 +280,7 @@
   </footer>
 
   <script src="/static/ui_common.js"></script>
-  <script src="/static/ui_alerts.js"></script>
+  <script src="/static/ui_alerts.js?v=remove-score-1"></script>
+
 </body>
 </html>

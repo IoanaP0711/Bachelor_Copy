@@ -141,7 +141,7 @@ async function loadRecent() {
     if (!rows.length) {
       tbody.innerHTML = `
         <tr>
-          <td colspan="10" class="muted">
+          <td colspan="9" class="muted">
             No recent traffic yet.
           </td>
         </tr>
@@ -211,10 +211,6 @@ async function loadRecent() {
               ${safeText(row.raw_severity)}
             </td>
 
-            <td class="center mono">
-              ${safeNum(row.ae_score, 4)}
-            </td>
-
             <td class="summary-cell">
               ${safeText(summary)}
             </td>
@@ -231,7 +227,7 @@ async function loadRecent() {
   } catch (err) {
     tbody.innerHTML = `
       <tr>
-        <td colspan="10" class="muted">
+        <td colspan="9" class="muted">
           Failed to load recent traffic.
         </td>
       </tr>

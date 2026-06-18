@@ -354,6 +354,73 @@
                 </article>
             </section>
 
+            <!-- Local process attribution -->
+            <section class="detail-card process-attribution-card">
+                <div class="process-attribution-header">
+                    <div>
+                        <h2>Local process attribution</h2>
+
+                        <p class="muted-text">
+                            Best-effort identification of the local application
+                            associated with this network flow.
+                        </p>
+                    </div>
+
+                    <span
+                        id="processConfidenceBadge"
+                        class="process-confidence-badge process-confidence-none"
+                    >
+                        No match
+                    </span>
+                </div>
+
+                <div class="detail-kv-grid process-attribution-grid">
+                    <div>
+                        <span>Application</span>
+
+                        <strong id="processName">
+                            Unknown
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>Process ID</span>
+
+                        <strong id="processPid">
+                            -
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>Executable</span>
+
+                        <strong
+                            id="processExecutable"
+                            class="mono process-executable"
+                        >
+                            -
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>Attribution method</span>
+
+                        <strong id="processAttribution">
+                            Not available
+                        </strong>
+                    </div>
+                </div>
+
+                <p
+                    id="processAttributionNote"
+                    class="process-attribution-note"
+                >
+                    Process attribution is explanatory metadata. It is not
+                    an input feature of the autoencoder and does not prove
+                    that the traffic is safe.
+                </p>
+            </section>
+
             <!-- Temporal context -->
             <section class="detail-card temporal-context-card">
                 <div class="temporal-context-header">
@@ -711,6 +778,10 @@
 
     <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
     <script src="/static/ui_common.js"></script>
-    <script src="/static/ui_alert_detail.js"></script>
+    <script src="/static/ui_alert_detail.js?v=process-attribution-5"></script>
+    <link
+    rel="stylesheet"
+    href="/static/dashboard.css?v=process-attribution-5"
+>
 </body>
 </html>

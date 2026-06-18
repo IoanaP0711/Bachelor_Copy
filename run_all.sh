@@ -54,7 +54,10 @@ sudo pkill -9 suricata 2>/dev/null || true
 sudo rm -f /var/run/suricata.pid /run/suricata.pid
 
 echo "Starting Suricata..."
-sudo suricata -D --af-packet -c "$SURICATA_CONFIG" -i "$SURICATA_INTERFACE"
+sudo suricata \
+  -D \
+  -c "$SURICATA_CONFIG" \
+  --pcap="$SURICATA_INTERFACE"
 
 echo "Starting FastAPI..."
 uvicorn src.realtime.server:app --host "$APP_HOST" --port "$APP_PORT" &

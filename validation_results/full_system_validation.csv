@@ -1,0 +1,10 @@
+validation_id,scenario,ground_truth,raw_decision,final_decision
+F01,Normal external HTTPS connection,NORMAL,OK,OK
+F02,SSDP multicast discovery,NORMAL,MED,OK
+F03,IPv6 ICMP local discovery,NORMAL,CRIT,BENIGN
+F04_1,Repeated UDP local discovery - repetition 1,NORMAL,CRIT,BENIGN
+F04_2,Repeated UDP local discovery - repetition 2,NORMAL,CRIT,BENIGN
+F04_3,Repeated UDP local discovery - repetition 3,NORMAL,CRIT,BENIGN
+F04_4,Repeated UDP local discovery - repetition 4,NORMAL,CRIT,BENIGN
+F04_5,Repeated UDP local discovery - repetition 5,NORMAL,CRIT,BENIGN
+F05,Unusual UDP web HTTPS flow,SUSPICIOUS,CRIT,REVIEW
